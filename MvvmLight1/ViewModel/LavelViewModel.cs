@@ -21,7 +21,6 @@ namespace MvvmLight1.Model
              PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-
         private readonly LavelModel _lavelModel;
         private LavelViewModel _parent;
         public LavelViewModel()
@@ -45,14 +44,8 @@ namespace MvvmLight1.Model
                 _IsSelected = value;
                 if (value)
                 {
-                    //var tmp2 = tmp.GetParamList("Settings", "Analiz1");
-                    //var ParamList = new ObservableCollection<ParamViewModel>(Params._Param.Select(b => new ParamViewModel(b)));
-                    //MessageBox.Show("new true");
-                    OnPropertyChanged();
-                    
+                    OnPropertyChanged();                   
                 }
-                
-               // OnPropertyChanged(value);
             }
         }
         private bool _IsExpanded;
@@ -112,9 +105,6 @@ namespace MvvmLight1.Model
             }
         }
         public ObservableCollection<LavelViewModel> Children { get; set; }
-
-
-
     }
 
 

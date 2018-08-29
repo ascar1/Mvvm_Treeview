@@ -6,7 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        Height="316.071"
+        Height="381"
         Width="792.857"
         Title="MVVM Light Application"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -20,7 +20,7 @@
     </Window.Resources>
 
     <Grid x:Name="LayoutRoot">
-        
+
 
         <TextBlock FontSize="10"
                    FontWeight="Bold"
@@ -28,13 +28,8 @@
                    Text="{Binding WelcomeTitle}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
-                   TextWrapping="Wrap" Margin="98,10,147,259" Width="166" Height="17" RenderTransformOrigin="0.5,0.5" />
-        <TreeView ItemsSource="{Binding LavelList}" HorizontalAlignment="Left" Height="198" Margin="10,49,0,0" VerticalAlignment="Top" Width="138">
-            <!--
-            <i:Interaction.Behaviors>
-                <utils:BindableSelectedItemBehavior SelectedItem="{Binding SelectedCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            </i:Interaction.Behaviors>
-            -->
+                   TextWrapping="Wrap" Margin="285,10,334,446" Width="166" Height="15" RenderTransformOrigin="0.5,0.5" />
+        <TreeView ItemsSource="{Binding LavelList}" HorizontalAlignment="Left" Height="256" Margin="10,49,0,0" VerticalAlignment="Top" Width="138">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <StackPanel>
@@ -47,23 +42,19 @@
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
-                    <!-- <Setter Property="IsFocused" Value="{Binding IsFocused, Mode=OneWay}"/>-->
                 </Style>
             </TreeView.ItemContainerStyle>
-            
         </TreeView>
- 
-        <ListView ItemsSource="{Binding Path=ParamList}" HorizontalAlignment="Left" Height="198" Margin="153,49,0,0" VerticalAlignment="Top" Width="622">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="100" Header="Name" DisplayMemberBinding="{Binding name}"/>
-                    <GridViewColumn Width="100" Header="Type" DisplayMemberBinding="{Binding type }"/>
-                    <GridViewColumn Width="100" Header="Val" DisplayMemberBinding="{Binding val}"/>
-                    <GridViewColumn Width="300" Header="Comment" DisplayMemberBinding="{Binding comment}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <Button Command="{Binding MyCommand}" Content="Button" HorizontalAlignment="Left" Margin="153,252,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Command="{Binding MyCommand}" Content="Button" HorizontalAlignment="Left" Margin="153,310,0,0" VerticalAlignment="Top" Width="75"/>
+
+        <DataGrid ItemsSource="{Binding Path=ParamList}" HorizontalAlignment="Left" Height="256" Margin="153,49,0,0" VerticalAlignment="Top" Width="622" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Path=name}" Width="90" />
+                <DataGridTextColumn Header="Тип" Binding="{Binding Path=type}" Width="80" />
+                <DataGridTextColumn Header="Значение" Binding="{Binding Path=val}" Width="100" />
+                <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=comment}" Width="300" />
+            </DataGrid.Columns>
+        </DataGrid>
 
     </Grid>
 </Window>
