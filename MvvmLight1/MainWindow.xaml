@@ -42,6 +42,15 @@
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
+
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
+                    <!-- <Setter Property="IsFocused" Value="{Binding IsFocused, Mode=OneWay}"/>-->
+                </Style>
+            </TreeView.ItemContainerStyle>
+            
         </TreeView>
  
         <ListView ItemsSource="{Binding Path=ParamList}" HorizontalAlignment="Left" Height="198" Margin="153,49,0,0" VerticalAlignment="Top" Width="622">
@@ -54,6 +63,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button Command="{Binding MyCommand}" Content="Button" HorizontalAlignment="Left" Margin="153,252,0,0" VerticalAlignment="Top" Width="75"/>
 
     </Grid>
 </Window>

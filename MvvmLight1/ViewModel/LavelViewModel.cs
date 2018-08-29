@@ -1,15 +1,27 @@
 ﻿using GalaSoft.MvvmLight;
+using MvvmLight1.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MvvmLight1.Model
 {
     public class LavelViewModel :ViewModelBase
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
         private readonly LavelModel _lavelModel;
         private LavelViewModel _parent;
         public LavelViewModel()
@@ -22,6 +34,39 @@ namespace MvvmLight1.Model
 
             Children = new ObservableCollection<LavelViewModel>();
         }
+
+        #region обработка выбора         
+        private bool _IsSelected;
+        public bool IsSelected
+        {
+            get { return _IsSelected; }
+            set
+            {
+                _IsSelected = value;
+                if (value)
+                {
+                    //var tmp2 = tmp.GetParamList("Settings", "Analiz1");
+                    //var ParamList = new ObservableCollection<ParamViewModel>(Params._Param.Select(b => new ParamViewModel(b)));
+                    //MessageBox.Show("new true");
+                    OnPropertyChanged();
+                    
+                }
+                
+               // OnPropertyChanged(value);
+            }
+        }
+        private bool _IsExpanded;
+        public bool IsExpanded
+        {
+            get { return _IsExpanded; }
+            set
+            {
+                _IsExpanded = value;
+            }
+        }
+        #endregion
+
+
         public int ID
         {
             get => _lavelModel.id;
@@ -68,22 +113,7 @@ namespace MvvmLight1.Model
         }
         public ObservableCollection<LavelViewModel> Children { get; set; }
 
-        public static void setChild (LavelViewModel root, IList<LavelModel> source)
-        {
-            for (var i = 0; i < source.Count; i++)
-            {
-                if (root.ID != source[i].id && root.ID == source[i].paremtId)
-                {
-                    if (source[i].paremtId != -1)
-                    {
-                        //source[i].Parent = root;
-                        LavelViewModel tmp = new LavelViewModel(source[i]);
-                        root.Children.Add(tmp);
-                        setChild(tmp, source);
-                    }
-                }
-            }
-        }
+
 
     }
 

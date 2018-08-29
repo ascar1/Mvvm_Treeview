@@ -1,8 +1,12 @@
 ﻿using GalaSoft.MvvmLight;
+using MvvmLight1.Command;
 using MvvmLight1.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 
 namespace MvvmLight1.ViewModel
 {
@@ -23,7 +27,29 @@ namespace MvvmLight1.ViewModel
 
         private string _welcomeTitle = string.Empty;
 
-        public ObservableCollection <LavelViewModel> LavelList { get; private set; }
+        private MyCommand myCommand;
+        public MyCommand MyCommand
+        {
+            get
+            {
+                return myCommand ?? (myCommand = new MyCommand(obj =>
+                {
+                    MessageBox.Show("Команда");
+                    ParamList.Clear();
+                    _dataService.GetParam(
+                        (item, error) =>
+                        {
+                            if (error != null)
+                            {
+                                return;
+                            }
+                            LoadParam(item, 4);
+                        }
+                        );
+                }));
+            }
+        }
+        public BindingList<LavelViewModel> LavelList { get; private set; }
         public ObservableCollection <ParamViewModel> ParamList { get; private set; }
  
         /// <summary>
@@ -48,19 +74,38 @@ namespace MvvmLight1.ViewModel
         /// <param name="list"></param>
         private void LoadLavel(List<LavelModel> list)
         {
-            LavelList = new ObservableCollection<LavelViewModel>();
+            
+            
             var rootElement = list.Where(c => c.paremtId == -1);
             foreach (var rootCategory in rootElement)
             {
+                
                 LavelViewModel tmp = new LavelViewModel(rootCategory);
+                tmp.PropertyChanged += ItemsOnCollectionChanged1;
                 LavelList.Add(tmp);
-                LavelViewModel.setChild(tmp, list);                    
+                setChild(tmp, list);                    
+            }
+        }
+
+        public void setChild(LavelViewModel root, IList<LavelModel> source)
+        {
+            for (var i = 0; i < source.Count; i++)
+            {
+                if (root.ID != source[i].id && root.ID == source[i].paremtId)
+                {
+                    if (source[i].paremtId != -1)
+                    {
+                        LavelViewModel tmp = new LavelViewModel(source[i]);
+                        tmp.PropertyChanged += ItemsOnCollectionChanged1;
+                        root.Children.Add(tmp);
+                        setChild(tmp, source);
+                    }
+                }
             }
         }
 
         private void LoadParam(List<ParamModel> list, int id)
-        {
-            ParamList = new ObservableCollection<ParamViewModel>();
+        {          
             var rootElement = list.Where(c => c.ParamID == id); 
             foreach (var root in rootElement)
             {
@@ -73,6 +118,8 @@ namespace MvvmLight1.ViewModel
         /// </summary>
         public MainViewModel(IDataService dataService)
         {
+            LavelList = new BindingList<LavelViewModel>();
+            ParamList = new ObservableCollection<ParamViewModel>();
             _dataService = dataService;
             _dataService.GetData(
                 (item, error) =>
@@ -95,23 +142,25 @@ namespace MvvmLight1.ViewModel
                     LoadLavel(item);
                 }
                 );
-            _dataService.GetParam(
-                (item,error) =>
-                {
-                    if (error!= null)
-                    {
-                        return;
-                    }
-                    LoadParam(item, 6);
-                }
-                );
         }
 
-        ////public override void Cleanup()
-        ////{
-        ////    // Clean up if needed
-
-        ////    base.Cleanup();
-        ////}
+        private void ItemsOnCollectionChanged1(object sender, PropertyChangedEventArgs e)
+        {          
+            if (e.PropertyName == "IsSelected")
+            {
+                var Lavel = (LavelViewModel)sender;
+                ParamList.Clear();
+                _dataService.GetParam(
+                    (item, error) =>
+                    {
+                        if (error != null)
+                        {
+                            return;
+                        }
+                        LoadParam(item, Lavel.ID);
+                    }
+                    );
+            }
+        }
     }
 }
