@@ -6,7 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        Height="381"
+        Height="376"
         Width="792.857"
         Title="MVVM Light Application"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -28,7 +28,7 @@
                    Text="{Binding WelcomeTitle}"
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
-                   TextWrapping="Wrap" Margin="285,10,334,446" Width="166" Height="15" RenderTransformOrigin="0.5,0.5" />
+                   TextWrapping="Wrap" Margin="270,10,349,306" Width="166" Height="30" RenderTransformOrigin="0.512,0.5" />
         <TreeView ItemsSource="{Binding LavelList}" HorizontalAlignment="Left" Height="256" Margin="10,49,0,0" VerticalAlignment="Top" Width="138">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
@@ -45,7 +45,7 @@
                 </Style>
             </TreeView.ItemContainerStyle>
         </TreeView>
-        <Button Command="{Binding MyCommand}" Content="Button" HorizontalAlignment="Left" Margin="153,310,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button Command="{Binding MyCommand}" Content="Button" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="75"/>
 
         <DataGrid ItemsSource="{Binding Path=ParamList}" HorizontalAlignment="Left" Height="256" Margin="153,49,0,0" VerticalAlignment="Top" Width="622" AutoGenerateColumns="False">
             <DataGrid.Columns>

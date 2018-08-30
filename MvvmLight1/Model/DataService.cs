@@ -1,42 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace MvvmLight1.Model
 {
     public class DataService : IDataService
     {
+        private string NameFile = "C:\\newparam_.xml";
+        private List<LavelModel> LavelItem = new List<LavelModel>();
+        private List<ParamModel> ParamItem = new List<ParamModel>();
+
+        public DataService()
+        {
+            LoadData();
+        }
+        private void Clear()
+        {
+            LavelItem.Clear();
+            ParamItem.Clear();
+        }
+        private void LoadData()
+        {
+            Clear();
+            XDocument xdoc = XDocument.Load(NameFile);
+            foreach (var tmp in xdoc.Element("ProgramParam").Elements("level"))
+            {                
+                LavelItem.Add(new LavelModel()
+                {
+                    id = chekInt(tmp.Attribute("Id")),
+                    paremtId = chekInt(tmp.Attribute("paremtId")),
+                    name = tmp.Attribute("Name").Value,
+                    comment = tmp.Attribute("Comment").Value,
+                });
+                foreach (var tmp1 in tmp.Elements("level"))
+                {
+                    LavelItem.Add(new LavelModel()
+                    {
+                        id = chekInt(tmp1.Attribute("Id")),
+                        paremtId = chekInt(tmp1.Attribute("paremtId")),
+                        name = tmp1.Attribute("Name").Value,
+                        comment = tmp1.Attribute("Comment").Value,
+                    });
+
+                    foreach (var tmp2 in tmp1.Elements("Param"))
+                    {
+                        ParamItem.Add(new ParamModel()
+                        {
+                            id = chekInt(tmp2.Attribute("Id")),
+                            ParamID = chekInt(tmp2.Attribute("ParamID")),
+                            name = tmp2.Attribute("Name").Value,
+                            type = tmp2.Attribute("Type").Value,
+                            val = tmp2.Attribute("Val").Value,
+                            comment = tmp2.Attribute("Comment").Value
+                        });
+                    }
+                }
+            }
+        }
+        private int chekInt(XAttribute str)
+        {
+            if (str == null)
+            {
+                return -1;
+            }
+
+            int val = Convert.ToInt16(str.Value);
+            return val;
+        }
+
         public void GetData(Action<DataItem, Exception> callback)
         {
             // Use this to connect to the actual data service
 
             var item = new DataItem("Welcome to MVVM Light");
             callback(item, null);
-        }
-
-        public void GetDataLevel (Action<List<LavelModel>,Exception> callback)
+        }        
+        public void GetDataLevel(Action<List<LavelModel>, Exception> callback)
         {
-            var item = new List<LavelModel>();
-            item.Add(new LavelModel() { id = 0, name = "name 1 ", comment = "# 1" });
-            item.Add(new LavelModel() { id = 1, name = "name 2 ", comment = "# 1" });
-            item.Add(new LavelModel() { id = 2, name = "name 3 ", comment = "# 1" });
-            item.Add(new LavelModel() { id = 3, paremtId = 0, name = "name 4", comment = "# 1" });
-            item.Add(new LavelModel() { id = 4, paremtId = 1, name = "name 5", comment = "# 1" });
-            item.Add(new LavelModel() { id = 5, paremtId = 2, name = "name 6", comment = "# 1" });
-            item.Add(new LavelModel() { id = 6, paremtId = 5, name = "name 7", comment = "# 1" });
-            callback(item, null);
+            LoadData();
+            callback(LavelItem, null);
         }
-        public void GetParam (Action<List<ParamModel>,Exception> callback)
+        public void GetParam (Action<List<ParamModel>, Exception> callback)
         {
-            var item = new List<ParamModel>();
-            item.Add(new ParamModel() { id = 0, ParamID = 3, name = "param 1", type = "str", val = "val 1", comment = "#1" });
-            item.Add(new ParamModel() { id = 0, ParamID = 3, name = "param 2", type = "str", val = "val 2", comment = "#2" });
-            item.Add(new ParamModel() { id = 0, ParamID = 3, name = "param 3", type = "str", val = "val 3", comment = "#3" });
-            item.Add(new ParamModel() { id = 0, ParamID = 4, name = "param 4", type = "str", val = "val 4", comment = "#4" });
-            item.Add(new ParamModel() { id = 0, ParamID = 4, name = "param 5", type = "str", val = "val 5", comment = "#5" });
-            item.Add(new ParamModel() { id = 0, ParamID = 4, name = "param 6", type = "str", val = "val 6", comment = "#6" });
-            item.Add(new ParamModel() { id = 0, ParamID = 6, name = "param 7", type = "str", val = "val 7", comment = "#7" });
-            item.Add(new ParamModel() { id = 0, ParamID = 6, name = "param 8", type = "str", val = "val 8", comment = "#8" });
-            callback(item, null);
+            LoadData();
+            callback(ParamItem, null);
         }
     }
 }

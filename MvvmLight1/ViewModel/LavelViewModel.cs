@@ -15,12 +15,10 @@ namespace MvvmLight1.Model
     public class LavelViewModel :ViewModelBase
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
              PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
         private readonly LavelModel _lavelModel;
         private LavelViewModel _parent;
         public LavelViewModel()
@@ -33,7 +31,6 @@ namespace MvvmLight1.Model
 
             Children = new ObservableCollection<LavelViewModel>();
         }
-
         #region обработка выбора         
         private bool _IsSelected;
         public bool IsSelected
@@ -58,8 +55,6 @@ namespace MvvmLight1.Model
             }
         }
         #endregion
-
-
         public int ID
         {
             get => _lavelModel.id;
@@ -106,7 +101,5 @@ namespace MvvmLight1.Model
         }
         public ObservableCollection<LavelViewModel> Children { get; set; }
     }
-
-
 }
 

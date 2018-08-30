@@ -19,14 +19,11 @@ namespace MvvmLight1.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
-
         /// <summary>
         /// The <see cref="WelcomeTitle" /> property's name.
         /// </summary>
         public const string WelcomeTitlePropertyName = "WelcomeTitle";
-
         private string _welcomeTitle = string.Empty;
-
         private MyCommand myCommand;
         public MyCommand MyCommand
         {
@@ -158,8 +155,7 @@ namespace MvvmLight1.ViewModel
                             return;
                         }
                         LoadParam(item, Lavel.ID);
-                    }
-                    );
+                    });
             }
         }
     }

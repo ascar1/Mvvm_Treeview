@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using MvvmLight1.Model;
 
 namespace MvvmLight1.Design
@@ -37,6 +38,39 @@ namespace MvvmLight1.Design
             item.Add(new ParamModel() { id = 0, ParamID = 6, name = "param 7", type = "str", val = "val 7", comment = "#7" });
             item.Add(new ParamModel() { id = 0, ParamID = 6, name = "param 8", type = "str", val = "val 8", comment = "#8" });
             callback(item, null);
+        }
+
+        public void LoadData(Action<List<ParamModel>, Exception> callback, Action<List<LavelModel>, Exception> callback1)
+        {
+            XDocument xdoc = XDocument.Load("C:\\newparam1.xml");
+            var LavelItem = new List<LavelModel>();
+            var ParamItem = new List<ParamModel>();
+            foreach (var tmp in xdoc.Element("ProgramParam").Elements("level"))
+            {
+
+                LavelItem.Add(new LavelModel()
+                {
+                    id = Convert.ToInt16(tmp.Attribute("id").Value),
+                    paremtId = Convert.ToInt16(tmp.Attribute("paremtId").Value),
+                    name = tmp.Attribute("name").Value,
+                    comment = tmp.Attribute("comment").Value,
+                });
+
+                foreach (var tmp2 in tmp.Elements("Param"))
+                {
+                    ParamItem.Add(new ParamModel()
+                    {
+                        id = Convert.ToInt16(tmp.Attribute("id").Value),
+                        ParamID = Convert.ToInt16(tmp.Attribute("ParamID").Value),
+                        name = tmp.Attribute("name").Value,
+                        type = tmp.Attribute("type").Value,
+                        val = tmp.Attribute("val").Value,
+                        comment = tmp.Attribute("comment").Value
+                    });
+                }
+            }
+            callback(ParamItem, null);
+            callback1(LavelItem, null);
         }
 
     }
