@@ -9,6 +9,7 @@ namespace MvvmLight1.Model
         private string NameFile = "C:\\newparam_.xml";
         private List<LavelModel> LavelItem = new List<LavelModel>();
         private List<ParamModel> ParamItem = new List<ParamModel>();
+        private List<string> TypeDataList = new List<string>();
 
         public DataService()
         {
@@ -67,7 +68,6 @@ namespace MvvmLight1.Model
             int val = Convert.ToInt16(str.Value);
             return val;
         }
-
         public void GetData(Action<DataItem, Exception> callback)
         {
             // Use this to connect to the actual data service
@@ -85,5 +85,12 @@ namespace MvvmLight1.Model
             LoadData();
             callback(ParamItem, null);
         }
+    /*    public void GetDataType (Action<List<string>, Exception> callback)
+        {            
+            TypeDataList.Add("String");
+            TypeDataList.Add("Int");
+            TypeDataList.Add("Bool");
+            callback(TypeDataList, null);
+        }*/
     }
 }

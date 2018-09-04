@@ -19,11 +19,7 @@ namespace MvvmLight1.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
-        /// <summary>
-        /// The <see cref="WelcomeTitle" /> property's name.
-        /// </summary>
-        public const string WelcomeTitlePropertyName = "WelcomeTitle";
-        private string _welcomeTitle = string.Empty;
+
         private MyCommand myCommand;
         public MyCommand MyCommand
         {
@@ -31,38 +27,20 @@ namespace MvvmLight1.ViewModel
             {
                 return myCommand ?? (myCommand = new MyCommand(obj =>
                 {
-                    MessageBox.Show("Команда");
-                    ParamList.Clear();
-                    _dataService.GetParam(
-                        (item, error) =>
-                        {
-                            if (error != null)
-                            {
-                                return;
-                            }
-                            LoadParam(item, 4);
-                        }
-                        );
+                    MessageBox.Show("Команда " + " ParamList " + ParamList.Count.ToString());
                 }));
             }
         }
         public BindingList<LavelViewModel> LavelList { get; private set; }
         public ObservableCollection <ParamViewModel> ParamList { get; private set; }
- 
-        /// <summary>
-        /// Gets the WelcomeTitle property.
-        /// Changes to that property's value raise the PropertyChanged event. 
-        /// </summary>
-        public string WelcomeTitle
+        public ObservableCollection<string> type { get; private set; }
+        public enum OrderStatus { None, New, Processing, Shipped, Received };
+
+        private void loadDataType()
         {
-            get
-            {
-                return _welcomeTitle;
-            }
-            set
-            {
-                Set(ref _welcomeTitle, value);
-            }
+            type.Add("String");
+            type.Add("Int");
+            type.Add("Bool");            
         }
 
         /// <summary>
@@ -71,12 +49,9 @@ namespace MvvmLight1.ViewModel
         /// <param name="list"></param>
         private void LoadLavel(List<LavelModel> list)
         {
-            
-            
             var rootElement = list.Where(c => c.paremtId == -1);
             foreach (var rootCategory in rootElement)
             {
-                
                 LavelViewModel tmp = new LavelViewModel(rootCategory);
                 tmp.PropertyChanged += ItemsOnCollectionChanged1;
                 LavelList.Add(tmp);
@@ -117,6 +92,7 @@ namespace MvvmLight1.ViewModel
         {
             LavelList = new BindingList<LavelViewModel>();
             ParamList = new ObservableCollection<ParamViewModel>();
+            type = new ObservableCollection<string>();
             _dataService = dataService;
             _dataService.GetData(
                 (item, error) =>
@@ -125,9 +101,7 @@ namespace MvvmLight1.ViewModel
                     {
                         // Report error here
                         return;
-                    }
-
-                    WelcomeTitle = item.Title;
+                    }                    
                 });
             _dataService.GetDataLevel(
                 (item,error) =>
@@ -139,6 +113,7 @@ namespace MvvmLight1.ViewModel
                     LoadLavel(item);
                 }
                 );
+            loadDataType();
         }
 
         private void ItemsOnCollectionChanged1(object sender, PropertyChangedEventArgs e)

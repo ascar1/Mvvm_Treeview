@@ -4,10 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ignore="http://www.galasoft.ch/ignore"
+        xmlns:ignore="http://www.galasoft.ch/ignore"        
+        xmlns:core="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d ignore"
-        Height="376"
-        Width="792.857"
+        Height="426"
+        Width="868.982"
         Title="MVVM Light Application"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
@@ -17,44 +18,58 @@
                 <ResourceDictionary Source="Skins/MainSkin.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
+
     </Window.Resources>
+    
+        <DockPanel LastChildFill="True">
+        <ToolBarPanel  DockPanel.Dock="Top" Height="25" HorizontalAlignment="Left" >
+            <Button Command="{Binding MyCommand}" Width="70" Height="25" HorizontalAlignment="Left" Content="Добавить"/>
+        </ToolBarPanel>
+        <StatusBar DockPanel.Dock="Bottom" Height="20" />
+            <TreeView DockPanel.Dock="Left" ItemsSource="{Binding LavelList}"   Width="140">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <StackPanel>
+                            <TextBlock x:Name="textBlock" Text="{Binding name}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
 
-    <Grid x:Name="LayoutRoot">
-
-
-        <TextBlock FontSize="10"
-                   FontWeight="Bold"
-                   Foreground="Purple"
-                   Text="{Binding WelcomeTitle}"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   TextWrapping="Wrap" Margin="270,10,349,306" Width="166" Height="30" RenderTransformOrigin="0.512,0.5" />
-        <TreeView ItemsSource="{Binding LavelList}" HorizontalAlignment="Left" Height="256" Margin="10,49,0,0" VerticalAlignment="Top" Width="138">
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <StackPanel>
-                        <TextBlock x:Name="textBlock" Text="{Binding name}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="TreeViewItem">
-                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
-                </Style>
-            </TreeView.ItemContainerStyle>
-        </TreeView>
-        <Button Command="{Binding MyCommand}" Content="Button" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="75"/>
-
-        <DataGrid ItemsSource="{Binding Path=ParamList}" HorizontalAlignment="Left" Height="256" Margin="153,49,0,0" VerticalAlignment="Top" Width="622" AutoGenerateColumns="False">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            <TreeView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Копировать"></MenuItem>
+                    <MenuItem Header="Вставить"></MenuItem>
+                    <MenuItem Header="Вырезать"></MenuItem>
+                    <MenuItem Header="Удалить"></MenuItem>
+                </ContextMenu>
+            </TreeView.ContextMenu>
+            </TreeView>
+        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Path=name}" Width="90" />
                 <DataGridTextColumn Header="Тип" Binding="{Binding Path=type}" Width="80" />
                 <DataGridTextColumn Header="Значение" Binding="{Binding Path=val}" Width="100" />
                 <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=comment}" Width="300" />
+                <!--  <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />-->
             </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Копировать"></MenuItem>
+                    <MenuItem Header="Вставить"></MenuItem>
+                    <MenuItem Header="Вырезать"></MenuItem>
+                    <MenuItem Header="Удалить"></MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
-
-    </Grid>
+    </DockPanel>
 </Window>
+
+<!--
+        <Button  Content="Button" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="75"/>
+-->

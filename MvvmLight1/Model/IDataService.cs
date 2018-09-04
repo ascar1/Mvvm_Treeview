@@ -10,6 +10,6 @@ namespace MvvmLight1.Model
         void GetData(Action<DataItem, Exception> callback);
         void GetDataLevel (Action<List<LavelModel>, Exception> callback);
         void GetParam(Action<List<ParamModel>, Exception> callback);
-        //void LoadData(Action<List<ParamModel>, Exception> callback, Action<List<LavelModel>, Exception> callback1);
+        //void GetDataType(Action<List<string>, Exception> callback);
     }
 }
