@@ -10,16 +10,16 @@ using System.Windows;
 
 namespace MvvmLight1.ViewModel
 {
+    
     /// <summary>
     /// This class contains properties that the main View can data bind to.
     /// <para>
     /// See http://www.mvvmlight.net
     /// </para>
-    /// </summary>
+    /// </summary>    
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
-
         private MyCommand myCommand;
         public MyCommand MyCommand
         {
@@ -27,6 +27,7 @@ namespace MvvmLight1.ViewModel
             {
                 return myCommand ?? (myCommand = new MyCommand(obj =>
                 {
+                    AddNewParam();
                     MessageBox.Show("Команда " + " ParamList " + ParamList.Count.ToString());
                 }));
             }
@@ -34,15 +35,6 @@ namespace MvvmLight1.ViewModel
         public BindingList<LavelViewModel> LavelList { get; private set; }
         public ObservableCollection <ParamViewModel> ParamList { get; private set; }
         public ObservableCollection<string> type { get; private set; }
-        public enum OrderStatus { None, New, Processing, Shipped, Received };
-
-        private void loadDataType()
-        {
-            type.Add("String");
-            type.Add("Int");
-            type.Add("Bool");            
-        }
-
         /// <summary>
         ///  Загрузка Lavel List 
         /// </summary>
@@ -58,7 +50,6 @@ namespace MvvmLight1.ViewModel
                 setChild(tmp, list);                    
             }
         }
-
         public void setChild(LavelViewModel root, IList<LavelModel> source)
         {
             for (var i = 0; i < source.Count; i++)
@@ -75,16 +66,14 @@ namespace MvvmLight1.ViewModel
                 }
             }
         }
-
         private void LoadParam(List<ParamModel> list, int id)
         {          
             var rootElement = list.Where(c => c.ParamID == id); 
             foreach (var root in rootElement)
-            {
+            {                
                 ParamList.Add(new ParamViewModel(root));
             }
         }
-
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -112,10 +101,8 @@ namespace MvvmLight1.ViewModel
                     }
                     LoadLavel(item);
                 }
-                );
-            loadDataType();
+                );            
         }
-
         private void ItemsOnCollectionChanged1(object sender, PropertyChangedEventArgs e)
         {          
             if (e.PropertyName == "IsSelected")
@@ -132,6 +119,15 @@ namespace MvvmLight1.ViewModel
                         LoadParam(item, Lavel.ID);
                     });
             }
+        }
+        private void AddNewParam()
+        {
+            ParamList.Add(new ParamViewModel());
+        }
+
+        public void TestTest ()
+        {
+            MessageBox.Show("Test Test Test");
         }
     }
 }

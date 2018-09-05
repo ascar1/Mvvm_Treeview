@@ -6,6 +6,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ignore="http://www.galasoft.ch/ignore"        
         xmlns:core="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:MvvmLight1.Model"
         mc:Ignorable="d ignore"
         Height="426"
         Width="868.982"
@@ -17,8 +18,12 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Skins/MainSkin.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <ObjectDataProvider x:Key="myEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="local:OrderStatus"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
         </ResourceDictionary>
-
     </Window.Resources>
     
         <DockPanel LastChildFill="True">
@@ -50,16 +55,16 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
             </TreeView>
-        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" >
+        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="{Binding TestTest}" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Path=name}" Width="90" />
-                <DataGridTextColumn Header="Тип" Binding="{Binding Path=type}" Width="80" />
+                <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />
                 <DataGridTextColumn Header="Значение" Binding="{Binding Path=val}" Width="100" />
                 <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=comment}" Width="300" />
-                <!--  <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />-->
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="Добавить" Command="{Binding MyCommand}" ></MenuItem>
                     <MenuItem Header="Копировать"></MenuItem>
                     <MenuItem Header="Вставить"></MenuItem>
                     <MenuItem Header="Вырезать"></MenuItem>

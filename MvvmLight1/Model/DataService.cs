@@ -4,13 +4,13 @@ using System.Xml.Linq;
 
 namespace MvvmLight1.Model
 {
+    public enum OrderStatus { String, Int, Bool };
     public class DataService : IDataService
     {
         private string NameFile = "C:\\newparam_.xml";
         private List<LavelModel> LavelItem = new List<LavelModel>();
         private List<ParamModel> ParamItem = new List<ParamModel>();
         private List<string> TypeDataList = new List<string>();
-
         public DataService()
         {
             LoadData();
@@ -20,6 +20,16 @@ namespace MvvmLight1.Model
             LavelItem.Clear();
             ParamItem.Clear();
         }
+        private OrderStatus getType(string type)
+        {
+            switch (type)
+            {
+                case "String": return OrderStatus.String;
+                case "Int": return OrderStatus.Int;
+                case "Bool": return OrderStatus.Bool;
+                default:return OrderStatus.String;
+            }            
+        }            
         private void LoadData()
         {
             Clear();
@@ -50,9 +60,9 @@ namespace MvvmLight1.Model
                             id = chekInt(tmp2.Attribute("Id")),
                             ParamID = chekInt(tmp2.Attribute("ParamID")),
                             name = tmp2.Attribute("Name").Value,
-                            type = tmp2.Attribute("Type").Value,
+                            type = getType(tmp2.Attribute("Type").Value),
                             val = tmp2.Attribute("Val").Value,
-                            comment = tmp2.Attribute("Comment").Value
+                            comment = tmp2.Attribute("Comment").Value,                            
                         });
                     }
                 }
@@ -71,7 +81,6 @@ namespace MvvmLight1.Model
         public void GetData(Action<DataItem, Exception> callback)
         {
             // Use this to connect to the actual data service
-
             var item = new DataItem("Welcome to MVVM Light");
             callback(item, null);
         }        
@@ -85,12 +94,5 @@ namespace MvvmLight1.Model
             LoadData();
             callback(ParamItem, null);
         }
-    /*    public void GetDataType (Action<List<string>, Exception> callback)
-        {            
-            TypeDataList.Add("String");
-            TypeDataList.Add("Int");
-            TypeDataList.Add("Bool");
-            callback(TypeDataList, null);
-        }*/
     }
 }

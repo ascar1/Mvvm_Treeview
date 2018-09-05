@@ -19,7 +19,7 @@ namespace MvvmLight1.Model
             get;
             set;
         }
-        public string type
+        public OrderStatus type
         {
             get;
             set;
@@ -33,6 +33,6 @@ namespace MvvmLight1.Model
         {
             get;
             set;
-        }
+        }        
     }
 }

@@ -14,7 +14,10 @@ namespace MvvmLight1.ViewModel
         private readonly ParamModel _param;
 
         public ObservableCollection<ParamViewModel> Param;
-
+        public ParamViewModel()
+        {
+            _param = new ParamModel();
+        }
         public ParamViewModel (ParamModel param)
         {
             _param = param;
@@ -37,7 +40,7 @@ namespace MvvmLight1.ViewModel
                 _param.name = value;
             }
         }
-        public string type
+        public OrderStatus type
         {
             get { return _param.type; }
             set
@@ -60,6 +63,6 @@ namespace MvvmLight1.ViewModel
             {
                 _param.val = value;
             }
-        }
+        }        
     }
 }

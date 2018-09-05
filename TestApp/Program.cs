@@ -8,9 +8,21 @@ namespace TestApp
 {
     class Program
     {
-
+        enum Operation
+        {
+            Add = 1,
+            Subtract,
+            Multiply,
+            Divide
+        }
         static void Main(string[] args)
         {
+            Operation op;
+            op = Operation.Multiply;
+            
+            Console.WriteLine(op); // Add
+
+            Console.ReadLine();
         }
     }
 }
