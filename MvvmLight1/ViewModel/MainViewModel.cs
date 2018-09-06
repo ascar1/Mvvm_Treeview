@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using System.Windows.Interactivity;
 using MvvmLight1.Command;
 using MvvmLight1.Model;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using GalaSoft.MvvmLight.Command;
 
 namespace MvvmLight1.ViewModel
 {
@@ -128,6 +130,17 @@ namespace MvvmLight1.ViewModel
         public void TestTest ()
         {
             MessageBox.Show("Test Test Test");
+        }
+        private MyCommand relayCommand;
+        public MyCommand RelayCommand
+        {
+            get
+            {
+                return relayCommand ?? (relayCommand = new MyCommand(obj =>
+                {
+                    MessageBox.Show("Команда Relay command");
+                }));
+            }
         }
     }
 }

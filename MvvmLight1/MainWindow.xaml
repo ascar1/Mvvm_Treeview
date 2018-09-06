@@ -55,7 +55,12 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
             </TreeView>
-        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="{Binding TestTest}" >
+        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" CanUserAddRows="False">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding RelayCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Path=name}" Width="90" />
                 <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />
