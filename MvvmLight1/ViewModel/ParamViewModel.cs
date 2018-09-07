@@ -17,10 +17,12 @@ namespace MvvmLight1.ViewModel
         public ParamViewModel()
         {
             _param = new ParamModel();
+            isNew = true;
         }
         public ParamViewModel (ParamModel param)
         {
             _param = param;
+            isNew = false;
         }
         public int id
         {
@@ -63,6 +65,10 @@ namespace MvvmLight1.ViewModel
             {
                 _param.val = value;
             }
-        }        
+        }
+        public bool isNew
+        {
+            get;set;
+        }
     }
 }
