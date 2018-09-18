@@ -142,5 +142,17 @@ namespace MvvmLight1.ViewModel
                 }));
             }
         }
+
+        private MyCommand mouseCommand;
+        public MyCommand MouseCommand
+        {
+            get
+            {
+                return mouseCommand ?? (mouseCommand = new MyCommand(obj =>
+                {
+                    MessageBox.Show("Команда MouseCommand");
+                }));
+            }
+        }
     }
 }

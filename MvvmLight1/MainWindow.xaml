@@ -55,10 +55,13 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
             </TreeView>
-        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" CanUserAddRows="False">
+        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False">
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
+                <i:EventTrigger EventName="RowEditEnding">
                     <i:InvokeCommandAction Command="{Binding RelayCommand}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding MouseCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Columns>
