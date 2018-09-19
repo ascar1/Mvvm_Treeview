@@ -23,6 +23,7 @@ namespace MvvmLight1.ViewModel
     {
         private readonly IDataService _dataService;
         private MyCommand myCommand;
+
         public MyCommand MyCommand
         {
             get
@@ -126,7 +127,6 @@ namespace MvvmLight1.ViewModel
         {
             ParamList.Add(new ParamViewModel());
         }
-
         public void TestTest ()
         {
             MessageBox.Show("Test Test Test");
@@ -138,10 +138,13 @@ namespace MvvmLight1.ViewModel
             {
                 return relayCommand ?? (relayCommand = new MyCommand(obj =>
                 {
-                    MessageBox.Show("Команда Relay command");
+                    MessageBox.Show(SelectedROW.isNew.ToString());
+                    //MessageBox.Show("Команда Relay command");
                 }));
             }
         }
+
+        public ParamViewModel SelectedROW { get; set; }
 
         private MyCommand mouseCommand;
         public MyCommand MouseCommand
@@ -150,7 +153,10 @@ namespace MvvmLight1.ViewModel
             {
                 return mouseCommand ?? (mouseCommand = new MyCommand(obj =>
                 {
-                    MessageBox.Show("Команда MouseCommand");
+                    //ParamViewModel phone = obj as ParamViewModel;
+                    //MessageBox.Show(SelectedROW.name.ToString());
+                    //MessageBox.Show("Команда MouseCommand");
+
                 }));
             }
         }
