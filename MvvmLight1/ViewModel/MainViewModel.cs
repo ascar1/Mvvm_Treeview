@@ -11,8 +11,7 @@ using System.Windows;
 using GalaSoft.MvvmLight.Command;
 
 namespace MvvmLight1.ViewModel
-{
-    
+{    
     /// <summary>
     /// This class contains properties that the main View can data bind to.
     /// <para>
@@ -137,9 +136,9 @@ namespace MvvmLight1.ViewModel
             get
             {
                 return relayCommand ?? (relayCommand = new MyCommand(obj =>
-                {
-                    MessageBox.Show(SelectedROW.isNew.ToString());
-                    //MessageBox.Show("Команда Relay command");
+                {                    
+                    MessageBox.Show(" ! " + SelectedROW.isNew.ToString() /*+ " " + SelectedROW.name.ToString()*/);
+                    MessageBox.Show("Команда Relay command");
                 }));
             }
         }
@@ -155,8 +154,22 @@ namespace MvvmLight1.ViewModel
                 {
                     //ParamViewModel phone = obj as ParamViewModel;
                     //MessageBox.Show(SelectedROW.name.ToString());
-                    //MessageBox.Show("Команда MouseCommand");
-
+                    //MessageBox.Show("Команда MouseCommand");             
+                }));
+            }
+        }
+        private MyCommand newItem;
+        public MyCommand NewItem
+        {
+            get
+            {
+                return newItem ?? (newItem = new MyCommand(obj =>
+                {
+                    //ParamViewModel phone = obj as ParamViewModel;
+                   /* SelectedROW = new ParamViewModel();
+                    SelectedROW.name = "";*/
+                    MessageBox.Show("New Item");
+                    //MessageBox.Show("Команда MouseCommand");             
                 }));
             }
         }
