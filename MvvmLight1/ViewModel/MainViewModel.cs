@@ -18,7 +18,7 @@ namespace MvvmLight1.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>    
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase , IEditableObject
     {
         private readonly IDataService _dataService;
         private MyCommand myCommand;
@@ -130,6 +130,25 @@ namespace MvvmLight1.ViewModel
         {
             MessageBox.Show("Test Test Test");
         }
+
+        public void BeginEdit()
+        {
+            MessageBox.Show("BeginEdit");
+            //throw new System.NotImplementedException();
+        }
+
+        public void EndEdit()
+        {
+            MessageBox.Show("EndEdit");
+            // throw new System.NotImplementedException();
+        }
+
+        public void CancelEdit()
+        {
+            MessageBox.Show("CancelEdit");
+            //throw new System.NotImplementedException();
+        }
+
         private MyCommand relayCommand;
         public MyCommand RelayCommand
         {
@@ -138,7 +157,7 @@ namespace MvvmLight1.ViewModel
                 return relayCommand ?? (relayCommand = new MyCommand(obj =>
                 {                    
                     MessageBox.Show(" ! " + SelectedROW.isNew.ToString() /*+ " " + SelectedROW.name.ToString()*/);
-                    MessageBox.Show("Команда Relay command");
+                    //MessageBox.Show("Команда Relay command");
                 }));
             }
         }

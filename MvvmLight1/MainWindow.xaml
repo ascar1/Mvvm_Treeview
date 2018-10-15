@@ -56,24 +56,30 @@
             </TreeView.ContextMenu>
             </TreeView>
         <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedROW}">
+            <!--
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="RowEditEnding">
-                    <i:InvokeCommandAction Command="{Binding RelayCommand}"
-                                           />
+                    <i:InvokeCommandAction Command="{Binding RelayCommand}"/>
                 </i:EventTrigger>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding MouseCommand}"/>
                 </i:EventTrigger>
                 <i:EventTrigger EventName="InitializingNewItem">
                     <i:InvokeCommandAction Command="{Binding NewItem}"/>
-                </i:EventTrigger>                
+                </i:EventTrigger>
             </i:Interaction.Triggers>
+            -->
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Имя" Binding="{Binding Path=name}" Width="90" />
+                <DataGridTextColumn Header="Имя" Binding="{Binding Path=name, TargetNullValue=(enter a name)}" Width="90"  />
                 <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />
-                <DataGridTextColumn Header="Значение" Binding="{Binding Path=val}" Width="100" />
-                <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=comment}" Width="300" />
+                <DataGridTextColumn Header="Значение" Binding="{Binding Path=val, TargetNullValue=(enter a val)}" Width="100" />
+                <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=comment, TargetNullValue=(enter a comment)}" Width="300" />
             </DataGrid.Columns>
+
+            <DataGrid.RowValidationRules>
+                <local:CourseValidationRule ValidationStep="UpdatedValue"/>
+            </DataGrid.RowValidationRules>
+            
         </DataGrid>
     </DockPanel>
 </Window>
