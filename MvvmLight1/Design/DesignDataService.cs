@@ -73,5 +73,11 @@ namespace MvvmLight1.Design
             callback1(LavelItem, null);
         }
 
+        public void SaveParam(ParamModel param)
+        {
+
+        }
+            
+
     }
 }

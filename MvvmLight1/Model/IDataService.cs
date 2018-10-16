@@ -9,6 +9,7 @@ namespace MvvmLight1.Model
     {
         void GetData(Action<DataItem, Exception> callback);
         void GetDataLevel (Action<List<LavelModel>, Exception> callback);
-        void GetParam(Action<List<ParamModel>, Exception> callback);        
+        void GetParam(Action<List<ParamModel>, Exception> callback);
+        void SaveParam(ParamModel param);
     }
 }
