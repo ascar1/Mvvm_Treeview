@@ -22,7 +22,6 @@ namespace MvvmLight1.Model
         }
         private readonly LavelModel _lavelModel;
         private LavelViewModel _parent;
-        #region constructor
         public LavelViewModel()
         {
 
@@ -30,10 +29,9 @@ namespace MvvmLight1.Model
         public LavelViewModel (LavelModel model)
         {
             _lavelModel = model;
+
             Children = new ObservableCollection<LavelViewModel>();
         }
-        #endregion
-
         #region обработка выбора         
         private bool _IsSelected;
         public bool IsSelected
@@ -58,7 +56,6 @@ namespace MvvmLight1.Model
             }
         }
         #endregion
-
         public int ID
         {
             get => _lavelModel.id;
@@ -104,6 +101,24 @@ namespace MvvmLight1.Model
             }
         }
         public ObservableCollection<LavelViewModel> Children { get; set; }
+    }
+
+    public class CourseValidationRule : ValidationRule
+    {
+        public override ValidationResult Validate(object value, System.Globalization.CultureInfo cultureInfo)
+        {
+            /*     Course course = (value as BindingGroup).Items[0] as Course;
+                 if (course.StartDate > course.EndDate)
+                 {
+                     return new ValidationResult(false,
+                         "Start Date must be earlier than End Date.");
+                 }
+                 else
+                 {
+                     return ValidationResult.ValidResult;
+                 }*/
+            return ValidationResult.ValidResult;
+        }
     }
 }
 

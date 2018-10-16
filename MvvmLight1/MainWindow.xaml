@@ -31,8 +31,7 @@
             <Button Command="{Binding MyCommand}" Width="70" Height="25" HorizontalAlignment="Left" Content="Добавить"/>
         </ToolBarPanel>
         <StatusBar DockPanel.Dock="Bottom" Height="20" />
-            
-        <TreeView DockPanel.Dock="Left" ItemsSource="{Binding LavelList}"   Width="140">
+            <TreeView DockPanel.Dock="Left" ItemsSource="{Binding LavelList}"   Width="140">
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <StackPanel>
@@ -55,10 +54,9 @@
                     <MenuItem Header="Удалить"></MenuItem>
                 </ContextMenu>
             </TreeView.ContextMenu>
-        </TreeView>
-            
-        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedROW}" SelectionUnit="Cell">
-            
+            </TreeView>
+        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedROW}">
+            <!--
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="RowEditEnding">
                     <i:InvokeCommandAction Command="{Binding RelayCommand}"/>
@@ -66,19 +64,22 @@
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding MouseCommand}"/>
                 </i:EventTrigger>
-                
                 <i:EventTrigger EventName="InitializingNewItem">
                     <i:InvokeCommandAction Command="{Binding NewItem}"/>
                 </i:EventTrigger>
-                
             </i:Interaction.Triggers>
-
+            -->
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Path=name, TargetNullValue=(enter a name)}" Width="90"  />
                 <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />
                 <DataGridTextColumn Header="Значение" Binding="{Binding Path=val, TargetNullValue=(enter a val)}" Width="100" />
                 <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=comment, TargetNullValue=(enter a comment)}" Width="300" />
             </DataGrid.Columns>
+
+            <DataGrid.RowValidationRules>
+                <local:CourseValidationRule ValidationStep="UpdatedValue"/>
+            </DataGrid.RowValidationRules>
+            
         </DataGrid>
     </DockPanel>
 </Window>
