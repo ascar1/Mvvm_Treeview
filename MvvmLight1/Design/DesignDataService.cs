@@ -72,6 +72,22 @@ namespace MvvmLight1.Design
             callback(ParamItem, null);
             callback1(LavelItem, null);
         }
+        public void SaveParam(ParamModel param)
+        {
+        }
+        public void DeleteParam(int id)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void AddLavel(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteLavel(int i)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

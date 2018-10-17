@@ -23,40 +23,73 @@
                     <x:Type Type="local:OrderStatus"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
+
+            <HierarchicalDataTemplate x:Key="LavelItem" ItemsSource="{Binding Children}">
+                <StackPanel>
+                    <TextBlock x:Name="textBlock" Text="{Binding name}">
+                        <!--
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseLeftButtonDown">
+                            <i:InvokeCommandAction Command="{Binding MyCommand}"/>
+                        </i:EventTrigger>                                 
+                    </i:Interaction.Triggers>
+                        -->
+                        <TextBlock.InputBindings>
+                            <MouseBinding Command="{Binding MyCommand}" MouseAction="LeftClick"/>
+                        </TextBlock.InputBindings>
+                        
+                    </TextBlock>
+                </StackPanel>
+                <HierarchicalDataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding isSelected}" Value="True">
+                        <Setter TargetName="textBlock" Property="FontWeight" Value="Bold"/>
+                    </DataTrigger>
+                </HierarchicalDataTemplate.Triggers>
+            </HierarchicalDataTemplate>
+            
         </ResourceDictionary>
+
+        
     </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="X" Modifiers="ALT" Command="{Binding MyCommand}" />
+    </Window.InputBindings>
     
-        <DockPanel LastChildFill="True">
+    <DockPanel LastChildFill="True">
         <ToolBarPanel  DockPanel.Dock="Top" Height="25" HorizontalAlignment="Left" >
             <Button Command="{Binding MyCommand}" Width="70" Height="25" HorizontalAlignment="Left" Content="Добавить"/>
         </ToolBarPanel>
         <StatusBar DockPanel.Dock="Bottom" Height="20" />
-            <TreeView DockPanel.Dock="Left" ItemsSource="{Binding LavelList}"   Width="140">
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                        <StackPanel>
-                            <TextBlock x:Name="textBlock" Text="{Binding name}" />
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
 
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="TreeViewItem">
-                        <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
-                        <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
-                    </Style>
-                </TreeView.ItemContainerStyle>
+        <TreeView DockPanel.Dock="Left" ItemsSource="{Binding LavelList}" Width="140" ItemTemplate="{StaticResource LavelItem}">
+            <!--
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <StackPanel>
+                        <TextBlock x:Name="textBlock" Text="{Binding name}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+            -->
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="TreeViewItem">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
             <TreeView.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Копировать"></MenuItem>
+                    <MenuItem Header="Добавить уровень" Command="{Binding AddLavel}"></MenuItem>
                     <MenuItem Header="Вставить"></MenuItem>
                     <MenuItem Header="Вырезать"></MenuItem>
                     <MenuItem Header="Удалить"></MenuItem>
                 </ContextMenu>
             </TreeView.ContextMenu>
-            </TreeView>
-        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedROW}">
-            <!--
+        </TreeView>
+            
+        <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedROW}" >
+ <!--
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="RowEditEnding">
                     <i:InvokeCommandAction Command="{Binding RelayCommand}"/>
@@ -68,7 +101,7 @@
                     <i:InvokeCommandAction Command="{Binding NewItem}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-            -->
+-->
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Path=name, TargetNullValue=(enter a name)}" Width="90"  />
                 <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />
@@ -76,10 +109,12 @@
                 <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=comment, TargetNullValue=(enter a comment)}" Width="300" />
             </DataGrid.Columns>
 
-            <DataGrid.RowValidationRules>
-                <local:CourseValidationRule ValidationStep="UpdatedValue"/>
-            </DataGrid.RowValidationRules>
-            
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add" Command="{Binding MyCommand}"></MenuItem>
+                    <MenuItem Header="Delete" Command="{Binding DeleteRow}"></MenuItem>
+                </ContextMenu>                
+            </DataGrid.ContextMenu>
         </DataGrid>
     </DockPanel>
 </Window>

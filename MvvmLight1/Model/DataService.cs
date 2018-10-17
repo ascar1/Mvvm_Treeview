@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Linq;
 
 namespace MvvmLight1.Model
 {
@@ -27,9 +28,17 @@ namespace MvvmLight1.Model
                 case "String": return OrderStatus.String;
                 case "Int": return OrderStatus.Int;
                 case "Bool": return OrderStatus.Bool;
-                default:return OrderStatus.String;
-            }            
-        }            
+                default: return OrderStatus.String;
+            }
+        }
+        private int getNewIndex()
+        {
+            int i;
+            //i = ParamItem.LastOrDefault().id;
+            i = ParamItem.Max(I=> I.id);
+            i = i + 1;
+            return i;
+        }
         private void LoadData()
         {
             Clear();
@@ -93,6 +102,85 @@ namespace MvvmLight1.Model
         {
             LoadData();
             callback(ParamItem, null);
+        }
+        private void writeParam(XElement tmp, ParamModel param)
+        {
+            tmp.Add(new XElement("Param",
+                      new XAttribute("Id", getNewIndex()),
+                      new XAttribute("ParamID", param.ParamID),
+                      new XAttribute("Name", param.name),
+                      new XAttribute("Type", param.type),
+                      new XAttribute("Val", param.val),
+                      new XAttribute("Comment", param.comment)
+                      ));           
+        }
+        private void updateParam(XElement tmp, ParamModel param)
+        {
+            tmp.Attribute("Name").Value = param.name;
+            tmp.Attribute("Type").Value = param.type.ToString();
+            tmp.Attribute("Val").Value = param.val;
+            tmp.Attribute("Comment").Value = param.comment;
+        }
+        public void SaveParam(ParamModel param)
+        {
+            XDocument xDoc = XDocument.Load(NameFile);
+            bool flag = false;
+            // записать                 
+            foreach (XElement tmp in xDoc.Element("ProgramParam").Elements("level"))
+            {
+                foreach (XElement tmp1 in tmp.Elements("level"))
+                {
+                    if ((tmp1.Attribute("Id").Value.ToString() == param.ParamID.ToString()) && (param.id == 0))
+                    {
+                        writeParam(tmp1, param);
+                        break;
+                    }
+                    foreach (XElement tmp2 in tmp1.Elements("Param"))
+                    {
+                        if (param.id != 0)
+                        {
+                            if (tmp2.Attribute("Id").Value.ToString() == param.id.ToString())
+                            {
+                                updateParam(tmp2, param);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            xDoc.Save(NameFile);
+            LoadData();
+        }
+        public void DeleteParam(int id)
+        {
+            XDocument xDoc = XDocument.Load(NameFile);            
+            // записать                 
+            foreach (XElement tmp in xDoc.Element("ProgramParam").Elements("level"))
+            {
+                foreach (XElement tmp1 in tmp.Elements("level"))
+                {
+                    foreach (XElement tmp2 in tmp1.Elements("Param"))
+                    {
+                        if (tmp2.Attribute("Id").Value.ToString() == id.ToString())
+                        {
+                            tmp2.Remove();
+                            break;
+                        }
+                    }
+                }
+            }
+            xDoc.Save(NameFile);
+            LoadData();
+        }
+
+        public void AddLavel(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteLavel(int i)
+        {
+            throw new NotImplementedException();
         }
     }
 }
