@@ -18,10 +18,11 @@ namespace MvvmLight1.Model
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         private readonly LavelModel _lavelModel;
         private LavelViewModel _parent;
+
         #region constructor
         public LavelViewModel()
         {
@@ -30,7 +31,6 @@ namespace MvvmLight1.Model
         public LavelViewModel (LavelModel model)
         {
             _lavelModel = model;
-
             Children = new ObservableCollection<LavelViewModel>();
         }
         #endregion
@@ -42,20 +42,32 @@ namespace MvvmLight1.Model
             set
             {
                 _IsSelected = value;
-                if (value)
-                {
-                    OnPropertyChanged();                   
-                }
+                if (!_IsSelected) IsEditMode = false; 
+/*                if (value)
+                {*/
+                   OnPropertyChanged("IsSelected");                   
+                //}
             }
         }
+
         private bool _IsExpanded;
         public bool IsExpanded
         {
             get { return _IsExpanded; }
-            set
-            {
+            set {
                 _IsExpanded = value;
+                if (value)
+                {
+                    OnPropertyChanged();
+                }
             }
+        }
+
+        private bool _isEditMode;
+        public bool IsEditMode
+        {
+            get { return _isEditMode; }
+            set { _isEditMode = value; }
         }
         #endregion
         public int ID
@@ -84,6 +96,18 @@ namespace MvvmLight1.Model
                 _lavelModel.name = value;
             }
         }
+
+        public bool test
+        {
+            get
+            {
+                /*
+                if (_lavelModel.name == "Analiz1") return _IsSelected; 
+                else return false;*/
+                return _IsSelected;
+            }
+        }
+        
         public bool isRoot
         {
             get { return _lavelModel.paremtId == -1; }

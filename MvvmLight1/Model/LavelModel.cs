@@ -9,11 +9,12 @@ namespace MvvmLight1.Model
     public class LavelModel{
         public LavelModel()
         {
-            this.paremtId = -1;
+            this.paremtId = -1;            
         }
         public string name { get; set; }
         public string comment { get; set; }
         public int id { get; set; }
         public int paremtId { get; set; }
+        
     }
 }

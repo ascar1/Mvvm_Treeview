@@ -21,12 +21,21 @@ namespace MvvmLight1.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly IDataService _dataService;
-        public BindingList<LavelViewModel> LavelList { get; private set; }
+        public BindingList<LavelViewModel> LavelList { get; set; }
         public ObservableCollection<ParamViewModel> ParamList { get; private set; }
         public ObservableCollection<string> type { get; private set; }
+        public LavelViewModel SelectedLavel { get; private set; }
         public ParamViewModel SelectedROW { get; set; }
         public int parentSelected;
         public int idSelected;
+
+        public bool testparam
+        {
+            get
+            {
+                return true;
+            }
+        }
 
         #region constructor
         public MainViewModel(IDataService dataService)
@@ -93,8 +102,14 @@ namespace MvvmLight1.ViewModel
         }
         private void ItemsOnCollectionChanged1(object sender, PropertyChangedEventArgs e)
         {
+            
+            if (e.PropertyName == "IsExpanded")
+            {
+                MessageBox.Show("2");
+            }
             if (e.PropertyName == "IsSelected")
             {
+                SelectedLavel = (LavelViewModel)sender;
                 var Lavel = (LavelViewModel)sender;
                 ParamList.Clear();
                 _dataService.GetParam(
@@ -106,7 +121,9 @@ namespace MvvmLight1.ViewModel
                         }
                         parentSelected = Lavel.ID;
                         LoadParam(item, Lavel.ID);
+
                     });
+                
             }
         }
 
@@ -119,7 +136,7 @@ namespace MvvmLight1.ViewModel
                 return myCommand ?? (myCommand = new MyCommand(obj =>
                 {
                     //AddNewParam();
-                    MessageBox.Show("Команда " + " ParamList " /*+ ParamList.Count.ToString()*/);
+                    MessageBox.Show("Команда " + " Test " + LavelList.Count());
                 }));
             }
         }
@@ -140,6 +157,7 @@ namespace MvvmLight1.ViewModel
                                                        {
                      MessageBox.Show("Команда MouseCommand: " /* +  SelectedROW.name.ToString()*/);                    
                 }));
+
         private MyCommand newItem;
         public MyCommand NewItem => newItem ?? (newItem = new MyCommand(obj =>
                                                   {
@@ -161,6 +179,41 @@ namespace MvvmLight1.ViewModel
                                                    {
                                                        MessageBox.Show("Add Lavel!!! " + parentSelected.ToString());
                                                    }));
+
+        private MyCommand editLavel;
+        public MyCommand EditLavel
+        {
+            get
+            {
+                return editLavel ?? (editLavel = new MyCommand(obj =>
+                {
+                    if (SelectedLavel != null)
+                    {                        
+                        SelectedLavel.IsEditMode = true;
+                    }                        
+                }));
+            }
+        }
+
+        private MyCommand commitLavel;
+        public MyCommand CommitLavel
+        {
+            get
+            {
+                return commitLavel ?? (commitLavel = new MyCommand(obj =>
+                {                    
+                    if (SelectedLavel != null)
+                    {
+                        MessageBox.Show("CommitLavel");
+                        SelectedLavel.IsEditMode = false;
+                    }
+                        
+                }));
+            }
+        }
+
+
+
 
         #endregion
     }

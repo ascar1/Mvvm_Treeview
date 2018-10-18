@@ -12,7 +12,16 @@
         Width="868.982"
         Title="MVVM Light Application"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
-
+    
+    <Window.InputBindings>
+        <KeyBinding Key="X" Modifiers="ALT" Command="{Binding MyCommand}" />
+        <!--
+        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding MyCommand}"/>
+        -->
+        <KeyBinding Key="F2" Command="{Binding EditLavel}" />
+        <KeyBinding Key="Enter" Command="{Binding CommitLavel}" />
+    </Window.InputBindings>
+    
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -27,38 +36,21 @@
             <HierarchicalDataTemplate x:Key="LavelItem" ItemsSource="{Binding Children}">
                 <StackPanel>
                     <TextBlock x:Name="textBlock" Text="{Binding name}">
-                        <!--
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseLeftButtonDown">
-                            <i:InvokeCommandAction Command="{Binding MyCommand}"/>
-                        </i:EventTrigger>                                 
-                    </i:Interaction.Triggers>
-                        -->
-                        <TextBlock.InputBindings>
-                            <MouseBinding Command="{Binding MyCommand}" MouseAction="LeftClick"/>
-                        </TextBlock.InputBindings>
-                        
                     </TextBlock>
                 </StackPanel>
                 <HierarchicalDataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding isSelected}" Value="True">
-                        <Setter TargetName="textBlock" Property="FontWeight" Value="Bold"/>
+                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                        <Setter TargetName="textBlock" Property="FontSize" Value="20"/>
                     </DataTrigger>
                 </HierarchicalDataTemplate.Triggers>
             </HierarchicalDataTemplate>
-            
         </ResourceDictionary>
-
-        
     </Window.Resources>
-
-    <Window.InputBindings>
-        <KeyBinding Key="X" Modifiers="ALT" Command="{Binding MyCommand}" />
-    </Window.InputBindings>
     
     <DockPanel LastChildFill="True">
         <ToolBarPanel  DockPanel.Dock="Top" Height="25" HorizontalAlignment="Left" >
             <Button Command="{Binding MyCommand}" Width="70" Height="25" HorizontalAlignment="Left" Content="Добавить"/>
+          
         </ToolBarPanel>
         <StatusBar DockPanel.Dock="Bottom" Height="20" />
 
@@ -74,8 +66,8 @@
             -->
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">
-                    <Setter Property="IsSelected" Value="{Binding IsSelected}"/>
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ContextMenu>
@@ -87,9 +79,9 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
-            
+         
         <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedROW}" >
- <!--
+ 
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="RowEditEnding">
                     <i:InvokeCommandAction Command="{Binding RelayCommand}"/>
@@ -101,7 +93,7 @@
                     <i:InvokeCommandAction Command="{Binding NewItem}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
--->
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Имя" Binding="{Binding Path=name, TargetNullValue=(enter a name)}" Width="90"  />
                 <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />
@@ -116,9 +108,14 @@
                 </ContextMenu>                
             </DataGrid.ContextMenu>
         </DataGrid>
+        
     </DockPanel>
+
+
+
 </Window>
 
 <!--
         <Button  Content="Button" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="75"/>
 -->
+
