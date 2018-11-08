@@ -105,7 +105,7 @@ namespace MvvmLight1.ViewModel
             
             if (e.PropertyName == "IsExpanded")
             {
-                MessageBox.Show("2");
+               // MessageBox.Show("2");
             }
             if (e.PropertyName == "IsSelected")
             {

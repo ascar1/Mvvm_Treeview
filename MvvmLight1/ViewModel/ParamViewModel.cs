@@ -99,8 +99,7 @@ namespace MvvmLight1.ViewModel
             {
                 _dataService.SaveParam(this._param);
                 isNew = false;
-                inEdit = false;
-                
+                inEdit = false;                
             }
             else
             {
