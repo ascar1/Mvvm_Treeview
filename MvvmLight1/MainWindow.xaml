@@ -35,13 +35,32 @@
 
             <HierarchicalDataTemplate x:Key="LavelItem" ItemsSource="{Binding Children}">
                 <StackPanel>
-                    <TextBlock x:Name="textBlock" Text="{Binding name}">
-                    </TextBlock>
+                    <TextBlock x:Name="textBlock" Text="{Binding name}" Margin="3,0,0,0"/>
+                    <TextBox x:Name="editTextBlock" Visibility="Collapsed" MinWidth="100" 
+                             Text="{Binding name}"  Height="16" />
                 </StackPanel>
                 <HierarchicalDataTemplate.Triggers>
-                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                  <!--
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeViewItem}}}" Value="True"/>
+                        </MultiTrigger.Conditions>
                         <Setter TargetName="textBlock" Property="FontSize" Value="20"/>
+                    </MultiTrigger>-->
+                    <!--
+                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}" Value="True">
+                        <Setter TargetName="textBlock" Property="FontSize" Value="20"/>
+                        <Setter TargetName="textBlock" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="editTextBlock" Property="Visibility" Value="Visible"/>
                     </DataTrigger>
+                    -->
+                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}" Value="True">
+                        <Setter TargetName="textBlock" Property="FontSize" Value="20"/>
+                        <Setter TargetName="textBlock" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="editTextBlock" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+
+
                 </HierarchicalDataTemplate.Triggers>
             </HierarchicalDataTemplate>
         </ResourceDictionary>
@@ -57,7 +76,7 @@
         <TreeView DockPanel.Dock="Left" ItemsSource="{Binding LavelList}" Width="140" ItemTemplate="{StaticResource LavelItem}">
             <!--
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}k">
                     <StackPanel>
                         <TextBlock x:Name="textBlock" Text="{Binding name}"/>
                     </StackPanel>
@@ -72,6 +91,7 @@
             </TreeView.ItemContainerStyle>
             <TreeView.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="Переименовать" Command="{Binding EditLavel}"></MenuItem>
                     <MenuItem Header="Добавить уровень" Command="{Binding AddLavel}"></MenuItem>
                     <MenuItem Header="Вставить"></MenuItem>
                     <MenuItem Header="Вырезать"></MenuItem>

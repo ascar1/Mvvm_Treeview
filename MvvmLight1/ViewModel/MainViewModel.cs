@@ -101,8 +101,7 @@ namespace MvvmLight1.ViewModel
             }
         }
         private void ItemsOnCollectionChanged1(object sender, PropertyChangedEventArgs e)
-        {
-            
+        {            
             if (e.PropertyName == "IsExpanded")
             {
                // MessageBox.Show("2");
@@ -121,9 +120,7 @@ namespace MvvmLight1.ViewModel
                         }
                         parentSelected = Lavel.ID;
                         LoadParam(item, Lavel.ID);
-
-                    });
-                
+                    });                
             }
         }
 
@@ -188,7 +185,8 @@ namespace MvvmLight1.ViewModel
                 return editLavel ?? (editLavel = new MyCommand(obj =>
                 {
                     if (SelectedLavel != null)
-                    {                        
+                    {
+                        MessageBox.Show("Is edit mode enable! " + parentSelected.ToString());
                         SelectedLavel.IsEditMode = true;
                     }                        
                 }));

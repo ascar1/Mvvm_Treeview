@@ -42,7 +42,7 @@ namespace MvvmLight1.Model
             set
             {
                 _IsSelected = value;
-                if (!_IsSelected) IsEditMode = false; 
+             //   if (!_IsSelected) IsEditMode = false; 
 /*                if (value)
                 {*/
                    OnPropertyChanged("IsSelected");                   
@@ -67,7 +67,13 @@ namespace MvvmLight1.Model
         public bool IsEditMode
         {
             get { return _isEditMode; }
-            set { _isEditMode = value; }
+            set {                
+                _isEditMode = value;
+                if (value)
+                {
+                    OnPropertyChanged("IsEditMode");
+                }
+            }
         }
         #endregion
         public int ID
