@@ -18,7 +18,7 @@
         <!--
         <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding MyCommand}"/>
         -->
-        <KeyBinding Key="F2" Command="{Binding EditLavel}" />
+        <KeyBinding Key="F2" Command="{Binding Edit}" />
         <KeyBinding Key="Enter" Command="{Binding CommitLavel}" />
     </Window.InputBindings>
     
@@ -53,8 +53,11 @@
                         <Setter TargetName="textBlock" Property="Visibility" Value="Collapsed"/>
                         <Setter TargetName="editTextBlock" Property="Visibility" Value="Visible"/>
                     </DataTrigger>
+                    ,RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}"  
+                    IsEditMode
                     -->
-                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}" Value="True">
+
+                    <DataTrigger Binding="{Binding IsEditMode}" Value="True">
                         <Setter TargetName="textBlock" Property="FontSize" Value="20"/>
                         <Setter TargetName="textBlock" Property="Visibility" Value="Collapsed"/>
                         <Setter TargetName="editTextBlock" Property="Visibility" Value="Visible"/>
@@ -76,7 +79,7 @@
         <TreeView DockPanel.Dock="Left" ItemsSource="{Binding LavelList}" Width="140" ItemTemplate="{StaticResource LavelItem}">
             <!--
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}k">
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <StackPanel>
                         <TextBlock x:Name="textBlock" Text="{Binding name}"/>
                     </StackPanel>
@@ -87,6 +90,7 @@
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                   
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ContextMenu>

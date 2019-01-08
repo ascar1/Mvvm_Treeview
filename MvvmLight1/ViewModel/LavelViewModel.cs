@@ -13,16 +13,10 @@ using System.Windows.Controls;
 
 namespace MvvmLight1.Model
 {
-    public class LavelViewModel :ViewModelBase
+    public class LavelViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
         private readonly LavelModel _lavelModel;
         private LavelViewModel _parent;
-
         #region constructor
         public LavelViewModel()
         {
@@ -31,22 +25,23 @@ namespace MvvmLight1.Model
         public LavelViewModel (LavelModel model)
         {
             _lavelModel = model;
-            Children = new ObservableCollection<LavelViewModel>();
+            Children = new ObservableCollection<LavelViewModel>();            
         }
         #endregion
-        #region обработка выбора         
+        #region обработка выбора                
         private bool _IsSelected;
         public bool IsSelected
         {
-            get { return _IsSelected; }
+            get {
+                
+                return _IsSelected;
+            }
             set
-            {
+            {              
                 _IsSelected = value;
-             //   if (!_IsSelected) IsEditMode = false; 
-/*                if (value)
-                {*/
-                   OnPropertyChanged("IsSelected");                   
-                //}
+                PropertyChangedEventHandler handler = PropertyChanged;
+                if (handler != null)
+                    handler(this, new PropertyChangedEventArgs("IsSelected"));                                            
             }
         }
 
@@ -58,7 +53,9 @@ namespace MvvmLight1.Model
                 _IsExpanded = value;
                 if (value)
                 {
-                    OnPropertyChanged();
+                    PropertyChangedEventHandler handler = PropertyChanged;
+                    if (handler != null)
+                        handler(this, new PropertyChangedEventArgs("IsExpanded"));                   
                 }
             }
         }
@@ -67,14 +64,15 @@ namespace MvvmLight1.Model
         public bool IsEditMode
         {
             get { return _isEditMode; }
-            set {                
+            set {
+                
                 _isEditMode = value;
-                if (value)
-                {
-                    OnPropertyChanged("IsEditMode");
-                }
+                PropertyChangedEventHandler handler = PropertyChanged;
+                if (handler != null)
+                    handler(this, new PropertyChangedEventArgs("IsEditMode"));
             }
         }
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
         public int ID
         {

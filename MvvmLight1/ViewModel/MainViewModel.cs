@@ -18,10 +18,10 @@ namespace MvvmLight1.ViewModel
     /// See http://www.mvvmlight.net
     /// </para>
     /// </summary>    
-    public class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private readonly IDataService _dataService;
-        public BindingList<LavelViewModel> LavelList { get; set; }
+        public ObservableCollection<LavelViewModel> LavelList { get; set; }
         public ObservableCollection<ParamViewModel> ParamList { get; private set; }
         public ObservableCollection<string> type { get; private set; }
         public LavelViewModel SelectedLavel { get; private set; }
@@ -29,18 +29,10 @@ namespace MvvmLight1.ViewModel
         public int parentSelected;
         public int idSelected;
 
-        public bool testparam
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         #region constructor
         public MainViewModel(IDataService dataService)
         {
-            LavelList = new BindingList<LavelViewModel>();
+            LavelList = new ObservableCollection<LavelViewModel>();
             ParamList = new ObservableCollection<ParamViewModel>();
             type = new ObservableCollection<string>();
             _dataService = dataService;
@@ -62,8 +54,18 @@ namespace MvvmLight1.ViewModel
                     }
                     LoadLavel(item);
                 });
+
+            Edit = new DelegateCommand<object>(arg =>
+           {
+               LavelViewModel tmp = LavelList.FirstOrDefault(i => i.IsSelected);
+               if (tmp != null)
+               {
+                   tmp.IsEditMode = true;
+               }
+           });
         }
         #endregion
+        public DelegateCommand<object> Edit { get; private set; }
 
         private void LoadLavel(List<LavelModel> list)
         {
@@ -122,6 +124,14 @@ namespace MvvmLight1.ViewModel
                         LoadParam(item, Lavel.ID);
                     });                
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs("propertyName"));
         }
 
         #region Command
@@ -188,6 +198,7 @@ namespace MvvmLight1.ViewModel
                     {
                         MessageBox.Show("Is edit mode enable! " + parentSelected.ToString());
                         SelectedLavel.IsEditMode = true;
+                        NotifyPropertyChanged("LavelList");
                     }                        
                 }));
             }
@@ -201,8 +212,7 @@ namespace MvvmLight1.ViewModel
                 return commitLavel ?? (commitLavel = new MyCommand(obj =>
                 {                    
                     if (SelectedLavel != null)
-                    {
-                        MessageBox.Show("CommitLavel");
+                    {                        
                         SelectedLavel.IsEditMode = false;
                     }
                         
