@@ -140,6 +140,7 @@ namespace MvvmLight1.ViewModel
         {
             get
             {
+                MessageBox.Show("Команда " + " Test " + LavelList.Count());
                 return myCommand ?? (myCommand = new MyCommand(obj =>
                 {
                     //AddNewParam();

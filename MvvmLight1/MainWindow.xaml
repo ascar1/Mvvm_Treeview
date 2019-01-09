@@ -37,7 +37,13 @@
                 <StackPanel>
                     <TextBlock x:Name="textBlock" Text="{Binding name}" Margin="3,0,0,0"/>
                     <TextBox x:Name="editTextBlock" Visibility="Collapsed" MinWidth="100" 
-                             Text="{Binding name}"  Height="16" />
+                             Text="{Binding name}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="LostFocus">
+                                <i:InvokeCommandAction Command="{Binding MyCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
                 </StackPanel>
                 <HierarchicalDataTemplate.Triggers>
                   <!--
