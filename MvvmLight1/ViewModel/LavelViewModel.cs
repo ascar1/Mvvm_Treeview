@@ -16,6 +16,7 @@ namespace MvvmLight1.Model
     public class LavelViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private readonly LavelModel _lavelModel;
+        private IDataService _dataService = new DataService();
         private LavelViewModel _parent;
         #region constructor
         public LavelViewModel()
@@ -100,7 +101,18 @@ namespace MvvmLight1.Model
                 _lavelModel.name = value;
             }
         }
-
+        private string _CNGName;
+        public string CNGName
+        {
+            get
+            {
+                return _CNGName;
+            }
+            set
+            {
+                _CNGName = value;
+            }
+        }
         public bool test
         {
             get
@@ -131,6 +143,11 @@ namespace MvvmLight1.Model
             }
         }
         public ObservableCollection<LavelViewModel> Children { get; set; }
+        public void Save()
+        {
+            _dataService.SaveLavel(this._lavelModel);
+        }
+
     }
 }
 

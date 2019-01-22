@@ -89,5 +89,10 @@ namespace MvvmLight1.Design
         {
             throw new NotImplementedException();
         }
+ 
+        public void SaveLavel(LavelModel lavel)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

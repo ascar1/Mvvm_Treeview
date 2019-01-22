@@ -94,7 +94,7 @@ namespace MvvmLight1.ViewModel
             //throw new NotImplementedException();
         }
         public void EndEdit()
-        {
+        {            
             if ((!inEdit) && (MessageBox.Show("Save changes?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes))
             {
                 _dataService.SaveParam(this._param);

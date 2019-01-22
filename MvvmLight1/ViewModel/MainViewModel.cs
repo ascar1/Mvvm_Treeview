@@ -104,13 +104,16 @@ namespace MvvmLight1.ViewModel
         }
         private void ItemsOnCollectionChanged1(object sender, PropertyChangedEventArgs e)
         {            
-            if (e.PropertyName == "IsExpanded")
-            {
-               // MessageBox.Show("2");
-            }
             if (e.PropertyName == "IsSelected")
             {
+                //MessageBox.Show("ItemsOnCollectionChanged1 IsSelected");
+
                 SelectedLavel = (LavelViewModel)sender;
+
+                if (SelectedLavel.IsSelected == false)
+                {
+                    SelectedLavel.IsEditMode = false;
+                }
                 var Lavel = (LavelViewModel)sender;
                 ParamList.Clear();
                 _dataService.GetParam(
@@ -140,7 +143,7 @@ namespace MvvmLight1.ViewModel
         {
             get
             {
-                MessageBox.Show("Команда " + " Test " + LavelList.Count());
+             //   MessageBox.Show("Команда " + " Test " + LavelList.Count());
                 return myCommand ?? (myCommand = new MyCommand(obj =>
                 {
                     //AddNewParam();
@@ -196,8 +199,7 @@ namespace MvvmLight1.ViewModel
                 return editLavel ?? (editLavel = new MyCommand(obj =>
                 {
                     if (SelectedLavel != null)
-                    {
-                        MessageBox.Show("Is edit mode enable! " + parentSelected.ToString());
+                    {                        
                         SelectedLavel.IsEditMode = true;
                         NotifyPropertyChanged("LavelList");
                     }                        
@@ -211,7 +213,12 @@ namespace MvvmLight1.ViewModel
             get
             {
                 return commitLavel ?? (commitLavel = new MyCommand(obj =>
-                {                    
+                {    
+                    if (SelectedLavel.name != SelectedLavel.CNGName)
+                    {
+                        //MessageBox.Show("!!!");
+                        //SelectedLavel.Save();
+                    }
                     if (SelectedLavel != null)
                     {                        
                         SelectedLavel.IsEditMode = false;
@@ -220,10 +227,6 @@ namespace MvvmLight1.ViewModel
                 }));
             }
         }
-
-
-
-
         #endregion
     }
 }

@@ -98,6 +98,46 @@ namespace MvvmLight1.Model
             LoadData();
             callback(LavelItem, null);
         }
+
+        public void UpdateLavel (XElement tmp, LavelModel lavel)
+        {
+            tmp.Attribute("Name").Value = lavel.name;                        
+            tmp.Attribute("Comment").Value = lavel.comment;
+        }
+
+        public void SaveLavel (LavelModel lavel)
+        {
+            XDocument xDoc = XDocument.Load(NameFile);
+            bool flag = false;
+            // записать                 
+            foreach (XElement tmp in xDoc.Element("ProgramParam").Elements("level"))
+            {
+                foreach (XElement tmp1 in tmp.Elements("level"))
+                {
+                    /* Записать новый уровень
+                    if ((tmp1.Attribute("Id").Value.ToString() == param.ParamID.ToString()) && (param.id == 0))
+                    {
+                        writeParam(tmp1, param);
+                        break;
+                    }
+                    */
+                    // Обновить уровень
+                    foreach (XElement tmp2 in tmp1.Elements("lavel"))
+                    {
+                        if (lavel.id != 0)
+                        {
+                            if (tmp2.Attribute("Id").Value.ToString() == lavel.id.ToString())
+                            {
+                                UpdateLavel(tmp2, lavel);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            xDoc.Save(NameFile);
+            LoadData();
+        }
         public void GetParam (Action<List<ParamModel>, Exception> callback)
         {
             LoadData();

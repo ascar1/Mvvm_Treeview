@@ -12,16 +12,16 @@
         Width="868.982"
         Title="MVVM Light Application"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
-    
+
     <Window.InputBindings>
         <KeyBinding Key="X" Modifiers="ALT" Command="{Binding MyCommand}" />
         <!--
         <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding MyCommand}"/>
         -->
-        <KeyBinding Key="F2" Command="{Binding Edit}" />
+        <KeyBinding Key="F2" Command="{Binding EditLavel}" />
         <KeyBinding Key="Enter" Command="{Binding CommitLavel}" />
     </Window.InputBindings>
-    
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -35,9 +35,9 @@
 
             <HierarchicalDataTemplate x:Key="LavelItem" ItemsSource="{Binding Children}">
                 <StackPanel>
-                    <TextBlock x:Name="textBlock" Text="{Binding name}" Margin="3,0,0,0"/>
+                    <TextBlock x:Name="textBlock" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Margin="3,0,0,0"/>
                     <TextBox x:Name="editTextBlock" Visibility="Collapsed" MinWidth="100" 
-                             Text="{Binding name}">
+                             Text="{Binding name, UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="LostFocus">
                                 <i:InvokeCommandAction Command="{Binding MyCommand}"/>
@@ -46,7 +46,7 @@
                     </TextBox>
                 </StackPanel>
                 <HierarchicalDataTemplate.Triggers>
-                  <!--
+                    <!--
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
                             <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeViewItem}}}" Value="True"/>
@@ -74,11 +74,11 @@
             </HierarchicalDataTemplate>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <DockPanel LastChildFill="True">
         <ToolBarPanel  DockPanel.Dock="Top" Height="25" HorizontalAlignment="Left" >
             <Button Command="{Binding MyCommand}" Width="70" Height="25" HorizontalAlignment="Left" Content="Добавить"/>
-          
+
         </ToolBarPanel>
         <StatusBar DockPanel.Dock="Bottom" Height="20" />
 
@@ -96,7 +96,7 @@
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
-                   
+
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ContextMenu>
@@ -109,9 +109,9 @@
                 </ContextMenu>
             </TreeView.ContextMenu>
         </TreeView>
-         
+
         <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedROW}" >
- 
+
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="RowEditEnding">
                     <i:InvokeCommandAction Command="{Binding RelayCommand}"/>
@@ -135,17 +135,9 @@
                 <ContextMenu>
                     <MenuItem Header="Add" Command="{Binding MyCommand}"></MenuItem>
                     <MenuItem Header="Delete" Command="{Binding DeleteRow}"></MenuItem>
-                </ContextMenu>                
+                </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
-        
     </DockPanel>
-
-
-
 </Window>
-
-<!--
-        <Button  Content="Button" HorizontalAlignment="Left" Margin="10,310,0,0" VerticalAlignment="Top" Width="75"/>
--->
 
