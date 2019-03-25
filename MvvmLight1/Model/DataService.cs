@@ -114,25 +114,19 @@ namespace MvvmLight1.Model
             {
                 foreach (XElement tmp1 in tmp.Elements("level"))
                 {
-                    /* Записать новый уровень
-                    if ((tmp1.Attribute("Id").Value.ToString() == param.ParamID.ToString()) && (param.id == 0))
-                    {
-                        writeParam(tmp1, param);
-                        break;
-                    }
-                    */
                     // Обновить уровень
-                    foreach (XElement tmp2 in tmp1.Elements("lavel"))
+                    if (lavel.id != 0)
                     {
-                        if (lavel.id != 0)
+                        if (tmp1.Attribute("Id").Value.ToString() == lavel.id.ToString())
                         {
-                            if (tmp2.Attribute("Id").Value.ToString() == lavel.id.ToString())
-                            {
-                                UpdateLavel(tmp2, lavel);
-                                break;
-                            }
+                            UpdateLavel(tmp1, lavel);
+                            break;
                         }
                     }
+                    // 
+                    /*foreach (XElement tmp2 in tmp1.Elements("lavel"))
+                    {
+                    }*/
                 }
             }
             xDoc.Save(NameFile);

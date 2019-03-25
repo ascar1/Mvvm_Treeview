@@ -216,8 +216,9 @@ namespace MvvmLight1.ViewModel
                 {    
                     if (SelectedLavel.name != SelectedLavel.CNGName)
                     {
-                        //MessageBox.Show("!!!");
-                        //SelectedLavel.Save();
+                        MessageBox.Show("!!!");
+                        SelectedLavel.Save();
+                        
                     }
                     if (SelectedLavel != null)
                     {                        
