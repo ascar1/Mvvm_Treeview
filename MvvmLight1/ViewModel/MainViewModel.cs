@@ -136,18 +136,25 @@ namespace MvvmLight1.ViewModel
             if (handler != null)
                 handler(this, new PropertyChangedEventArgs("propertyName"));
         }
+        private void NewLavel(int id)
+        {
+            var tmp = new LavelViewModel();
+            tmp.ID = id;
+            tmp.name = "new";
+            tmp.IsEditMode = true;
+            LavelList.Add(tmp);
+        }
 
         #region Command
         private MyCommand myCommand;
         public MyCommand MyCommand
         {
             get
-            {
-             //   MessageBox.Show("Команда " + " Test " + LavelList.Count());
+            {             
                 return myCommand ?? (myCommand = new MyCommand(obj =>
-                {
-                    //AddNewParam();
-                    MessageBox.Show("Команда " + " Test " + LavelList.Count());
+                {                    
+                    MessageBox.Show("Команда " + " Test !!! " + LavelList.Count());
+                    NewLavel(1);
                 }));
             }
         }
@@ -188,7 +195,8 @@ namespace MvvmLight1.ViewModel
         private MyCommand addLavel;
         public MyCommand AddLavel => addLavel ?? (addLavel = new MyCommand(obj =>
                                                    {
-                                                       MessageBox.Show("Add Lavel!!! " + parentSelected.ToString());
+                                                       MessageBox.Show("Add Lavel!!! " + parentSelected.ToString());                                                       
+                                                       _dataService.AddLavel(SelectedLavel.ID);
                                                    }));
 
         private MyCommand editLavel;
@@ -215,10 +223,8 @@ namespace MvvmLight1.ViewModel
                 return commitLavel ?? (commitLavel = new MyCommand(obj =>
                 {    
                     if (SelectedLavel.name != SelectedLavel.CNGName)
-                    {
-                        MessageBox.Show("!!!");
-                        SelectedLavel.Save();
-                        
+                    {                        
+                        SelectedLavel.Save();                        
                     }
                     if (SelectedLavel != null)
                     {                        

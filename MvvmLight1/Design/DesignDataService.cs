@@ -29,14 +29,14 @@ namespace MvvmLight1.Design
         public void GetParam(Action<List<ParamModel>, Exception> callback)
         {
             var item = new List<ParamModel>();
-            item.Add(new ParamModel() { id = 0, ParamID = 3, name = "param 1", type = OrderStatus.String, val = "val 1", comment = "#1" });
-            item.Add(new ParamModel() { id = 0, ParamID = 3, name = "param 2", type = OrderStatus.String, val = "val 2", comment = "#2" });
-            item.Add(new ParamModel() { id = 0, ParamID = 3, name = "param 3", type = OrderStatus.String, val = "val 3", comment = "#3" });
-            item.Add(new ParamModel() { id = 0, ParamID = 4, name = "param 4", type = OrderStatus.String, val = "val 4", comment = "#4" });
-            item.Add(new ParamModel() { id = 0, ParamID = 4, name = "param 5", type = OrderStatus.String, val = "val 5", comment = "#5" });
-            item.Add(new ParamModel() { id = 0, ParamID = 4, name = "param 6", type = OrderStatus.String, val = "val 6", comment = "#6" });
-            item.Add(new ParamModel() { id = 0, ParamID = 6, name = "param 7", type = OrderStatus.String, val = "val 7", comment = "#7" });
-            item.Add(new ParamModel() { id = 0, ParamID = 6, name = "param 8", type = OrderStatus.String, val = "val 8", comment = "#8" });
+            item.Add(new ParamModel() { id = 0, ParamID = 3, name = "param 1", type = DataType.String, val = "val 1", comment = "#1" });
+            item.Add(new ParamModel() { id = 0, ParamID = 3, name = "param 2", type = DataType.String, val = "val 2", comment = "#2" });
+            item.Add(new ParamModel() { id = 0, ParamID = 3, name = "param 3", type = DataType.String, val = "val 3", comment = "#3" });
+            item.Add(new ParamModel() { id = 0, ParamID = 4, name = "param 4", type = DataType.String, val = "val 4", comment = "#4" });
+            item.Add(new ParamModel() { id = 0, ParamID = 4, name = "param 5", type = DataType.String, val = "val 5", comment = "#5" });
+            item.Add(new ParamModel() { id = 0, ParamID = 4, name = "param 6", type = DataType.String, val = "val 6", comment = "#6" });
+            item.Add(new ParamModel() { id = 0, ParamID = 6, name = "param 7", type = DataType.String, val = "val 7", comment = "#7" });
+            item.Add(new ParamModel() { id = 0, ParamID = 6, name = "param 8", type = DataType.String, val = "val 8", comment = "#8" });
             callback(item, null);
         }
 

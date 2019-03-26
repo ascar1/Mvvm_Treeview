@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace MvvmLight1.Model
 {
-    public enum OrderStatus { String, Int, Bool };
+    public enum DataType { String, Int, Bool };
     public class DataService : IDataService
     {
         private string NameFile = "C:\\newparam_.xml";
@@ -21,23 +21,25 @@ namespace MvvmLight1.Model
             LavelItem.Clear();
             ParamItem.Clear();
         }
-        private OrderStatus getType(string type)
+        private DataType getType(string type)
         {
             switch (type)
             {
-                case "String": return OrderStatus.String;
-                case "Int": return OrderStatus.Int;
-                case "Bool": return OrderStatus.Bool;
-                default: return OrderStatus.String;
+                case "String": return DataType.String;
+                case "Int": return DataType.Int;
+                case "Bool": return DataType.Bool;
+                default: return DataType.String;
             }
         }
-        private int getNewIndex()
+        private int getNewIndexParam()
         {
-            int i;
-            //i = ParamItem.LastOrDefault().id;
-            i = ParamItem.Max(I=> I.id);
-            i = i + 1;
-            return i;
+            int i = ParamItem.Max(I=> I.id);            
+            return ++i;
+        }
+        private int getNewIndexLavel()
+        {
+            int i = LavelItem.Max(I => I.id);
+            return ++i;
         }
         private void LoadData()
         {
@@ -92,23 +94,16 @@ namespace MvvmLight1.Model
             // Use this to connect to the actual data service
             var item = new DataItem("Welcome to MVVM Light");
             callback(item, null);
-        }        
+        }
+        #region функции для работы с уровнями
         public void GetDataLevel(Action<List<LavelModel>, Exception> callback)
         {
             LoadData();
             callback(LavelItem, null);
         }
-
-        public void UpdateLavel (XElement tmp, LavelModel lavel)
-        {
-            tmp.Attribute("Name").Value = lavel.name;                        
-            tmp.Attribute("Comment").Value = lavel.comment;
-        }
-
         public void SaveLavel (LavelModel lavel)
         {
             XDocument xDoc = XDocument.Load(NameFile);
-            bool flag = false;
             // записать                 
             foreach (XElement tmp in xDoc.Element("ProgramParam").Elements("level"))
             {
@@ -118,20 +113,35 @@ namespace MvvmLight1.Model
                     if (lavel.id != 0)
                     {
                         if (tmp1.Attribute("Id").Value.ToString() == lavel.id.ToString())
-                        {
-                            UpdateLavel(tmp1, lavel);
+                        {                           
+                            tmp1.Attribute("Name").Value = lavel.name;
+                            tmp1.Attribute("Comment").Value = lavel.comment;
                             break;
                         }
                     }
-                    // 
-                    /*foreach (XElement tmp2 in tmp1.Elements("lavel"))
-                    {
-                    }*/
                 }
             }
             xDoc.Save(NameFile);
-            LoadData();
         }
+        public void AddLavel(int id)
+        {            
+            XDocument xDoc = XDocument.Load(NameFile);
+            var tmp = xDoc.Element("ProgramParam").Elements("level").First(i => i.Attribute("Id").Value.ToString() == id.ToString());
+            tmp.Add(new XElement("level", 
+                        new XAttribute("Id", getNewIndexLavel()),
+                        new XAttribute("paremtId", id),
+                        new XAttribute("Name", "New Lavel"),
+                        new XAttribute("Comment","")
+                ));
+            xDoc.Save(NameFile);
+        }
+
+        public void DeleteLavel(int i)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+        #region Функции для работы с параметрами 
         public void GetParam (Action<List<ParamModel>, Exception> callback)
         {
             LoadData();
@@ -140,7 +150,7 @@ namespace MvvmLight1.Model
         private void writeParam(XElement tmp, ParamModel param)
         {
             tmp.Add(new XElement("Param",
-                      new XAttribute("Id", getNewIndex()),
+                      new XAttribute("Id", getNewIndexParam()),
                       new XAttribute("ParamID", param.ParamID),
                       new XAttribute("Name", param.name),
                       new XAttribute("Type", param.type),
@@ -206,15 +216,7 @@ namespace MvvmLight1.Model
             xDoc.Save(NameFile);
             LoadData();
         }
+        #endregion
 
-        public void AddLavel(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteLavel(int i)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

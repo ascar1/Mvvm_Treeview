@@ -29,7 +29,7 @@
             </ResourceDictionary.MergedDictionaries>
             <ObjectDataProvider x:Key="myEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
                 <ObjectDataProvider.MethodParameters>
-                    <x:Type Type="local:OrderStatus"/>
+                    <x:Type Type="local:DataType"/>
                 </ObjectDataProvider.MethodParameters>
             </ObjectDataProvider>
 

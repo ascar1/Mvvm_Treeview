@@ -19,7 +19,7 @@ namespace MvvmLight1.Model
             get;
             set;
         }
-        public OrderStatus type
+        public DataType type
         {
             get;
             set;

@@ -48,7 +48,7 @@ namespace MvvmLight1.ViewModel
             get { return _param.name; }
             set { _param.name = value; }
         }
-        public OrderStatus type
+        public DataType type
         {
             get { return _param.type; }
             set

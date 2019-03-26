@@ -54,9 +54,7 @@ namespace MvvmLight1.Model
                 _IsExpanded = value;
                 if (value)
                 {
-                    PropertyChangedEventHandler handler = PropertyChanged;
-                    if (handler != null)
-                        handler(this, new PropertyChangedEventArgs("IsExpanded"));                   
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsExpanded"));
                 }
             }
         }
@@ -74,6 +72,7 @@ namespace MvvmLight1.Model
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
+
         #endregion
         public int ID
         {
@@ -99,8 +98,11 @@ namespace MvvmLight1.Model
             set
             {
                 _lavelModel.name = value;
+                //Вызвать событие обновление для интефейса  
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("name"));
             }
         }
+
         private string _CNGName;
         public string CNGName
         {
@@ -122,8 +124,7 @@ namespace MvvmLight1.Model
                 else return false;*/
                 return _IsSelected;
             }
-        }
-        
+        }       
         public bool isRoot
         {
             get { return _lavelModel.paremtId == -1; }
@@ -147,7 +148,6 @@ namespace MvvmLight1.Model
         {
             _dataService.SaveLavel(this._lavelModel);
         }
-
     }
 }
 
