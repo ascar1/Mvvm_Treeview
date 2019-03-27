@@ -78,6 +78,7 @@ namespace MvvmLight1.ViewModel
                 setChild(tmp, list);
             }
         }
+        
         public void setChild(LavelViewModel root, IList<LavelModel> source)
         {
             for (var i = 0; i < source.Count; i++)
@@ -136,12 +137,15 @@ namespace MvvmLight1.ViewModel
             if (handler != null)
                 handler(this, new PropertyChangedEventArgs("propertyName"));
         }
+        // TODO: добовление нового элемента
         private void NewLavel(int id)
         {
-            var tmp = new LavelViewModel();
-            tmp.ID = id;
-            tmp.name = "new";
-            tmp.IsEditMode = true;
+            LavelModel _tmp = new LavelModel();
+            _tmp.name = "new";
+            _tmp.id = 15;
+            _tmp.paremtId = id;
+
+            LavelViewModel tmp = new LavelViewModel(_tmp);
             LavelList.Add(tmp);
         }
 

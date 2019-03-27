@@ -19,10 +19,6 @@ namespace MvvmLight1.Model
         private IDataService _dataService = new DataService();
         private LavelViewModel _parent;
         #region constructor
-        public LavelViewModel()
-        {
-
-        }
         public LavelViewModel (LavelModel model)
         {
             _lavelModel = model;
