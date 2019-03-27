@@ -137,13 +137,36 @@ namespace MvvmLight1.ViewModel
             if (handler != null)
                 handler(this, new PropertyChangedEventArgs("propertyName"));
         }
+        
+        private int Find (int id, ObservableCollection<LavelViewModel> tmp)
+        {
+            if (tmp.Count != 0)
+            {
+                foreach (var tmp1 in tmp)
+                {
+                    if (tmp1.ParentID == id)
+                    {
+                        return tmp1.ID;
+                    }
+                    Find(id, tmp1.Children);
+                }
+            }
+            return -1;
+        }
+
         // TODO: добовление нового элемента
         private void NewLavel(int id)
         {
+            MessageBox.Show(id.ToString());
             LavelModel _tmp = new LavelModel();
             _tmp.name = "new";
             _tmp.id = 15;
             _tmp.paremtId = id;
+
+            // --- > Найти 
+
+
+
 
             LavelViewModel tmp = new LavelViewModel(_tmp);
             LavelList.Add(tmp);
@@ -199,8 +222,9 @@ namespace MvvmLight1.ViewModel
         private MyCommand addLavel;
         public MyCommand AddLavel => addLavel ?? (addLavel = new MyCommand(obj =>
                                                    {
-                                                       MessageBox.Show("Add Lavel!!! " + parentSelected.ToString());                                                       
-                                                       _dataService.AddLavel(SelectedLavel.ID);
+                                                       MessageBox.Show("Add Lavel!!! " + parentSelected.ToString());
+                                                       NewLavel(SelectedLavel.ID);
+                                                       //_dataService.AddLavel(SelectedLavel.ID);
                                                    }));
 
         private MyCommand editLavel;
