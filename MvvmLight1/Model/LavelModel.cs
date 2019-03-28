@@ -14,7 +14,6 @@ namespace MvvmLight1.Model
         public string name { get; set; }
         public string comment { get; set; }
         public int id { get; set; }
-        public int paremtId { get; set; }
-        
+        public int paremtId { get; set; }        
     }
 }

@@ -36,7 +36,7 @@ namespace MvvmLight1.Model
             int i = ParamItem.Max(I=> I.id);            
             return ++i;
         }
-        private int getNewIndexLavel()
+        public int getNewIndexLavel()
         {
             int i = LavelItem.Max(I => I.id);
             return ++i;
@@ -135,7 +135,6 @@ namespace MvvmLight1.Model
                 ));
             xDoc.Save(NameFile);
         }
-
         public void DeleteLavel(int i)
         {
             throw new NotImplementedException();

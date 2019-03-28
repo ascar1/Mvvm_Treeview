@@ -94,5 +94,10 @@ namespace MvvmLight1.Design
         {
             throw new NotImplementedException();
         }
+
+        public int getNewIndexLavel()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
