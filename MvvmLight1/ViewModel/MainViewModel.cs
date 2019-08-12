@@ -161,14 +161,10 @@ namespace MvvmLight1.ViewModel
             LavelModel _tmp = new LavelModel();
             _tmp.name = "new";
             _tmp.id = 15;
-            _tmp.paremtId = id;
-
+            _tmp.paremtId = id;  
+            
             // --- > Найти 
-
-
-
-
-            LavelViewModel tmp = new LavelViewModel(_tmp);
+            LavelViewModel tmp = new LavelViewModel(_tmp,true);
             LavelList.Add(tmp);
         }
 
@@ -180,7 +176,7 @@ namespace MvvmLight1.ViewModel
             {             
                 return myCommand ?? (myCommand = new MyCommand(obj =>
                 {                    
-                    MessageBox.Show("Команда " + " Test !!! " + LavelList.Count());
+//                    MessageBox.Show("Команда " + " Test !!! " + LavelList.Count());
                     NewLavel(1);
                 }));
             }
@@ -235,7 +231,8 @@ namespace MvvmLight1.ViewModel
                 return editLavel ?? (editLavel = new MyCommand(obj =>
                 {
                     if (SelectedLavel != null)
-                    {                        
+                    {
+                        MessageBox.Show("1");
                         SelectedLavel.IsEditMode = true;
                         NotifyPropertyChanged("LavelList");
                     }                        
@@ -249,7 +246,8 @@ namespace MvvmLight1.ViewModel
             get
             {
                 return commitLavel ?? (commitLavel = new MyCommand(obj =>
-                {    
+                {
+                    MessageBox.Show("2");
                     if (SelectedLavel.name != SelectedLavel.CNGName)
                     {                        
                         SelectedLavel.Save();                        
