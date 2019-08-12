@@ -107,9 +107,12 @@ namespace MvvmLight1.ViewModel
         {            
             if (e.PropertyName == "IsSelected")
             {
-                //MessageBox.Show("ItemsOnCollectionChanged1 IsSelected");
-
-                SelectedLavel = (LavelViewModel)sender;
+                // MessageBox.Show("ItemsOnCollectionChanged1 IsSelected");
+                var tmp = (LavelViewModel)sender;
+                if (tmp.IsSelected)
+                {
+                    SelectedLavel = (LavelViewModel)sender;
+                }
 
                 if (SelectedLavel.IsSelected == false)
                 {
@@ -140,17 +143,37 @@ namespace MvvmLight1.ViewModel
         
         private int Find (int id, ObservableCollection<LavelViewModel> tmp)
         {
-            if (tmp.Count != 0)
+            if (tmp == null)
+                return -1;
+            
+            foreach (var tmp1 in tmp)
             {
-                foreach (var tmp1 in tmp)
+                if (tmp1.ID == id)
                 {
-                    if (tmp1.ParentID == id)
-                    {
-                        return tmp1.ID;
-                    }
-                    Find(id, tmp1.Children);
+                    LavelModel _tmp = new LavelModel();
+                    _tmp.name = "new";                    
+                    _tmp.id = _dataService.getNewIndexLavel();
+                    _tmp.paremtId = id;
+                   
+                    LavelViewModel _tmp_ = new LavelViewModel(_tmp);
+                    _tmp_.PropertyChanged += ItemsOnCollectionChanged1;                    
+                    _tmp_.IsEditMode = true;
+                    _tmp_.IsSelected = true;
+                    _tmp_.IsExpanded = true;
+                                     
+                    tmp1.Children.Add(_tmp_);                    
+                    return tmp1.ID;
                 }
+                else
+                {
+                   int i = Find(id, tmp1.Children);
+                    if (i != -1)
+                    {
+                        return i;
+                    }
+                }               
             }
+
             return -1;
         }
 
@@ -217,8 +240,7 @@ namespace MvvmLight1.ViewModel
                                                     }));
         private MyCommand addLavel;
         public MyCommand AddLavel => addLavel ?? (addLavel = new MyCommand(obj =>
-                                                   {
-                                                       MessageBox.Show("Add Lavel!!! " + parentSelected.ToString());
+                                                   {                                                       
                                                        NewLavel(SelectedLavel.ID);
                                                        //_dataService.AddLavel(SelectedLavel.ID);
                                                    }));
@@ -234,6 +256,7 @@ namespace MvvmLight1.ViewModel
                     {
                         MessageBox.Show("1");
                         SelectedLavel.IsEditMode = true;
+                        SelectedLavel.CNGName = SelectedLavel.name;
                         NotifyPropertyChanged("LavelList");
                     }                        
                 }));
@@ -249,8 +272,22 @@ namespace MvvmLight1.ViewModel
                 {
                     MessageBox.Show("2");
                     if (SelectedLavel.name != SelectedLavel.CNGName)
-                    {                        
-                        SelectedLavel.Save();                        
+                    {
+                        if (MessageBox.Show("Save changes?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {
+                            SelectedLavel.Save();
+                        }         
+                        else
+                        {
+                            if (SelectedLavel.CNGName != null)
+                            {
+                                SelectedLavel.name = SelectedLavel.CNGName;
+                            }
+                            else
+                            {
+                                
+                            }
+                        }
                     }
                     if (SelectedLavel != null)
                     {                        

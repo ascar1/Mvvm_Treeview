@@ -15,5 +15,6 @@ namespace MvvmLight1.Model
         void AddLavel(int id);
         void DeleteLavel(int i);
         void SaveLavel(LavelModel lavel);
+        int getNewIndexLavel();
     }
 }

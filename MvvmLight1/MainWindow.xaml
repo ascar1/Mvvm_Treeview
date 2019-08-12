@@ -38,11 +38,13 @@
                     <TextBlock x:Name="textBlock" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Margin="3,0,0,0"/>
                     <TextBox x:Name="editTextBlock" Visibility="Collapsed" MinWidth="100" 
                              Text="{Binding name, UpdateSourceTrigger=PropertyChanged}">
+                        <!--
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="LostFocus">
                                 <i:InvokeCommandAction Command="{Binding MyCommand}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
+                        -->
                     </TextBox>
                 </StackPanel>
                 <HierarchicalDataTemplate.Triggers>
@@ -96,7 +98,9 @@
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
-
+                    <!--
+                    <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
+                    -->
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ContextMenu>
