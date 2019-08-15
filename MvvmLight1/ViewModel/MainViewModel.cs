@@ -180,7 +180,8 @@ namespace MvvmLight1.ViewModel
         // TODO: добовление нового элемента
         private void NewLavel(int id)
         {
-            Find(id, LavelList);
+            // Find(id, LavelList);
+            
             //MessageBox.Show(id.ToString() + " " + );
         }
 
@@ -192,8 +193,17 @@ namespace MvvmLight1.ViewModel
             {             
                 return myCommand ?? (myCommand = new MyCommand(obj =>
                 {                    
-                    MessageBox.Show("Команда " + " Test !!! " + LavelList.Count());
-                   // NewLavel(1);
+                    MessageBox.Show("Команда " + " Button !!! " + LavelList.Count());
+                    //NewLavel(1);
+                    //LavelList[1].IsSelected = true;
+                    LavelList[1].IsExpanded = true;
+                    LavelList[1].Children[1].IsSelected = true;
+                    LavelList[1].Children[1].IsEditMode = true;
+                    MessageBox.Show("1");
+                    //LavelList[1].Children[1].
+
+
+
                 }));
             }
         }
