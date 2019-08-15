@@ -105,7 +105,6 @@ namespace MvvmLight1.Model
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("name"));
             }
         }
-
         private string _CNGName;
         public string CNGName
         {
@@ -131,6 +130,12 @@ namespace MvvmLight1.Model
         public bool isRoot
         {
             get { return _lavelModel.paremtId == -1; }
+        }
+        private bool _IsNew;
+        public bool IsNew
+        {
+            get => _IsNew;
+            set => _IsNew = value;
         }
         public LavelViewModel parent {
             get

@@ -24,7 +24,7 @@ namespace MvvmLight1.ViewModel
         public ObservableCollection<LavelViewModel> LavelList { get; set; }
         public ObservableCollection<ParamViewModel> ParamList { get; private set; }
         public ObservableCollection<string> type { get; private set; }
-        public LavelViewModel SelectedLavel { get; private set; }
+        public Lavel;ViewModel SelectedLavel { get; private set; }
         public ParamViewModel SelectedROW { get; set; }
         public int parentSelected;
         public int idSelected;
@@ -181,14 +181,8 @@ namespace MvvmLight1.ViewModel
         private void NewLavel(int id)
         {
             MessageBox.Show(id.ToString());
-            LavelModel _tmp = new LavelModel();
-            _tmp.name = "new";
-            _tmp.id = 15;
-            _tmp.paremtId = id;  
-            
-            // --- > Найти 
-            LavelViewModel tmp = new LavelViewModel(_tmp,true);
-            LavelList.Add(tmp);
+            // --- > Найти и добавить 
+            Find(id, LavelList);
         }
 
         #region Command
@@ -251,6 +245,7 @@ namespace MvvmLight1.ViewModel
         public MyCommand AddLavel => addLavel ?? (addLavel = new MyCommand(obj =>
                                                    {                                                       
                                                        NewLavel(SelectedLavel.ID);
+
                                                        //_dataService.AddLavel(SelectedLavel.ID);
                                                    }));
 
