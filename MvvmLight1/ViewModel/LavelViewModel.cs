@@ -21,8 +21,15 @@ namespace MvvmLight1.Model
         #region constructor
         public LavelViewModel (LavelModel model)
         {
-            _lavelModel = model;
+            _lavelModel = model;            
             Children = new ObservableCollection<LavelViewModel>();            
+        }
+        public LavelViewModel (LavelModel model, bool SelectFlag)
+        {
+            _lavelModel = model;
+            this.IsEditMode = SelectFlag;
+            this.IsSelected = SelectFlag;            
+            Children = new ObservableCollection<LavelViewModel>();
         }
         #endregion
         #region обработка выбора                

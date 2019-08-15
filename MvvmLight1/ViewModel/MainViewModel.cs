@@ -180,9 +180,15 @@ namespace MvvmLight1.ViewModel
         // TODO: добовление нового элемента
         private void NewLavel(int id)
         {
-            // Find(id, LavelList);
+            MessageBox.Show(id.ToString());
+            LavelModel _tmp = new LavelModel();
+            _tmp.name = "new";
+            _tmp.id = 15;
+            _tmp.paremtId = id;  
             
-            //MessageBox.Show(id.ToString() + " " + );
+            // --- > Найти 
+            LavelViewModel tmp = new LavelViewModel(_tmp,true);
+            LavelList.Add(tmp);
         }
 
         #region Command
@@ -256,7 +262,8 @@ namespace MvvmLight1.ViewModel
                 return editLavel ?? (editLavel = new MyCommand(obj =>
                 {
                     if (SelectedLavel != null)
-                    {                        
+                    {
+                        MessageBox.Show("1");
                         SelectedLavel.IsEditMode = true;
                         SelectedLavel.CNGName = SelectedLavel.name;
                         NotifyPropertyChanged("LavelList");
@@ -271,7 +278,8 @@ namespace MvvmLight1.ViewModel
             get
             {
                 return commitLavel ?? (commitLavel = new MyCommand(obj =>
-                {    
+                {
+                    MessageBox.Show("2");
                     if (SelectedLavel.name != SelectedLavel.CNGName)
                     {
                         if (MessageBox.Show("Save changes?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
