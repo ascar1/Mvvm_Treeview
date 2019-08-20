@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Linq;
 using System.Linq;
+using System.Windows;
 
 namespace MvvmLight1.Model
 {
@@ -103,24 +104,37 @@ namespace MvvmLight1.Model
         }
         public void SaveLavel (LavelModel lavel)
         {
+            // Обновить уровень
             XDocument xDoc = XDocument.Load(NameFile);
             // записать                 
             foreach (XElement tmp in xDoc.Element("ProgramParam").Elements("level"))
             {
                 foreach (XElement tmp1 in tmp.Elements("level"))
-                {
-                    // Обновить уровень
+                {                    
                     if (lavel.id != 0)
                     {
                         if (tmp1.Attribute("Id").Value.ToString() == lavel.id.ToString())
-                        {                           
+                        {                            
                             tmp1.Attribute("Name").Value = lavel.name;
-                            tmp1.Attribute("Comment").Value = lavel.comment;
+                            tmp1.Attribute("Comment").Value = lavel.comment;                            
                             break;
                         }
                     }
                 }
             }
+            xDoc.Save(NameFile);
+        }
+        public void InsertLavel (LavelModel lavel)
+        {
+            // Вставить новый уровень
+            XDocument xDoc = XDocument.Load(NameFile);
+            var tmp = xDoc.Element("ProgramParam").Elements("level").First(i => i.Attribute("Id").Value.ToString() == lavel.paremtId.ToString());
+            tmp.Add(new XElement("level",
+                        new XAttribute("Id", lavel.id),
+                        new XAttribute("paremtId", lavel.paremtId),
+                        new XAttribute("Name", lavel.name),
+                        new XAttribute("Comment", "")
+                ));
             xDoc.Save(NameFile);
         }
         public void AddLavel(int id)
@@ -135,9 +149,29 @@ namespace MvvmLight1.Model
                 ));
             xDoc.Save(NameFile);
         }
-        public void DeleteLavel(int i)
+        public void DeleteLavel(int id)
         {
-            throw new NotImplementedException();
+            // Удалить уровень
+            XDocument xDoc = XDocument.Load(NameFile);
+            //var tmp = xDoc.Element("ProgramParam").Elements("level").First(i => i.Attribute("Id").Value.ToString() == id.ToString());
+                            
+            foreach (XElement tmp in xDoc.Element("ProgramParam").Elements("level"))
+            {
+                foreach (XElement tmp1 in tmp.Elements("level"))
+                {
+                    if (id != 0)
+                    {
+                        if (tmp1.Attribute("Id").Value.ToString() == id.ToString())
+                        {                           
+                            tmp1.Remove();
+                            break;
+                        }
+                    }
+                }
+            }
+            xDoc.Save(NameFile);
+            //tmp.
+
         }
         #endregion
         #region Функции для работы с параметрами 

@@ -24,7 +24,7 @@ namespace MvvmLight1.ViewModel
         public ObservableCollection<LavelViewModel> LavelList { get; set; }
         public ObservableCollection<ParamViewModel> ParamList { get; private set; }
         public ObservableCollection<string> type { get; private set; }
-        public Lavel;ViewModel SelectedLavel { get; private set; }
+        public LavelViewModel SelectedLavel { get; private set; }
         public ParamViewModel SelectedROW { get; set; }
         public int parentSelected;
         public int idSelected;
@@ -106,8 +106,7 @@ namespace MvvmLight1.ViewModel
         private void ItemsOnCollectionChanged1(object sender, PropertyChangedEventArgs e)
         {            
             if (e.PropertyName == "IsSelected")
-            {
-                // MessageBox.Show("ItemsOnCollectionChanged1 IsSelected");
+            {                
                 var tmp = (LavelViewModel)sender;
                 if (tmp.IsSelected)
                 {
@@ -160,7 +159,7 @@ namespace MvvmLight1.ViewModel
                     _tmp_.IsEditMode = true;
                     _tmp_.IsSelected = true;
                     _tmp_.IsExpanded = true;
-                                     
+                    _tmp_.IsNew = true;                 
                     tmp1.Children.Add(_tmp_);                    
                     return tmp1.ID;
                 }
@@ -179,8 +178,7 @@ namespace MvvmLight1.ViewModel
 
         // TODO: добовление нового элемента
         private void NewLavel(int id)
-        {
-            MessageBox.Show(id.ToString());
+        {            
             // --- > Найти и добавить 
             Find(id, LavelList);
         }
@@ -189,19 +187,13 @@ namespace MvvmLight1.ViewModel
         private MyCommand myCommand;
         public MyCommand MyCommand
         {
+            // тестовая комманда 
             get
             {             
                 return myCommand ?? (myCommand = new MyCommand(obj =>
-                {                    
+                {
                     MessageBox.Show("Команда " + " Button !!! " + LavelList.Count());
-                    //NewLavel(1);
-                    //LavelList[1].IsSelected = true;
-                    LavelList[1].IsExpanded = true;
-                    LavelList[1].Children[1].IsSelected = true;
-                    LavelList[1].Children[1].IsEditMode = true;
-                    MessageBox.Show("1");
-                    //LavelList[1].Children[1].
-
+                    LavelList[1].Children.Remove(SelectedLavel);
 
 
                 }));
@@ -244,9 +236,7 @@ namespace MvvmLight1.ViewModel
         private MyCommand addLavel;
         public MyCommand AddLavel => addLavel ?? (addLavel = new MyCommand(obj =>
                                                    {                                                       
-                                                       NewLavel(SelectedLavel.ID);
-
-                                                       //_dataService.AddLavel(SelectedLavel.ID);
+                                                       NewLavel(SelectedLavel.ID);                                                                                                              
                                                    }));
 
         private MyCommand editLavel;
@@ -260,6 +250,7 @@ namespace MvvmLight1.ViewModel
                     {
                         MessageBox.Show("1");
                         SelectedLavel.IsEditMode = true;
+                        SelectedLavel.IsExpanded = true;
                         SelectedLavel.CNGName = SelectedLavel.name;
                         NotifyPropertyChanged("LavelList");
                     }                        
@@ -273,8 +264,7 @@ namespace MvvmLight1.ViewModel
             get
             {
                 return commitLavel ?? (commitLavel = new MyCommand(obj =>
-                {
-                    MessageBox.Show("2");
+                {                    
                     if (SelectedLavel.name != SelectedLavel.CNGName)
                     {
                         if (MessageBox.Show("Save changes?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -298,6 +288,52 @@ namespace MvvmLight1.ViewModel
                         SelectedLavel.IsEditMode = false;
                     }
                         
+                }));
+            }
+        }
+
+        private int FindLavel (int id, ObservableCollection<LavelViewModel> tmp)
+        {
+            if (tmp == null)
+                return -1;
+
+            foreach (var tmp1 in tmp)
+            {
+                if (tmp1.ID == id)
+                {
+                    tmp.Remove(SelectedLavel);
+                    return id;
+                }
+                else
+                {                    
+                    int i = FindLavel(id, tmp1.Children);
+                    if (i != -1)
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        private MyCommand deletelavel;
+        public MyCommand DeleteLavel
+        {
+            get
+            {
+                return deletelavel ?? (deletelavel = new MyCommand(obj =>
+                {                    
+                    if (SelectedLavel != null)
+                    {
+                        if (MessageBox.Show("Delete lavel?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                        {                            
+                            SelectedLavel.Delete();
+                            FindLavel(SelectedLavel.ID, LavelList);
+                            NotifyPropertyChanged("DeleteLavel");
+                        }
+                    }
+                    
                 }));
             }
         }

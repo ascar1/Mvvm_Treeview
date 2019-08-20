@@ -154,7 +154,16 @@ namespace MvvmLight1.Model
         public ObservableCollection<LavelViewModel> Children { get; set; }
         public void Save()
         {
-            _dataService.SaveLavel(this._lavelModel);
+            if (!IsNew)
+                //Обновить запись
+                _dataService.SaveLavel(this._lavelModel);
+            else
+                // Добавить новую запись 
+                _dataService.InsertLavel(this._lavelModel);
+        }
+        public void Delete()
+        {
+            _dataService.DeleteLavel(this.ID);
         }
     }
 }
