@@ -11,7 +11,7 @@ namespace MvvmLight1.Behavior
 {
     class TreeViewBehavior : Behavior<TreeView>
     {
-        private static Dictionary<TreeViewBehavior, DependencyObject> behaivors = new Dictionary<TreeViewBehavior, DependencyObject>();
+   /*     private static Dictionary<TreeViewBehavior, DependencyObject> behaivors = new Dictionary<TreeViewBehavior, DependencyObject>();
 
 
         protected override void OnAttached()
@@ -27,6 +27,6 @@ namespace MvvmLight1.Behavior
         private void OnTreeViewSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             throw new NotImplementedException();
-        }
+        }*/
     }
 }
