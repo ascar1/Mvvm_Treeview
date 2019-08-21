@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MainApp
+namespace MainApp.Main
 {
     /// <summary>
     /// Логика взаимодействия для UserControl1.xaml

@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
-        xmlns:local="clr-namespace:MainApp."
+        xmlns:local="clr-namespace:MainApp.Main"
         mc:Ignorable="d ignore"
         Height="463.348"
         Width="690.254"
@@ -48,8 +48,10 @@
             <!--
             <Button Grid.Column="0" Grid.Row="1" Content="Строка 0 Столбец 1"  />
             -->
-            
+            <!--
             <Button Grid.Column="0" Grid.Row="1" Content="Строка 0 Столбец 0" Grid.RowSpan="2" />
+            -->
+            <local:UserControl1 Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"/>
             <Button Grid.Column="1" Grid.Row="1" Content="Строка 0 Столбец 1" Grid.RowSpan="3" />
             <Button Grid.Column="0" Grid.Row="3" Content="Строка 2 Столбец 1" />
             
