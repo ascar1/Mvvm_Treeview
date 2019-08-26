@@ -17,7 +17,7 @@ namespace MainApp.ViewModel
         {
             Header = header;
         }
-
+        #region обработка команд
         private MyCommand _TestCommand;
         public MyCommand TestCommand
         {
@@ -29,6 +29,20 @@ namespace MainApp.ViewModel
                 }));
             }
         }
+        private MyCommand _CloseCommand;
+        public MyCommand CloseCommand
+        {
+            get
+            {
+                return _CloseCommand ?? (_CloseCommand = new MyCommand(obj =>
+                {
+                    MessageBox.Show("Команда " + " Button !!! ");
+                    
+                }));
+            }
+        }
+
+        #endregion
         public event PropertyChangedEventHandler PropertyChanged;
     }
 

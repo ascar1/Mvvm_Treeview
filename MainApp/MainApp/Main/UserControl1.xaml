@@ -4,11 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"              
              mc:Ignorable="d" d:DesignWidth="481.242" d:DesignHeight="337.085" >
+   
     <Grid>
-        <TabControl ItemsSource="{Binding Tabs}" SelectedItem="{Binding SelectedTab}" />
+        <TabControl ItemsSource="{Binding Tabs}"  SelectedItem="{Binding SelectedTab}">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate DataType="{x:Type TabItem}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Header}"/>
+                                    <Button Content="X"  Command="{Binding TestCommand}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+        </TabControl>
     </Grid>
 </UserControl>
 <!--
+     
         <Grid.Resources>
             <DataTemplate x:Key="CustomHeaderTemplate">
                 <DockPanel LastChildFill="True">
@@ -27,18 +44,14 @@
         </Grid.Resources>
         -->
 <!--
-            <TabControl.Resources>
-                <Style TargetType="TabItem">
-                    <Setter Property="HeaderTemplate">
-                        <Setter.Value>
-                            <DataTemplate DataType="{x:Type TabItem}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Header}"/>
-                                    <Button Content="X"  Command="{Binding TestCommand}" BorderBrush="#FFCDCDCD" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TabControl.Resources>
+        <TabControl ItemsSource="{Binding Tabs}"  SelectedItem="{Binding SelectedTab}"  >
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Height="21" Width="100">
+                        <TextBlock Width="80" Text="{Binding Header}"/>
+                        <Button Content="X" Command="{Binding TestCommand}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+        </TabControl>
             -->

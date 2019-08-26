@@ -74,14 +74,9 @@ namespace MainApp.ViewModel
         public TabVm SelectedTab
         {
             get { return _selectedTab; }
-            set {/* SetProperty(ref _selectedTab, value); */}
+            set { _selectedTab = value; }
         }
-        /*
-        private void SetProperty(ref TabVm selectedTab, TabVm value)
-        {
-            throw new NotImplementedException();
-        }
-        */
+        
         private TabVm _selectedTab;
 
         #region Обработка команд
@@ -92,11 +87,24 @@ namespace MainApp.ViewModel
             {
                 return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
                 {
-                    Tabs.Add(new Tab1Vm());
+                    //Tabs.Add(new Tab1Vm());
+                    Tabs.Remove(_selectedTab);
                     MessageBox.Show("Команда " + " Button !!! ");
                 }));
             }
         }
+        private MyCommand _DeleteItemCommand;
+        public MyCommand DeleteItemCommand
+        {
+            get
+            {
+                return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
+                {                    
+                    Tabs.Remove(_selectedTab);                    
+                }));
+            }
+        }
+
         #endregion
 
         ////public override void Cleanup()
