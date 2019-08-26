@@ -44,15 +44,19 @@
                 </MenuItem>
                 <MenuItem Header="Edit" ></MenuItem>
                 <MenuItem Header="View" ></MenuItem>
+                <MenuItem Header="Test" Command="{Binding TestCommand}" ></MenuItem>
             </Menu>
             <!--
             <Button Grid.Column="0" Grid.Row="1" Content="Строка 0 Столбец 1"  />
             -->
             <!--
-            <Button Grid.Column="0" Grid.Row="1" Content="Строка 0 Столбец 0" Grid.RowSpan="2" />
+            <Button Grid.Column="0" Grid.Row="1" Content="Строка 0 Столбец 0" Grid.RowSpan="2" />            
             -->
             <local:UserControl1 Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"/>
-            <Button Grid.Column="1" Grid.Row="1" Content="Строка 0 Столбец 1" Grid.RowSpan="3" />
+            
+
+        
+        <Button Grid.Column="1" Grid.Row="1" Content="Строка 0 Столбец 1" Grid.RowSpan="3" />
             <Button Grid.Column="0" Grid.Row="3" Content="Строка 2 Столбец 1" />
             
 

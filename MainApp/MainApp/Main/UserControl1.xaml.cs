@@ -23,6 +23,7 @@ namespace MainApp.Main
         public UserControl1()
         {
             InitializeComponent();
+
         }
     }
 }

@@ -1,5 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
+using MainApp.Command;
 using MainApp.Model;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
 
 namespace MainApp.ViewModel
 {
@@ -53,7 +58,46 @@ namespace MainApp.ViewModel
 
                     WelcomeTitle = item.Title;
                 });
+
+            Tabs.Add(new Tab1Vm());
+            Tabs.Add(new Tab2Vm());
+            
+            SelectedTab = Tabs.FirstOrDefault();
         }
+
+        public ObservableCollection<TabVm> Tabs
+        {
+            get { return _tabs ?? (_tabs = new ObservableCollection<TabVm>()); }
+        }
+        private ObservableCollection<TabVm> _tabs;
+
+        public TabVm SelectedTab
+        {
+            get { return _selectedTab; }
+            set {/* SetProperty(ref _selectedTab, value); */}
+        }
+        /*
+        private void SetProperty(ref TabVm selectedTab, TabVm value)
+        {
+            throw new NotImplementedException();
+        }
+        */
+        private TabVm _selectedTab;
+
+        #region Обработка команд
+        private MyCommand _TestCommand;
+        public MyCommand TestCommand
+        {
+            get
+            {
+                return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
+                {
+                    Tabs.Add(new Tab1Vm());
+                    MessageBox.Show("Команда " + " Button !!! ");
+                }));
+            }
+        }
+        #endregion
 
         ////public override void Cleanup()
         ////{
