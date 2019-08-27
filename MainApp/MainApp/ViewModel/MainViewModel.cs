@@ -60,14 +60,27 @@ namespace MainApp.ViewModel
                 });
 
             Tabs.Add(new Tab1Vm());
-            Tabs.Add(new Tab2Vm());
-            
+            Tabs.Last().event1 += MainViewModel_event1;
+            /*Tabs.Add(new Tab2Vm());
+            Tabs.Last().event1 += MainViewModel_event1;
+            */
             SelectedTab = Tabs.FirstOrDefault();
+        }
+
+        private void MainViewModel_event1(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            //MessageBox.Show("!!!");
+            Tabs.Remove(_selectedTab);
+            
         }
 
         public ObservableCollection<TabVm> Tabs
         {
-            get { return _tabs ?? (_tabs = new ObservableCollection<TabVm>()); }
+            get {
+                
+                return _tabs ?? (_tabs = new ObservableCollection<TabVm>());
+                }
+            
         }
         private ObservableCollection<TabVm> _tabs;
 
@@ -87,9 +100,9 @@ namespace MainApp.ViewModel
             {
                 return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
                 {
-                    //Tabs.Add(new Tab1Vm());
-                    Tabs.Remove(_selectedTab);
-                    MessageBox.Show("Команда " + " Button !!! ");
+                    Tabs.Add(new Tab2Vm());
+                    Tabs.Last().event1 += MainViewModel_event1;
+                    SelectedTab = Tabs.FirstOrDefault();
                 }));
             }
         }

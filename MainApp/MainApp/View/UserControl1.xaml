@@ -10,11 +10,9 @@
         <ResourceDictionary>
             <DataTemplate DataType="{x:Type vm:Tab1Vm}">
                 <local:ParamView></local:ParamView>
-                
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:Tab2Vm}">
                 <local:TikerView></local:TikerView>
-                
             </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>   
@@ -26,7 +24,6 @@
                         <Setter.Value>
                             <DataTemplate DataType="{x:Type TabItem}">
                                 <local:CloseItemHeader x:Name="TabItem" ></local:CloseItemHeader>
-                                
                             </DataTemplate>
                         </Setter.Value>
                     </Setter>

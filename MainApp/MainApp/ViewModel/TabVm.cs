@@ -15,7 +15,7 @@ namespace MainApp.ViewModel
     public abstract class TabVm : ViewModelBase, INotifyPropertyChanged
     {
         public string Header { get; }
-
+        delegate void GetName();
         public TabVm(string header)
         {
             Header = header;
@@ -39,14 +39,14 @@ namespace MainApp.ViewModel
             {
                 return _CloseCommand ?? (_CloseCommand = new MyCommand(obj =>
                 {
-                    MessageBox.Show("Команда Close window" + " Button !!! ");
-                    
+                    event1.Invoke(this, new PropertyChangedEventArgs("propertyName"));
                 }));
             }
         }
 
         #endregion
         public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler event1;
     }
 
     public class Tab1Vm : TabVm
