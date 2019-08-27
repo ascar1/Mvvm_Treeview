@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="MainApp.View.ParamView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"               
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ignore="http://www.galasoft.ch/ignore"
+             xmlns:core="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:MainApp.Model"             
+             mc:Ignorable="d ignore" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding Param, Source={StaticResource Locator}}">
+    
+    <UserControl.InputBindings>
+        <KeyBinding Key="X" Modifiers="ALT" Command="{Binding MyCommand}" />
+        <KeyBinding Key="F2" Command="{Binding EditLavel}" />
+        <KeyBinding Key="Enter" Command="{Binding CommitLavel}" />
+    </UserControl.InputBindings>
+    <UserControl.Resources>
+        <ResourceDictionary>
+<!--
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+    -->      
+            <ObjectDataProvider x:Key="myEnum" MethodName="GetValues" ObjectType="{x:Type core:Enum}">
+                <ObjectDataProvider.MethodParameters>
+                    <x:Type Type="local:DataType"/>
+                </ObjectDataProvider.MethodParameters>
+            </ObjectDataProvider>
+
+            <HierarchicalDataTemplate x:Key="LavelItem" ItemsSource="{Binding Children}">
+                <StackPanel>
+                    <TextBlock x:Name="textBlock" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Margin="3,0,0,0"/>
+                    <TextBox x:Name="editTextBlock" Visibility="Collapsed" MinWidth="100" 
+                             Text="{Binding name, UpdateSourceTrigger=PropertyChanged}">
+                    </TextBox>
+                </StackPanel>
+                <HierarchicalDataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding IsEditMode}" Value="True">
+                        <Setter TargetName="textBlock" Property="FontSize" Value="20"/>
+                        <Setter TargetName="textBlock" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="editTextBlock" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                </HierarchicalDataTemplate.Triggers>
+            </HierarchicalDataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <DockPanel LastChildFill="True">
+
+            <StatusBar DockPanel.Dock="Bottom" Height="20" />
+
+            <TreeView DockPanel.Dock="Left" ItemsSource="{Binding LavelList}" Width="140" ItemTemplate="{StaticResource LavelItem}">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Переименовать" Command="{Binding EditLavel}"></MenuItem>
+                        <MenuItem Header="Добавить уровень" Command="{Binding AddLavel}"></MenuItem>
+                        <MenuItem Header="Удалить" Command="{Binding DeleteLavel}"></MenuItem>
+                    </ContextMenu>
+                </TreeView.ContextMenu>
+            </TreeView>
+
+            <DataGrid ItemsSource="{Binding Path=ParamList}" AutoGenerateColumns="False" SelectedItem="{Binding SelectedROW}" >
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="RowEditEnding">
+                        <i:InvokeCommandAction Command="{Binding RelayCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{Binding MouseCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="InitializingNewItem">
+                        <i:InvokeCommandAction Command="{Binding NewItem}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding Path=name, TargetNullValue=(enter a name)}" Width="90"  />
+                    <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />
+                    <DataGridTextColumn Header="Значение" Binding="{Binding Path=val, TargetNullValue=(enter a val)}" Width="100" />
+                    <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=comment, TargetNullValue=(enter a comment)}" Width="300" />
+                </DataGrid.Columns>
+
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Add" Command="{Binding MyCommand}"></MenuItem>
+                        <MenuItem Header="Delete" Command="{Binding DeleteRow}"></MenuItem>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+        </DockPanel>
+
+    </Grid>
+</UserControl>

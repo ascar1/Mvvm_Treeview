@@ -36,9 +36,11 @@ namespace MainApp.ViewModel
             else
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
+                SimpleIoc.Default.Register<IParamDataService, ParamDataService>();
             }
 
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<Tab1Vm>();
         }
 
         /// <summary>
@@ -54,7 +56,13 @@ namespace MainApp.ViewModel
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
-
+        public Tab1Vm Param
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<Tab1Vm>();
+            }
+        }
         /// <summary>
         /// Cleans up all the resources.
         /// </summary>

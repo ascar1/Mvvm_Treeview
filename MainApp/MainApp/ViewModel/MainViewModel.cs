@@ -98,7 +98,7 @@ namespace MainApp.ViewModel
         {
             get
             {
-                return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
+                return _DeleteItemCommand ?? (_DeleteItemCommand = new MyCommand(obj =>
                 {                    
                     Tabs.Remove(_selectedTab);                    
                 }));

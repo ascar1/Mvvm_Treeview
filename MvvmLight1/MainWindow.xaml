@@ -15,9 +15,6 @@
 
     <Window.InputBindings>
         <KeyBinding Key="X" Modifiers="ALT" Command="{Binding MyCommand}" />
-        <!--
-        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding MyCommand}"/>
-        -->
         <KeyBinding Key="F2" Command="{Binding EditLavel}" />
         <KeyBinding Key="Enter" Command="{Binding CommitLavel}" />
     </Window.InputBindings>
@@ -38,40 +35,14 @@
                     <TextBlock x:Name="textBlock" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Margin="3,0,0,0"/>
                     <TextBox x:Name="editTextBlock" Visibility="Collapsed" MinWidth="100" 
                              Text="{Binding name, UpdateSourceTrigger=PropertyChanged}">
-                        <!--
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="LostFocus">
-                                <i:InvokeCommandAction Command="{Binding MyCommand}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        -->
                     </TextBox>
                 </StackPanel>
                 <HierarchicalDataTemplate.Triggers>
-                    <!--
-                    <MultiTrigger>
-                        <MultiTrigger.Conditions>
-                            <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeViewItem}}}" Value="True"/>
-                        </MultiTrigger.Conditions>
-                        <Setter TargetName="textBlock" Property="FontSize" Value="20"/>
-                    </MultiTrigger>-->
-                    <!--
-                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}" Value="True">
-                        <Setter TargetName="textBlock" Property="FontSize" Value="20"/>
-                        <Setter TargetName="textBlock" Property="Visibility" Value="Collapsed"/>
-                        <Setter TargetName="editTextBlock" Property="Visibility" Value="Visible"/>
-                    </DataTrigger>
-                    ,RelativeSource={RelativeSource AncestorType={x:Type TreeViewItem}}}"  
-                    IsEditMode
-                    -->
-
                     <DataTrigger Binding="{Binding IsEditMode}" Value="True">
                         <Setter TargetName="textBlock" Property="FontSize" Value="20"/>
                         <Setter TargetName="textBlock" Property="Visibility" Value="Collapsed"/>
                         <Setter TargetName="editTextBlock" Property="Visibility" Value="Visible"/>
                     </DataTrigger>
-
-
                 </HierarchicalDataTemplate.Triggers>
             </HierarchicalDataTemplate>
         </ResourceDictionary>
@@ -85,22 +56,10 @@
         <StatusBar DockPanel.Dock="Bottom" Height="20" />
 
         <TreeView DockPanel.Dock="Left" ItemsSource="{Binding LavelList}" Width="140" ItemTemplate="{StaticResource LavelItem}">
-            <!--
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <StackPanel>
-                        <TextBlock x:Name="textBlock" Text="{Binding name}"/>
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-            -->
             <TreeView.ItemContainerStyle>
                 <Style TargetType="TreeViewItem">
                     <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
-                    <!--
-                    <Setter Property="FocusManager.FocusedElement" Value="{Binding RelativeSource={RelativeSource Self}}" />
-                    -->
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ContextMenu>
