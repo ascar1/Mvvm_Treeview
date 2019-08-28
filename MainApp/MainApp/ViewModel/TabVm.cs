@@ -362,4 +362,13 @@ namespace MainApp.ViewModel
         {
         }
     }
+
+    public class TabData: TabVm
+    {
+        public TabData()
+            :base("Данные")
+        {
+
+        }
+    }
 }

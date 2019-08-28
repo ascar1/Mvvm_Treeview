@@ -44,47 +44,17 @@
                 </MenuItem>
                 <MenuItem Header="Edit" ></MenuItem>
                 <MenuItem Header="View" ></MenuItem>
+                <MenuItem Header="Settings">
+                    <MenuItem Header="Data" Command="{Binding OpenParamCommand}"/>
+                    <MenuItem Header="Settings" Command="{Binding OpenParamCommand}"/>
+                </MenuItem>
                 <MenuItem Header="Test" Command="{Binding TestCommand}" ></MenuItem>
             </Menu>
-            <!--
-            <Button Grid.Column="0" Grid.Row="1" Content="Строка 0 Столбец 1"  />
-            -->
-            <!--
-            <Button Grid.Column="0" Grid.Row="1" Content="Строка 0 Столбец 0" Grid.RowSpan="2" />            
-            -->
+
             <local:UserControl1 Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"/>
             
-
-        
-        <Button Grid.Column="1" Grid.Row="1" Content="Строка 0 Столбец 1" Grid.RowSpan="3" />
-            
+            <Button Grid.Column="1" Grid.Row="1" Content="Строка 0 Столбец 1" Grid.RowSpan="3" />
             <Label Grid.Column="0" Grid.Row="3" Content="Строка 2 Столбец 1" />
-
-
-            <!--            
-            <Button Grid.Column="0" Grid.Row="1" Content="Объединение трех столбцов" Grid.ColumnSpan="3"  />
-            
-            <Button Grid.Column="2" Grid.Row="2" Content="Строка 2 Столбец 2"  />
-            -->
         </Grid>
-
-        <!--
-        <DockPanel LastChildFill="True">
-            <Button DockPanel.Dock="Top" Background="AliceBlue" Content="Верхняя кнопка" />
-            <Button DockPanel.Dock="Bottom" Background="BlanchedAlmond" Content="Нижняя кнопка" />
-            <Button DockPanel.Dock="Left" Background="Aquamarine" Content="Левая кнопка" />
-            <Button DockPanel.Dock="Right" Background="DarkGreen" Content="Правая кнопка" />
-            <Button Background="LightGreen" Content="Центр" />
-        </DockPanel>
-        -->
-        <!--
-        <TextBlock FontSize="36"
-                   FontWeight="Bold"
-                   Foreground="Purple"
-                   Text="{Binding WelcomeTitle}"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   TextWrapping="Wrap" />
--->
     </Grid>
 </Window>

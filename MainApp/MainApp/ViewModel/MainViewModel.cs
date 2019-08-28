@@ -117,7 +117,19 @@ namespace MainApp.ViewModel
                 }));
             }
         }
-
+        private MyCommand _OpenParamCommand;
+        public MyCommand OpenParamCommand
+        {
+            get
+            {
+                return _OpenParamCommand ?? (_OpenParamCommand = new MyCommand(obj =>
+                {
+                    Tabs.Add(new Tab1Vm());
+                    Tabs.Last().event1 += MainViewModel_event1;
+                    SelectedTab = Tabs.FirstOrDefault();
+                }));
+            }
+        }
         #endregion
 
         ////public override void Cleanup()
