@@ -76,9 +76,11 @@
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
+    <Compile Include="Model\DealModel.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="Model\IParamDataService.cs" />
     <Compile Include="Model\LavelModel.cs" />
+    <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\ParamDataService.cs" />
     <Compile Include="Model\ParamModel.cs" />
     <Compile Include="ViewModel\LavelViewModel.cs" />
