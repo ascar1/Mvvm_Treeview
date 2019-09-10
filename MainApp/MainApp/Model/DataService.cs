@@ -27,5 +27,6 @@ namespace MainApp.Model
                 default: return DataType.String;
             }
         }
+
     }
 }
