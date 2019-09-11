@@ -45,7 +45,7 @@
                 <MenuItem Header="Edit" ></MenuItem>
                 <MenuItem Header="View" ></MenuItem>
                 <MenuItem Header="Settings">
-                    <MenuItem Header="Data" Command="{Binding OpenParamCommand}"/>
+                    <MenuItem Header="Data" Command="{Binding OpenDataCommand}"/>
                     <MenuItem Header="Settings" Command="{Binding OpenParamCommand}"/>
                 </MenuItem>
                 <MenuItem Header="Test" Command="{Binding TestCommand}" ></MenuItem>

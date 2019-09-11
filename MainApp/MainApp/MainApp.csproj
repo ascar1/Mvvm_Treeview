@@ -80,10 +80,15 @@
     <Compile Include="Model\DealModel.cs" />
     <Compile Include="Model\IDataService.cs" />
     <Compile Include="Model\IParamDataService.cs" />
+    <Compile Include="Model\IteratorModel.cs" />
     <Compile Include="Model\LavelModel.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\ParamDataService.cs" />
     <Compile Include="Model\ParamModel.cs" />
+    <Compile Include="ViewModel\FileViewModel.cs" />
+    <Compile Include="View\DataParamView.xaml.cs">
+      <DependentUpon>DataParamView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\LavelViewModel.cs" />
     <Compile Include="ViewModel\ParamViewModel.cs" />
     <Compile Include="View\ParamView.xaml.cs">
@@ -116,6 +121,10 @@
     <Page Include="Skins\MainSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\DataParamView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ParamView.xaml">
       <SubType>Designer</SubType>

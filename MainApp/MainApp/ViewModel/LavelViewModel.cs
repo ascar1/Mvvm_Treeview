@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MainApp.ViewModel
+namespace MainApp.View
 {
     public class LavelViewModel : ViewModelBase, INotifyPropertyChanged
     {

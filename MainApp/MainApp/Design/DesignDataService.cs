@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MainApp.Model;
 
 namespace MainApp.Design
@@ -11,6 +12,16 @@ namespace MainApp.Design
 
             var item = new DataItem("Welcome to MVVM Light [design]");
             callback(item, null);
+        }
+
+        public List<FileArr> GetFileArrs()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LoadData(Action<List<MasterPointModel>, Exception> callback)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -2,11 +2,12 @@
 using MainApp.Command;
 using MainApp.Model;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 
-namespace MainApp.ViewModel
+namespace MainApp.View
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.
@@ -41,6 +42,9 @@ namespace MainApp.ViewModel
             }
         }
 
+        public List<MasterPointModel> MasterChartPoint { get; set; }
+        public List<FileArr> fileArr { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -58,6 +62,16 @@ namespace MainApp.ViewModel
 
                     WelcomeTitle = item.Title;
                 });
+            _dataService.LoadData(
+                (item, error) =>
+                {
+                    if (error != null)
+                    {
+                        return;
+                    }
+                    MasterChartPoint = item;
+                });
+            fileArr = _dataService.GetFileArrs();
 
             Tabs.Add(new Tab1Vm());
             Tabs.Last().event1 += MainViewModel_event1;
@@ -130,6 +144,20 @@ namespace MainApp.ViewModel
                 }));
             }
         }
+        private MyCommand _OpenDataCommand;
+        public MyCommand OpenDataCommand
+        {
+            get
+            {
+                return _OpenDataCommand ?? (_OpenDataCommand = new MyCommand(obj =>
+                {
+                    Tabs.Add(new TabDataParam(_dataService));
+                    Tabs.Last().event1 += MainViewModel_event1;
+                    SelectedTab = Tabs.FirstOrDefault();
+                }));
+            }
+        }
+
         #endregion
 
         ////public override void Cleanup()

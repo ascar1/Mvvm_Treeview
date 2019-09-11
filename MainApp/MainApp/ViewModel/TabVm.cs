@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using MainApp.Command;
 using MainApp.Model;
+using MainApp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MainApp.ViewModel
+namespace MainApp.View
 {
     public abstract class TabVm : ViewModelBase, INotifyPropertyChanged
     {
@@ -369,6 +370,25 @@ namespace MainApp.ViewModel
             :base("Данные")
         {
 
+        }
+    }
+
+    public class TabDataParam: TabVm
+    {
+        private readonly IDataService _dataService;
+        public ObservableCollection<FileViewModel> files { get; set; }
+
+        public TabDataParam(IDataService data)
+            : base("Настройка данных")
+        {
+            _dataService = data;
+            List<FileArr> f = data.GetFileArrs();
+            foreach(var i in f)
+            {
+                
+                files.Add(new FileViewModel( i));
+            }
+            MessageBox.Show("1");
         }
     }
 }

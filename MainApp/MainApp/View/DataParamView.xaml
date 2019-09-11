@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="MainApp.View.DataParamView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MainApp.View"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <Button DockPanel.Dock="Top" Background="AliceBlue" Content="Верхняя кнопка" />
+            <Button DockPanel.Dock="Bottom" Background="BlanchedAlmond" Content="Нижняя кнопка" />
+            <!--
+            <Button DockPanel.Dock="Left" Background="Aquamarine" Content="Левая кнопка" />
+            <Button DockPanel.Dock="Right" Background="DarkGreen" Content="Правая кнопка" />
+            -->
+            <DataGrid ItemsSource="{Binding Path=files}">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Обрабатывать"/>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding Path=Tiker, TargetNullValue=(enter a name)}" Width="50"  />
+                    <DataGridTextColumn Header="Имя файла" Binding="{Binding Path=Tiker, TargetNullValue=(enter a val)}" Width="150" />
+                    <DataGridTextColumn Header="Начало" Binding="{Binding Path=sDate, TargetNullValue=(enter a comment)}" Width="100" />
+                    <DataGridTextColumn Header="Конец" Binding="{Binding Path=eDate, TargetNullValue=(enter a comment)}" Width="100" />
+                </DataGrid.Columns>
+            </DataGrid>
+            
+            <!--
+            <Button Background="LightGreen" Content="Центр" />
+            -->
+        </DockPanel>
+            
+    </Grid>
+</UserControl>

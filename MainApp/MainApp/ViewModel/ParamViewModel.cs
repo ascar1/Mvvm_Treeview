@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using static MainApp.Model.DataService;
 
-namespace MainApp.ViewModel
+namespace MainApp.View
 {
     public class ParamViewModel : ViewModelBase, IEditableObject
     {

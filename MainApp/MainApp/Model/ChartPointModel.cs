@@ -6,18 +6,26 @@ using System.Threading.Tasks;
 
 namespace MainApp.Model
 {
-    class ChartPointModel
+    public class MasterPointModel
     {
         public string Tiker { get; set; }
+        public DateTime sDate { get; set; }
+        public DateTime eDate { get; set; }
+        public List<DateModel> Data { get; set; }         
+    }
+    public class ChartPointModel
+    {
+        public string Tiker { get; set; }
+        public DateTime sDate { get; set; }
+        public DateTime CurrDate { get; set;}
         public List<DateModel> Data { get; set; }
     }
-
-    class DateModel
+    public class DateModel
     {
         public string Scale { get; set; }
         public List<PointModel> Points { get; set; }
     }
-    class PointModel
+    public class PointModel
     {
         public DateTime Date { get; set; }
         public Double Open { get; set; }
@@ -29,10 +37,29 @@ namespace MainApp.Model
         public List<IndexModel> IndexPoint { get; set; }
 
     }
-    class IndexModel
+    public class IndexModel
     {
         public string Name { get; set; }
         public string Type { get; set; }
         public double Value { get; set; }
+    }
+
+    public class FileArr
+    {
+        public string Tiker { get; set; }
+        public DateTime sDate { get; set; }
+        public DateTime eDate { get; set; }
+        public bool Work { get; set; }
+        public FileArr()
+        {
+
+        }
+        public FileArr (MasterPointModel master, bool flag)
+        {
+            Tiker = master.Tiker;
+            sDate = master.sDate;
+            eDate = master.eDate;
+            Work = flag;
+        }
     }
 }

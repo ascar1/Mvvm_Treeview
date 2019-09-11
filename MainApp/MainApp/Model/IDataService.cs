@@ -8,5 +8,7 @@ namespace MainApp.Model
     public interface IDataService
     {
         void GetData(Action<DataItem, Exception> callback);
+        void LoadData(Action<List<MasterPointModel>, Exception> callback);
+        List<FileArr> GetFileArrs();
     }
 }
