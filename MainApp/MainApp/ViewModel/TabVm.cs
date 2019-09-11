@@ -381,8 +381,9 @@ namespace MainApp.View
         public TabDataParam(IDataService data)
             : base("Настройка данных")
         {
+            files = new ObservableCollection<FileViewModel>();
             _dataService = data;
-            List<FileArr> f = data.GetFileArrs();
+            List<FileArrModel> f = data.GetFileArrs();
             foreach(var i in f)
             {
                 

@@ -9,6 +9,6 @@ namespace MainApp.Model
     {
         void GetData(Action<DataItem, Exception> callback);
         void LoadData(Action<List<MasterPointModel>, Exception> callback);
-        List<FileArr> GetFileArrs();
+        List<FileArrModel> GetFileArrs();
     }
 }

@@ -9,8 +9,8 @@ namespace MainApp.ViewModel
 {
     public class FileViewModel
     {
-        private readonly FileArr _fileArr;
-        public FileViewModel(FileArr fArr)
+        private readonly FileArrModel _fileArr;
+        public FileViewModel(FileArrModel fArr)
         {
             _fileArr = fArr;
         }
@@ -18,6 +18,11 @@ namespace MainApp.ViewModel
         {
             get => _fileArr.Tiker;
             set => _fileArr.Tiker = value;
+        }
+        public string Fname
+        {
+            get => _fileArr.Fname;
+            set => _fileArr.Fname = value;
         }
         public DateTime sDate
         {

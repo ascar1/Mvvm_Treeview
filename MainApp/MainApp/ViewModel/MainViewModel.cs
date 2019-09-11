@@ -43,7 +43,7 @@ namespace MainApp.View
         }
 
         public List<MasterPointModel> MasterChartPoint { get; set; }
-        public List<FileArr> fileArr { get; set; }
+        public List<FileArrModel> fileArr { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.

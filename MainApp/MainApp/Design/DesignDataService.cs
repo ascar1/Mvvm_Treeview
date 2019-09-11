@@ -14,7 +14,7 @@ namespace MainApp.Design
             callback(item, null);
         }
 
-        public List<FileArr> GetFileArrs()
+        public List<FileArrModel> GetFileArrs()
         {
             throw new NotImplementedException();
         }

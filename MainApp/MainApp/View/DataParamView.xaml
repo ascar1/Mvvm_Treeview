@@ -15,11 +15,11 @@
             <Button DockPanel.Dock="Left" Background="Aquamarine" Content="Левая кнопка" />
             <Button DockPanel.Dock="Right" Background="DarkGreen" Content="Правая кнопка" />
             -->
-            <DataGrid ItemsSource="{Binding Path=files}">
+            <DataGrid ItemsSource="{Binding Path=files}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridCheckBoxColumn Header="Обрабатывать"/>
+                    <DataGridCheckBoxColumn Header="Обрабатывать" Binding="{Binding Path=Work}" />
                     <DataGridTextColumn Header="Имя" Binding="{Binding Path=Tiker, TargetNullValue=(enter a name)}" Width="50"  />
-                    <DataGridTextColumn Header="Имя файла" Binding="{Binding Path=Tiker, TargetNullValue=(enter a val)}" Width="150" />
+                    <DataGridTextColumn Header="Имя файла" Binding="{Binding Path=Fname, TargetNullValue=(enter a val)}" Width="150" />
                     <DataGridTextColumn Header="Начало" Binding="{Binding Path=sDate, TargetNullValue=(enter a comment)}" Width="100" />
                     <DataGridTextColumn Header="Конец" Binding="{Binding Path=eDate, TargetNullValue=(enter a comment)}" Width="100" />
                 </DataGrid.Columns>

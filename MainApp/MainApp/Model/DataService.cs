@@ -31,18 +31,18 @@ namespace MainApp.Model
                 string[] files = Directory.GetFiles(dirName,"*.txt");
                 foreach (string s in files)
                 {                   
-                    LoadFile(FileName, Path.GetFileName(s).Substring(0,4), "60");
+                    LoadFile(s, Path.GetFileName(s).Substring(0,4), "60");
                 }
             }           
             callback(CPModel_, null);            
         }
 
-        public List<FileArr> GetFileArrs()
+        public List<FileArrModel> GetFileArrs()
         {
-            List<FileArr> f = new List<FileArr>();
+            List<FileArrModel> f = new List<FileArrModel>();
             foreach (var i in CPModel_)
             {
-                f.Add(new FileArr(i, true));
+                f.Add(new FileArrModel(i, true));
             }
             return f;
         }
@@ -53,6 +53,7 @@ namespace MainApp.Model
             double i;
             MasterPointModel CPModel = new MasterPointModel();
             CPModel.Tiker = Tiker;
+            CPModel.FName = Path.GetFileName( FName);
             CPModel.Data = new List<DateModel>();
             CPModel.Data.Add(new DateModel());
             CPModel.Data[0].Scale = Scale;
@@ -68,14 +69,14 @@ namespace MainApp.Model
             while (!reader.EndOfStream)
             {
                 _data = reader.ReadLine().Split(';');
-                if (Double.TryParse(_data[6]/*.Replace(".", ",")*/, out i) == true)
+                if (Double.TryParse(_data[6].Replace(".", ","), out i) == true)
                 {
                     CPModel.Data[0].Points.Add(new PointModel()
                     {
-                        Open = Convert.ToDouble(_data[4]/*.Replace(".", ",")*/),
-                        High = Convert.ToDouble(_data[5]/*.Replace(".", ",")*/),
-                        Low = Convert.ToDouble(_data[6]/*.Replace(".", ",")*/),
-                        Close = Convert.ToDouble(_data[7]/*.Replace(".", ",")*/),
+                        Open = Convert.ToDouble(_data[4].Replace(".", ",")),
+                        High = Convert.ToDouble(_data[5].Replace(".", ",")),
+                        Low = Convert.ToDouble(_data[6].Replace(".", ",")),
+                        Close = Convert.ToDouble(_data[7].Replace(".", ",")),
                         Vol = Convert.ToDouble(_data[8]),
                         Date = Convert.ToDateTime(_data[2] + " " + _data[3])
                     });

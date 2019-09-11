@@ -9,11 +9,12 @@ namespace MainApp.Model
     public class MasterPointModel
     {
         public string Tiker { get; set; }
+        public string FName { get; set; }
         public DateTime sDate { get; set; }
         public DateTime eDate { get; set; }
         public List<DateModel> Data { get; set; }         
     }
-    public class ChartPointModel
+    public class WorkPointModel
     {
         public string Tiker { get; set; }
         public DateTime sDate { get; set; }
@@ -44,19 +45,21 @@ namespace MainApp.Model
         public double Value { get; set; }
     }
 
-    public class FileArr
+    public class FileArrModel
     {
         public string Tiker { get; set; }
+        public string Fname { get; set; }
         public DateTime sDate { get; set; }
         public DateTime eDate { get; set; }
         public bool Work { get; set; }
-        public FileArr()
+        public FileArrModel()
         {
 
         }
-        public FileArr (MasterPointModel master, bool flag)
+        public FileArrModel (MasterPointModel master, bool flag)
         {
             Tiker = master.Tiker;
+            Fname = master.FName;
             sDate = master.sDate;
             eDate = master.eDate;
             Work = flag;
