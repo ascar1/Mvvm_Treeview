@@ -15,7 +15,7 @@ namespace MainApp.View
 {
     public abstract class TabVm : ViewModelBase, INotifyPropertyChanged
     {
-        public string Header { get; }
+        public string Header { get; set; }
         delegate void GetName();
         public TabVm(string header)
         {
@@ -29,7 +29,7 @@ namespace MainApp.View
             {
                 return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
                 {
-                    MessageBox.Show("Команда " + " Button !!! ");
+                    MessageBox.Show("Команда TestCommand в abstract class TabVm" );
                 }));
             }
         }
@@ -366,10 +366,101 @@ namespace MainApp.View
 
     public class TabData: TabVm
     {
-        public TabData()
+        private readonly IDataService _dataService;
+        public ObservableCollection<FileViewModel> files { get; set; }
+        public ObservableCollection<PointModel> points { get; set; }
+        private bool FlagMaster;
+        public TabData(IDataService data, bool flagMaster )
             :base("Данные")
         {
+            FlagMaster = flagMaster;
+            if (flagMaster)
+            {
+                base.Header = "Master Data";
+                flag = Visibility.Collapsed;
+            }
+            else
+            {
+                base.Header = "Work Data";
+                flag = Visibility.Visible;
+            }
+            files = new ObservableCollection<FileViewModel>();
+            points = new ObservableCollection<PointModel>();
+            _dataService = data;
+            List<FileArrModel> f = data.GetFileArrs();
+            foreach (var i in f)
+            {
+                if (i.Work)
+                {
+                    files.Add(new FileViewModel(i));
+                    ListComboBoxItems.Add(i.Tiker);
+                }                
+            }
+        }
+        private void LoadData(string tiker)
+        {
+            points.Clear();
+            foreach (PointModel i in _dataService.GetMasterPoint("60", Value))
+            {
+                points.Add(i);
+            };
+        }
 
+        private ObservableCollection<string> listComboBoxItems = new ObservableCollection<string>();
+        public ObservableCollection<string> ListComboBoxItems
+        {
+            get { return listComboBoxItems; }
+            set { listComboBoxItems = value; /*OnPropertyChanged();*/ }
+        }
+        string v;
+        public string Value
+        {
+            get => v;
+            set
+            {
+                Set(ref v, value);
+                if (FlagMaster)
+                {
+                    LoadData(value);
+                }
+                
+            }
+        }
+
+        public Visibility flag
+        {
+            get;
+            set; 
+        }
+        private MyCommand _NextCommand;
+        public MyCommand NextCommand
+        {
+            get
+            {
+                return _NextCommand ?? (_NextCommand = new MyCommand(obj =>
+                {
+                    MessageBox.Show("TabData NextCommand");
+                    if (FlagMaster)
+                    {
+                        LoadData(Value);
+                    }                    
+                }));
+            }
+        }
+        private MyCommand _AllCommand;
+        public MyCommand AllCommand
+        {
+            get
+            {
+                return _AllCommand ?? (_AllCommand = new MyCommand(obj =>
+                {
+                    MessageBox.Show("TabData AllCommand");
+                    if (FlagMaster)
+                    {
+                        LoadData(Value);
+                    }
+                }));
+            }
         }
     }
 
@@ -385,11 +476,22 @@ namespace MainApp.View
             _dataService = data;
             List<FileArrModel> f = data.GetFileArrs();
             foreach(var i in f)
-            {
-                
+            {                
                 files.Add(new FileViewModel( i));
             }
-            MessageBox.Show("1");
+            
+        }
+        private MyCommand _TestCommand1;
+        public MyCommand TestCommand1
+        {
+            get
+            {
+                return _TestCommand1 ?? (_TestCommand1 = new MyCommand(obj =>
+                {
+                    MessageBox.Show("Команда TestCommand1 в TabDataParam");
+                    MessageBox.Show(files.Count().ToString());
+                }));
+            }
         }
     }
 }

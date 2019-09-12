@@ -19,6 +19,11 @@ namespace MainApp.Design
             throw new NotImplementedException();
         }
 
+        public List<PointModel> GetMasterPoint(string scale, string tiker)
+        {
+            throw new NotImplementedException();
+        }
+
         public void LoadData(Action<List<MasterPointModel>, Exception> callback)
         {
             throw new NotImplementedException();

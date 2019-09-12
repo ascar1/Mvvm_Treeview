@@ -75,15 +75,15 @@ namespace MainApp.View
 
             Tabs.Add(new Tab1Vm());
             Tabs.Last().event1 += MainViewModel_event1;
-            /*Tabs.Add(new Tab2Vm());
+            Tabs.Add(new Tab2Vm());
             Tabs.Last().event1 += MainViewModel_event1;
-            */
+
             SelectedTab = Tabs.FirstOrDefault();
         }
 
         private void MainViewModel_event1(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            //MessageBox.Show("!!!");
+           // MessageBox.Show("!!!");
             Tabs.Remove(_selectedTab);
             
         }
@@ -113,10 +113,10 @@ namespace MainApp.View
             get
             {
                 return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
-                {
+                {                   
                     Tabs.Add(new Tab2Vm());
                     Tabs.Last().event1 += MainViewModel_event1;
-                    SelectedTab = Tabs.FirstOrDefault();
+                    SelectedTab = Tabs.Last();
                 }));
             }
         }
@@ -140,7 +140,7 @@ namespace MainApp.View
                 {
                     Tabs.Add(new Tab1Vm());
                     Tabs.Last().event1 += MainViewModel_event1;
-                    SelectedTab = Tabs.FirstOrDefault();
+                    SelectedTab = Tabs.Last();
                 }));
             }
         }
@@ -153,11 +153,36 @@ namespace MainApp.View
                 {
                     Tabs.Add(new TabDataParam(_dataService));
                     Tabs.Last().event1 += MainViewModel_event1;
-                    SelectedTab = Tabs.FirstOrDefault();
+                    SelectedTab = Tabs.Last();
                 }));
             }
         }
-
+        private MyCommand _OpenViewDataCommand;
+        public MyCommand OpenViewDataCommand
+        {
+            get
+            {
+                return _OpenViewDataCommand ?? (_OpenViewDataCommand = new MyCommand(obj =>
+                {
+                    Tabs.Add(new TabData(_dataService, true));
+                    Tabs.Last().event1 += MainViewModel_event1;
+                    SelectedTab = Tabs.Last();
+                }));
+            }
+        }
+        private MyCommand _OpenViewWorkDataCommand;
+        public MyCommand OpenViewWorkDataCommand
+        {
+            get
+            {
+                return _OpenViewWorkDataCommand ?? (_OpenViewWorkDataCommand = new MyCommand(obj =>
+                {
+                    Tabs.Add(new TabData(_dataService, false));
+                    Tabs.Last().event1 += MainViewModel_event1;
+                    SelectedTab = Tabs.Last();
+                }));
+            }
+        }
         #endregion
 
         ////public override void Cleanup()

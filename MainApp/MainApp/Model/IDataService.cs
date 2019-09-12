@@ -10,5 +10,7 @@ namespace MainApp.Model
         void GetData(Action<DataItem, Exception> callback);
         void LoadData(Action<List<MasterPointModel>, Exception> callback);
         List<FileArrModel> GetFileArrs();
+
+        List<PointModel> GetMasterPoint(string scale, string tiker);
     }
 }

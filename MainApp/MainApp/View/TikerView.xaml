@@ -7,13 +7,41 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <DataGrid>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Имя" Binding="{Binding Path=name, TargetNullValue=(enter a name)}" Width="90"  />
-                
-                <DataGridTextColumn Header="Значение" Binding="{Binding Path=val, TargetNullValue=(enter a val)}" Width="100" />
-                <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=comment, TargetNullValue=(enter a comment)}" Width="300" />
-            </DataGrid.Columns>            
-        </DataGrid>
+            <DockPanel LastChildFill="True">
+            
+            <Button DockPanel.Dock="Bottom" Background="BlanchedAlmond" Content="Нижняя кнопка" />
+            <ToolBar DockPanel.Dock="Top">
+                <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Value}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
+                <Button  Content="Show" Command="{Binding GoCommand}"/>
+                <Separator />
+                <Button  Content="Next" Command="{Binding NextCommand}" Visibility="{Binding flag}"/>
+                <Button  Content="All" Command="{Binding AllCommand}" Visibility="{Binding flag}"/>
+            </ToolBar>
+            <DataGrid ItemsSource="{Binding Path=points}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Дата" Binding="{Binding Path=Date, TargetNullValue=(enter a name)}" Width="90"  />
+                    <DataGridTextColumn Header="Open" Binding="{Binding Path=Open, TargetNullValue=(enter a name)}" Width="90"  />
+                    <DataGridTextColumn Header="High" Binding="{Binding Path=High, TargetNullValue=(enter a name)}" Width="90"  />
+                    <DataGridTextColumn Header="Low" Binding="{Binding Path=Low, TargetNullValue=(enter a name)}" Width="90"  />
+                    <DataGridTextColumn Header="Close" Binding="{Binding Path=Close, TargetNullValue=(enter a val)}" Width="90" />
+                    <DataGridTextColumn Header="Val" Binding="{Binding Path=Vol, TargetNullValue=(enter a comment)}" Width="90" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+
+
     </Grid>
 </UserControl>
+    <!--
+    <Button DockPanel.Dock="Top" Background="AliceBlue" Content="Верхняя кнопка" Command="{Binding TestCommand1}"/>
+                <DataGrid ItemsSource="{Binding Path=files}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="Обрабатывать" Binding="{Binding Path=Work, Mode=TwoWay}" >
+                    </DataGridCheckBoxColumn>
+                    <DataGridTextColumn Header="Имя" Binding="{Binding Path=Tiker, TargetNullValue=(enter a name)}" Width="50"  />
+                    <DataGridTextColumn Header="Имя файла" Binding="{Binding Path=Fname, TargetNullValue=(enter a val)}" Width="150" />
+                    <DataGridTextColumn Header="Начало" Binding="{Binding Path=sDate, TargetNullValue=(enter a comment)}" Width="100" />
+                    <DataGridTextColumn Header="Конец" Binding="{Binding Path=eDate, TargetNullValue=(enter a comment)}" Width="100" />
+                </DataGrid.Columns>
+            </DataGrid>
+    -->

@@ -16,12 +16,15 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:TabDataParam}">
                 <local:DataParamView></local:DataParamView>
-            </DataTemplate>            
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:TabData}">
+                <local:TikerView></local:TikerView>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>   
     <Grid>
         <TabControl ItemsSource="{Binding Tabs}"  SelectedItem="{Binding SelectedTab}">
-            <TabControl.Resources>
+            <TabControl.Resources>                                       
                 <Style TargetType="TabItem">
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>

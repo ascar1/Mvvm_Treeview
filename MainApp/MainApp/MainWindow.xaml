@@ -43,7 +43,10 @@
                     <MenuItem Header="Exit" ></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Edit" ></MenuItem>
-                <MenuItem Header="View" ></MenuItem>
+                <MenuItem Header="View" >
+                    <MenuItem Header="View Master Data" Command="{Binding OpenViewDataCommand}"/>
+                    <MenuItem Header="View Work Data" Command="{Binding OpenViewWorkDataCommand}"/>
+                </MenuItem>
                 <MenuItem Header="Settings">
                     <MenuItem Header="Data" Command="{Binding OpenDataCommand}"/>
                     <MenuItem Header="Settings" Command="{Binding OpenParamCommand}"/>

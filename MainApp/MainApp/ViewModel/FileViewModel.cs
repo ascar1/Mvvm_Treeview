@@ -1,9 +1,11 @@
-﻿using MainApp.Model;
+﻿using MainApp.Command;
+using MainApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MainApp.ViewModel
 {
@@ -40,5 +42,16 @@ namespace MainApp.ViewModel
             set => _fileArr.Work = value;
         }
 
+        private MyCommand _TestCommand1;
+        public MyCommand TestCommand1
+        {
+            get
+            {
+                return _TestCommand1 ?? (_TestCommand1 = new MyCommand(obj =>
+                {
+                    MessageBox.Show("123");
+                }));
+            }
+        }
     }
 }
