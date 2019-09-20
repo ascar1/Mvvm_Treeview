@@ -24,6 +24,11 @@ namespace MainApp.Design
             throw new NotImplementedException();
         }
 
+        public List<MasterPointModel> GetMasterPoints()
+        {
+            throw new NotImplementedException();
+        }
+
         public void LoadData(Action<List<MasterPointModel>, Exception> callback)
         {
             throw new NotImplementedException();

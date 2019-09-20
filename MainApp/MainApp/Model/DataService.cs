@@ -24,8 +24,8 @@ namespace MainApp.Model
         {
             string dirName = @"C:\Tiker\";
             CPModel_ = new List<MasterPointModel>();
-            string FileName = "BANE_140303_150331.txt";
-            FileName = @"C:\Tiker\" + FileName;
+           /* string FileName = "BANE_140303_150331.txt";
+            FileName = @"C:\Tiker\" + FileName;*/
             if (Directory.Exists(dirName))
             {
                 string[] files = Directory.GetFiles(dirName,"*.txt");
@@ -109,5 +109,9 @@ namespace MainApp.Model
             return tmp.Data[0].Points;
         }
 
+        public List<MasterPointModel> GetMasterPoints()
+        {
+            return CPModel_;
+        }
     }
 }

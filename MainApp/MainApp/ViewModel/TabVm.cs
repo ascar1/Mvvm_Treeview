@@ -370,6 +370,7 @@ namespace MainApp.View
         public ObservableCollection<FileViewModel> files { get; set; }
         public ObservableCollection<PointModel> points { get; set; }
         private bool FlagMaster;
+        private IteratorModel iterator;
         public TabData(IDataService data, bool flagMaster )
             :base("Данные")
         {
@@ -396,6 +397,7 @@ namespace MainApp.View
                     ListComboBoxItems.Add(i.Tiker);
                 }                
             }
+            iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
         }
         private void LoadData(string tiker)
         {
@@ -423,6 +425,10 @@ namespace MainApp.View
                 {
                     LoadData(value);
                 }
+                else
+                {
+
+                }
                 
             }
         }
@@ -443,7 +449,11 @@ namespace MainApp.View
                     if (FlagMaster)
                     {
                         LoadData(Value);
-                    }                    
+                    }    
+                    else
+                    {
+                        iterator.next();
+                    }
                 }));
             }
         }
@@ -458,6 +468,10 @@ namespace MainApp.View
                     if (FlagMaster)
                     {
                         LoadData(Value);
+                    }
+                    else
+                    {
+                        iterator.GetSeed();
                     }
                 }));
             }
