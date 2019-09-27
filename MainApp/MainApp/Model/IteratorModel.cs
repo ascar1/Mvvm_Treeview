@@ -10,12 +10,15 @@ namespace MainApp.Model
     class IteratorModel
     {
         private int Seed = 10;
-        private List<MasterPointModel> MasterPoint;
-        private List<FileArrModel> fileArrs;
+        private List<MasterPointModel> MasterPoint;        
         public List<WorkPointModel> WorkPoints;
+
+        private List<FileArrModel> fileArrs;
+        public bool isClear;
 
         public IteratorModel(List<MasterPointModel> MasterChartPoint,List<FileArrModel> files)
         {
+            isClear = true;
             MasterPoint = MasterChartPoint;
             WorkPoints = new List<WorkPointModel>();
             fileArrs = files;
@@ -34,19 +37,25 @@ namespace MainApp.Model
                     Data = dateModels
                 });
             }
+            GetSeed();
         }
 
         public bool next()
         {
-            foreach (var i in MasterPoint )
+            bool flag = false;
+            foreach (MasterPointModel i in MasterPoint )
             {
-                int index;
-                // WorkPoints.Find(ii => ii.Tiker == i.Tiker).Data[0].Points.Add(new PointModel());
-                index = WorkPoints.FindIndex(ii => ii.Tiker == i.Tiker);
-                int intdex1 = WorkPoints[index].Data[0].Points.Count();
-                MessageBox.Show("TabData AllCommand");
+                int index = WorkPoints.FindIndex(ii => ii.Tiker == i.Tiker);
+                int tmp1 = WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Count;
+                if (tmp1 < i.Data[0].Points.Count)
+                {
+                    flag = true;
+                    var tmp = i.Data[0].Points[WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Count];
+                    WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Add(tmp);
+                    GetScale(WorkPoints[index].Data);
+                }
             }
-            return true;
+            return flag;
         }
 
         public void GetSeed ()
@@ -55,6 +64,61 @@ namespace MainApp.Model
             {
                 next();
             }
+        }
+
+        public void GetScale(List<DateModel> dateModels)
+        {
+            DateTime CurrDate;
+            DateTime Date1;
+            
+            if (dateModels.Count == 1)
+            {
+                dateModels.Add(new DateModel()
+                {
+                    Points = new List<PointModel>(),
+                    Scale = "D"                
+                });
+                dateModels.Find(i => i.Scale == "D").Points.Add(dateModels[0].Points[0]);
+            }
+            else
+            {
+                CurrDate = dateModels.Find(i => i.Scale == "60").Points.Last().Date;
+                Date1 = dateModels.Find(i => i.Scale == "D").Points.Last().Date;
+                if (CurrDate.Date == Date1.Date)
+                {
+                    PointModel pointD = dateModels.Find(i => i.Scale == "D").Points.Last();
+                    PointModel point60 = dateModels.Find(i => i.Scale == "60").Points.Last();
+                    pointD.High = Math.Max(pointD.High, point60.High);
+                    pointD.Low = Math.Min(pointD.High, point60.High);
+                    pointD.Close = point60.Close;
+                    pointD.Vol = pointD.Vol + point60.Vol;
+                }
+                else
+                {
+                    PointModel point60 = dateModels.Find(i => i.Scale == "60").Points.Last();
+                    dateModels.Find(i => i.Scale == "D").Points.Add(new PointModel()
+                    {
+                        Close = point60.Close,
+                        Vol = point60.Vol,
+                        Date = point60.Date,
+                        High = point60.High,
+                        Low = point60.Low,
+                        Open = point60.Open
+                    });
+                }
+            }
+        }
+        public void GetIndex()
+        {
+
+        }
+        public void All()
+        {
+            while(next())
+            {
+
+            }
+          //  MessageBox.Show("All");
         }
     }
 }

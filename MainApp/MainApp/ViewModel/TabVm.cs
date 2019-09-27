@@ -397,6 +397,8 @@ namespace MainApp.View
                     ListComboBoxItems.Add(i.Tiker);
                 }                
             }
+            listScaleItems.Add("60");
+            listScaleItems.Add("D");
             iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
         }
         private void LoadData(string tiker)
@@ -408,12 +410,22 @@ namespace MainApp.View
             };
         }
 
+        private void LoadData1(string tiker, string skale)
+        {
+            points.Clear();
+            foreach (PointModel i in iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1=>i1.Scale==skale).Points)
+            {
+                points.Add(i);
+            };
+        }
+
         private ObservableCollection<string> listComboBoxItems = new ObservableCollection<string>();
         public ObservableCollection<string> ListComboBoxItems
         {
             get { return listComboBoxItems; }
             set { listComboBoxItems = value; /*OnPropertyChanged();*/ }
         }
+
         string v;
         public string Value
         {
@@ -424,13 +436,20 @@ namespace MainApp.View
                 if (FlagMaster)
                 {
                     LoadData(value);
-                }
-                else
-                {
-
-                }
-                
+                }               
             }
+        }
+        private ObservableCollection<string> listScaleItems = new ObservableCollection<string>();
+        public ObservableCollection<string> ListScaleItems
+        {
+            get { return listScaleItems; }
+            set { listScaleItems = value; /*OnPropertyChanged();*/ }
+        }
+        string scale;
+        public string Scale
+        {
+            get => scale;
+            set => Set(ref scale, value);
         }
 
         public Visibility flag
@@ -445,14 +464,16 @@ namespace MainApp.View
             {
                 return _NextCommand ?? (_NextCommand = new MyCommand(obj =>
                 {
-                    MessageBox.Show("TabData NextCommand");
+                   // MessageBox.Show("TabData NextCommand");
                     if (FlagMaster)
                     {
                         LoadData(Value);
                     }    
                     else
                     {
+
                         iterator.next();
+                        LoadData1(v,scale);
                     }
                 }));
             }
@@ -464,15 +485,28 @@ namespace MainApp.View
             {
                 return _AllCommand ?? (_AllCommand = new MyCommand(obj =>
                 {
-                    MessageBox.Show("TabData AllCommand");
+                    //MessageBox.Show("TabData AllCommand");
                     if (FlagMaster)
                     {
                         LoadData(Value);
                     }
                     else
                     {
-                        iterator.GetSeed();
+                        //iterator.GetSeed();
+                        iterator.All();
                     }
+                }));
+            }
+        }
+        private MyCommand showCommand;
+        public MyCommand ShowCommand
+        {
+            get
+            {
+                return showCommand ?? (showCommand = new MyCommand(obj =>
+                {
+                    //MessageBox.Show("ShowCommand");
+                    LoadData1(Value, Scale);
                 }));
             }
         }
