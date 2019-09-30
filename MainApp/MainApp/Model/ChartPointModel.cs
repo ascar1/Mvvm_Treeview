@@ -35,15 +35,24 @@ namespace MainApp.Model
         public Double Close { get; set; }
         public Double Vol { get; set; }
         public Double OpenInt { get; set; }
-        public List<IndexModel> IndexPoint { get; set; }
-
+        public List<Index> IndexPoint { get; set; }
     }
-    public class IndexModel
+    public class Index
     {
         public string Name { get; set; }
         public string Type { get; set; }
+        public List<IndexPoint> Value { get; set; }
+        public Index()
+        {
+            Value = new List<IndexPoint>();
+        }
+    }
+    public class IndexPoint
+    {
+        public string Name { get; set; }
         public double Value { get; set; }
     }
+
 
     public class FileArrModel
     {

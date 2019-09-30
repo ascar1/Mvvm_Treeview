@@ -79,6 +79,7 @@
     <Compile Include="Model\DataService.cs" />
     <Compile Include="Model\DealModel.cs" />
     <Compile Include="Model\IDataService.cs" />
+    <Compile Include="Model\IndexModel.cs" />
     <Compile Include="Model\IParamDataService.cs" />
     <Compile Include="Model\IteratorModel.cs" />
     <Compile Include="Model\LavelModel.cs" />

@@ -181,6 +181,10 @@ namespace MainApp.Model
             LoadData();
             callback(ParamItem, null);
         }
+        public List<ParamModel> GetParam (int id)
+        {           
+            return ParamItem.FindAll(i => i.ParamID == id);
+        }
         private void writeParam(XElement tmp, ParamModel param)
         {
             tmp.Add(new XElement("Param",
@@ -201,8 +205,7 @@ namespace MainApp.Model
         }
         public void SaveParam(ParamModel param)
         {
-            XDocument xDoc = XDocument.Load(NameFile);
-            bool flag = false;
+            XDocument xDoc = XDocument.Load(NameFile);            
             // записать                 
             foreach (XElement tmp in xDoc.Element("ProgramParam").Elements("level"))
             {
@@ -251,5 +254,6 @@ namespace MainApp.Model
             LoadData();
         }
         #endregion
+
     }
 }

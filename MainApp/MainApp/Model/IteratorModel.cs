@@ -53,6 +53,7 @@ namespace MainApp.Model
                     var tmp = i.Data[0].Points[WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Count];
                     WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Add(tmp);
                     GetScale(WorkPoints[index].Data);
+                    GetIndex(WorkPoints[index].Data);
                 }
             }
             return flag;
@@ -108,9 +109,29 @@ namespace MainApp.Model
                 }
             }
         }
-        public void GetIndex()
+        public void GetIndex(List<DateModel> dateModels)
         {
+            List<LavelModel> lavelModels = new List<LavelModel>();            
+            ParamDataService paramDataService = new ParamDataService();           
+            paramDataService.GetDataLevel((item, error) => { if (error != null) { return; } lavelModels = item; });
+            foreach(var tmp in lavelModels.FindAll(i=> i.paremtId == lavelModels.Find(i1 => i1.name == "Index").id))
+            {                
+                List<ParamModel> tmp2 = paramDataService.GetParam(tmp.id);
+                string type = tmp2.Find(i => i.name.Trim() == "Type").val;                
+                switch (type)
+                {
+                    case "EMA":
+                        MessageBox.Show("EMA");
 
+                        break;
+                    case "MACD":
+                        MessageBox.Show("MACD");
+                        break;
+                    case "FI":
+                        MessageBox.Show("FI");
+                        break;
+                }
+            }             
         }
         public void All()
         {
