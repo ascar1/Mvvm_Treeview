@@ -111,6 +111,7 @@ namespace MainApp.Model
         }
         public void GetIndex(List<DateModel> dateModels)
         {
+            IndexModel indexModel = new IndexModel();
             List<LavelModel> lavelModels = new List<LavelModel>();            
             ParamDataService paramDataService = new ParamDataService();           
             paramDataService.GetDataLevel((item, error) => { if (error != null) { return; } lavelModels = item; });
@@ -121,14 +122,15 @@ namespace MainApp.Model
                 switch (type)
                 {
                     case "EMA":
-                        MessageBox.Show("EMA");
-
+                        //MessageBox.Show("EMA");
+                        indexModel.GetEMA(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                        indexModel.GetEMA(dateModels.Find(i => i.Scale == "D").Points, tmp2);
                         break;
                     case "MACD":
-                        MessageBox.Show("MACD");
+                        //MessageBox.Show("MACD");
                         break;
                     case "FI":
-                        MessageBox.Show("FI");
+                        //MessageBox.Show("FI");
                         break;
                 }
             }             

@@ -36,6 +36,10 @@ namespace MainApp.Model
         public Double Vol { get; set; }
         public Double OpenInt { get; set; }
         public List<Index> IndexPoint { get; set; }
+        public PointModel()
+        {
+            IndexPoint = new List<Index>();
+        }
     }
     public class Index
     {
