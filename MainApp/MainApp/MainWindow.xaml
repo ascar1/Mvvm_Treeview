@@ -46,6 +46,7 @@
                 <MenuItem Header="View" >
                     <MenuItem Header="View Master Data" Command="{Binding OpenViewDataCommand}"/>
                     <MenuItem Header="View Work Data" Command="{Binding OpenViewWorkDataCommand}"/>
+                    <MenuItem Header="View Chart Work Data" Command="{Binding OpenChartViewWorkDataCommand}"/>
                 </MenuItem>
                 <MenuItem Header="Settings">
                     <MenuItem Header="Data" Command="{Binding OpenDataCommand}"/>

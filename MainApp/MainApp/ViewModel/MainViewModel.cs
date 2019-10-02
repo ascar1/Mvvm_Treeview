@@ -183,6 +183,19 @@ namespace MainApp.View
                 }));
             }
         }
+        private MyCommand _OpenChartViewWorkDataCommand;
+        public MyCommand OpenChartViewWorkDataCommand
+        {
+            get
+            {
+                return _OpenChartViewWorkDataCommand ?? (_OpenChartViewWorkDataCommand = new MyCommand(obj =>
+                {
+                    Tabs.Add(new ChartData(_dataService));
+                    Tabs.Last().event1 += MainViewModel_event1;
+                    SelectedTab = Tabs.Last();
+                }));
+            }
+        }
         #endregion
 
         ////public override void Cleanup()
