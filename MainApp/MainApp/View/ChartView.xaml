@@ -19,10 +19,15 @@
                 <Button  Content="Next" Command="{Binding NextCommand}" Visibility="{Binding flag}"/>
                 <Button  Content="All" Command="{Binding AllCommand}" Visibility="{Binding flag}"/>
             </ToolBar>
-            <lvc:CartesianChart Grid.Row="2" Series="{Binding SeriesCollection}">
+            <lvc:CartesianChart Grid.Row="2" >
+                <lvc:CartesianChart.Series>
+                    <lvc:OhlcSeries Values="{Binding ohlcPoints}"></lvc:OhlcSeries>
+                </lvc:CartesianChart.Series>
+                
                 <lvc:CartesianChart.AxisX>
-                    <lvc:Axis Labels="{Binding Labels}"/>
+                    <lvc:Axis Labels="{Binding NLabels}"/>
                 </lvc:CartesianChart.AxisX>
+                
             </lvc:CartesianChart>
 
             

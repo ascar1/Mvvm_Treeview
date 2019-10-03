@@ -551,6 +551,7 @@ namespace MainApp.View
 
     public class ChartData:TabVm
     {
+
         public SeriesCollection SeriesCollection { get; set; }
         private string[] _labels;
         public string[] Labels
@@ -562,39 +563,159 @@ namespace MainApp.View
                // OnPropertyChanged("Labels");
             }
         }
+        public List<string> NLabels { get; set; }
+        private IteratorModel iterator;
+        private readonly IDataService _dataService;
+        public ObservableCollection<FileViewModel> files { get; set; }
+        public ObservableCollection<PointModel> points { get; set; }
+        public ChartValues<OhlcPoint> ohlcPoints { get; set; }
+
+        private ObservableCollection<string> listComboBoxItems = new ObservableCollection<string>();
+        public ObservableCollection<string> ListComboBoxItems
+        {
+            get { return listComboBoxItems; }
+            set { listComboBoxItems = value; /*OnPropertyChanged();*/ }
+        }
+
+        string v;
+        public string Value
+        {
+            get => v;
+            set
+            {
+                Set(ref v, value);
+            }
+        }
+        private ObservableCollection<string> listScaleItems = new ObservableCollection<string>();
+        public ObservableCollection<string> ListScaleItems
+        {
+            get { return listScaleItems; }
+            set { listScaleItems = value; /*OnPropertyChanged();*/ }
+        }
+
+        string scale;
+        public string Scale
+        {
+            get => scale;
+            set => Set(ref scale, value);
+        }
+
         public ChartData(IDataService data)
             :base ("График")
         {
-            SeriesCollection = new SeriesCollection
+            #region
+            /*
+             SeriesCollection = new SeriesCollection
+             {
+                 new OhlcSeries()
+                 {
+                     Values = new ChartValues<OhlcPoint>
+                     {
+                         new OhlcPoint(32, 35, 30, 32),
+                         new OhlcPoint(33, 38, 31, 37),
+                         new OhlcPoint(35, 42, 30, 40),
+                         new OhlcPoint(37, 40, 35, 38),
+                         new OhlcPoint(35, 38, 32, 33)
+                     }
+                 },
+                 new LineSeries
+                 {
+                     Values = new ChartValues<double> {30, 32, 35, 30, 28},
+                     Fill = Brushes.Transparent
+                 }
+             };
+             Labels = new []
+             {
+                 DateTime.Now.ToString("dd MMM"),
+                 DateTime.Now.AddDays(1).ToString("dd MMM"),
+                 DateTime.Now.AddDays(2).ToString("dd MMM"),
+                 DateTime.Now.AddDays(3).ToString("dd MMM"),
+                 DateTime.Now.AddDays(4).ToString("dd MMM"),
+             };
+             */
+            #endregion
+            ohlcPoints = new ChartValues<OhlcPoint>();
+            _dataService = data;
+            iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
+            NLabels = new List<string>();
+            files = new ObservableCollection<FileViewModel>();
+            List<FileArrModel> f = data.GetFileArrs();
+            foreach (var i in f)
             {
-                new OhlcSeries()
+                if (i.Work)
                 {
-                    Values = new ChartValues<OhlcPoint>
-                    {
-                        new OhlcPoint(32, 35, 30, 32),
-                        new OhlcPoint(33, 38, 31, 37),
-                        new OhlcPoint(35, 42, 30, 40),
-                        new OhlcPoint(37, 40, 35, 38),
-                        new OhlcPoint(35, 38, 32, 33)
-                    }
-                },
-                new LineSeries
-                {
-                    Values = new ChartValues<double> {30, 32, 35, 30, 28},
-                    Fill = Brushes.Transparent
+                    files.Add(new FileViewModel(i));
+                    ListComboBoxItems.Add(i.Tiker);
                 }
-            };
-            Labels = new []
-            {
-                DateTime.Now.ToString("dd MMM"),
-                DateTime.Now.AddDays(1).ToString("dd MMM"),
-                DateTime.Now.AddDays(2).ToString("dd MMM"),
-                DateTime.Now.AddDays(3).ToString("dd MMM"),
-                DateTime.Now.AddDays(4).ToString("dd MMM"),
-            };
-
-            //DataContext = this;
+            }
+            listScaleItems.Add("60");
+            listScaleItems.Add("D");
         }
-        
+
+        private void LoadData1(string tiker, string skale)
+        {
+            ohlcPoints.Clear();
+            
+            foreach (PointModel i in iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points)
+            {
+                ohlcPoints.Add(new OhlcPoint
+                {
+                    Close = i.Close,
+                    High = i.High,
+                    Low = i.Low,
+                    Open = i.Open
+                });
+                NLabels.Add(i.Date.ToString("dd MMM"));
+                //points.Add(i);
+            };
+            SeriesCollection = new SeriesCollection
+                {
+                    new OhlcSeries()
+                    {
+                        Values = ohlcPoints
+                    }
+                };
+        }
+
+
+
+        private MyCommand _NextCommand;
+        public MyCommand NextCommand
+        {
+            get
+            {
+                return _NextCommand ?? (_NextCommand = new MyCommand(obj =>
+                {
+                    // MessageBox.Show("TabData NextCommand");
+                        iterator.next();
+                        LoadData1(v, scale);
+                }));
+            }
+        }
+        private MyCommand _AllCommand;
+        public MyCommand AllCommand
+        {
+            get
+            {
+                return _AllCommand ?? (_AllCommand = new MyCommand(obj =>
+                {
+                    iterator.All();
+                    MessageBox.Show("!");
+                    LoadData1(v, scale);
+                }));
+            }
+        }
+        private MyCommand showCommand;
+        public MyCommand ShowCommand
+        {
+            get
+            {
+                return showCommand ?? (showCommand = new MyCommand(obj =>
+                {
+                    //MessageBox.Show("ShowCommand");
+                    LoadData1(Value, Scale);
+                }));
+            }
+        }
     }
 }
