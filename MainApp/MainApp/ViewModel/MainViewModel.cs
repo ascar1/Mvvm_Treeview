@@ -73,10 +73,11 @@ namespace MainApp.View
                 });
             fileArr = _dataService.GetFileArrs();
 
+            Tabs.Add(new ChartData(_dataService));
+            Tabs.Last().event1 += MainViewModel_event1;
             Tabs.Add(new Tab1Vm());
             Tabs.Last().event1 += MainViewModel_event1;
-            Tabs.Add(new Tab2Vm());
-            Tabs.Last().event1 += MainViewModel_event1;
+
 
             SelectedTab = Tabs.FirstOrDefault();
         }

@@ -569,6 +569,7 @@ namespace MainApp.View
         public ObservableCollection<FileViewModel> files { get; set; }
         public ObservableCollection<PointModel> points { get; set; }
         public ChartValues<OhlcPoint> ohlcPoints { get; set; }
+        public ChartValues<double> EMALine { get; set; }
 
         private ObservableCollection<string> listComboBoxItems = new ObservableCollection<string>();
         public ObservableCollection<string> ListComboBoxItems
@@ -604,7 +605,7 @@ namespace MainApp.View
             :base ("График")
         {
             #region
-            /*
+            
              SeriesCollection = new SeriesCollection
              {
                  new OhlcSeries()
@@ -632,9 +633,10 @@ namespace MainApp.View
                  DateTime.Now.AddDays(3).ToString("dd MMM"),
                  DateTime.Now.AddDays(4).ToString("dd MMM"),
              };
-             */
+             
             #endregion
             ohlcPoints = new ChartValues<OhlcPoint>();
+            EMALine = new ChartValues<double>();
             _dataService = data;
             iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
             NLabels = new List<string>();
@@ -655,7 +657,9 @@ namespace MainApp.View
         private void LoadData1(string tiker, string skale)
         {
             ohlcPoints.Clear();
-            
+            EMALine.Clear();
+            SeriesCollection[0].Values.Clear();
+            SeriesCollection[1].Values.Clear();
             foreach (PointModel i in iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points)
             {
                 ohlcPoints.Add(new OhlcPoint
@@ -666,18 +670,24 @@ namespace MainApp.View
                     Open = i.Open
                 });
                 NLabels.Add(i.Date.ToString("dd MMM"));
+                EMALine.Add(i.IndexPoint[0].Value[0].Value);
+                SeriesCollection[0].Values.Add(new OhlcPoint
+                {
+                    Close = i.Close,
+                    High = i.High,
+                    Low = i.Low,
+                    Open = i.Open
+                });
+                SeriesCollection[1].Values.Add(i.IndexPoint[0].Value[0].Value);
                 //points.Add(i);
             };
-            SeriesCollection = new SeriesCollection
-                {
-                    new OhlcSeries()
-                    {
-                        Values = ohlcPoints
-                    }
-                };
+            
         }
 
+        private void GetScaleAverage(string tiker, string skale, int KolPoint)
+        {
 
+        }
 
         private MyCommand _NextCommand;
         public MyCommand NextCommand
@@ -685,10 +695,26 @@ namespace MainApp.View
             get
             {
                 return _NextCommand ?? (_NextCommand = new MyCommand(obj =>
-                {
-                    // MessageBox.Show("TabData NextCommand");
+                {                    
                         iterator.next();
                         LoadData1(v, scale);
+                }));
+            }
+        }
+        private MyCommand _Next100Command;
+        public MyCommand Next100Command
+        {
+            get
+            {
+                return _Next100Command ?? (_Next100Command = new MyCommand(obj =>
+                {
+                    for (int i = 0; i<50; i++)
+                    {
+                        iterator.next();
+                    }
+
+                    LoadData1(v, scale);
+
                 }));
             }
         }
