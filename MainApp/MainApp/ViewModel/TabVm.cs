@@ -549,9 +549,8 @@ namespace MainApp.View
         }
     }
 
-    public class ChartData:TabVm
+    public class ChartData : TabVm
     {
-
         public SeriesCollection SeriesCollection { get; set; }
         private string[] _labels;
         public string[] Labels
@@ -560,16 +559,17 @@ namespace MainApp.View
             set
             {
                 _labels = value;
-               // OnPropertyChanged("Labels");
+                // OnPropertyChanged("Labels");
             }
         }
         public List<string> NLabels { get; set; }
+        public ChartValues<OhlcPoint> ohlcPoints { get; set; }
+        public ChartValues<double> EMALine { get; set; }
+
         private IteratorModel iterator;
         private readonly IDataService _dataService;
         public ObservableCollection<FileViewModel> files { get; set; }
         public ObservableCollection<PointModel> points { get; set; }
-        public ChartValues<OhlcPoint> ohlcPoints { get; set; }
-        public ChartValues<double> EMALine { get; set; }
 
         private ObservableCollection<string> listComboBoxItems = new ObservableCollection<string>();
         public ObservableCollection<string> ListComboBoxItems
@@ -602,41 +602,10 @@ namespace MainApp.View
         }
 
         public ChartData(IDataService data)
-            :base ("График")
+            : base("График")
         {
-            #region
-            
-             SeriesCollection = new SeriesCollection
-             {
-                 new OhlcSeries()
-                 {
-                     Values = new ChartValues<OhlcPoint>
-                     {
-                         new OhlcPoint(32, 35, 30, 32),
-                         new OhlcPoint(33, 38, 31, 37),
-                         new OhlcPoint(35, 42, 30, 40),
-                         new OhlcPoint(37, 40, 35, 38),
-                         new OhlcPoint(35, 38, 32, 33)
-                     }
-                 },
-                 new LineSeries
-                 {
-                     Values = new ChartValues<double> {30, 32, 35, 30, 28},
-                     Fill = Brushes.Transparent
-                 }
-             };
-             Labels = new []
-             {
-                 DateTime.Now.ToString("dd MMM"),
-                 DateTime.Now.AddDays(1).ToString("dd MMM"),
-                 DateTime.Now.AddDays(2).ToString("dd MMM"),
-                 DateTime.Now.AddDays(3).ToString("dd MMM"),
-                 DateTime.Now.AddDays(4).ToString("dd MMM"),
-             };
-             
-            #endregion
-            ohlcPoints = new ChartValues<OhlcPoint>();
-            EMALine = new ChartValues<double>();
+            NewChartData();
+
             _dataService = data;
             iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
             NLabels = new List<string>();
@@ -654,50 +623,17 @@ namespace MainApp.View
             listScaleItems.Add("D");
         }
 
-        private void LoadData1(string tiker, string skale)
-        {
-            ohlcPoints.Clear();
-            EMALine.Clear();
-            SeriesCollection[0].Values.Clear();
-            SeriesCollection[1].Values.Clear();
-            foreach (PointModel i in iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points)
-            {
-                ohlcPoints.Add(new OhlcPoint
-                {
-                    Close = i.Close,
-                    High = i.High,
-                    Low = i.Low,
-                    Open = i.Open
-                });
-                NLabels.Add(i.Date.ToString("dd MMM"));
-                EMALine.Add(i.IndexPoint[0].Value[0].Value);
-                SeriesCollection[0].Values.Add(new OhlcPoint
-                {
-                    Close = i.Close,
-                    High = i.High,
-                    Low = i.Low,
-                    Open = i.Open
-                });
-                SeriesCollection[1].Values.Add(i.IndexPoint[0].Value[0].Value);
-                //points.Add(i);
-            };
-            
-        }
 
-        private void GetScaleAverage(string tiker, string skale, int KolPoint)
-        {
-
-        }
-
+        #region Обработка комманд
         private MyCommand _NextCommand;
         public MyCommand NextCommand
         {
             get
             {
                 return _NextCommand ?? (_NextCommand = new MyCommand(obj =>
-                {                    
-                        iterator.next();
-                        LoadData1(v, scale);
+                {
+                    iterator.next();
+                    LoadData1(v, scale);
                 }));
             }
         }
@@ -708,7 +644,7 @@ namespace MainApp.View
             {
                 return _Next100Command ?? (_Next100Command = new MyCommand(obj =>
                 {
-                    for (int i = 0; i<50; i++)
+                    for (int i = 0; i < 50; i++)
                     {
                         iterator.next();
                     }
@@ -738,10 +674,108 @@ namespace MainApp.View
             {
                 return showCommand ?? (showCommand = new MyCommand(obj =>
                 {
-                    //MessageBox.Show("ShowCommand");
                     LoadData1(Value, Scale);
                 }));
             }
         }
+        #endregion
+
+        #region Код для работы с графиком 
+        private double _from;
+        private double _to;
+        private double _kolPoint;
+
+        public double From
+        {
+            get { return _from; }
+            set {
+                _from = value;
+            }
+        }
+        public double To
+        {
+            get { return _to; }
+            set { _to = value; }
+        }
+        public double kolPoint
+            {
+            get { return _kolPoint; }
+            set { _kolPoint = value; }
+            }
+
+        private void NewChartData ()
+        {
+            From = 1;
+            To = 3;
+            kolPoint = 50;
+
+            SeriesCollection = new SeriesCollection
+             {
+                 new OhlcSeries()
+                 {
+                     Values = new ChartValues<OhlcPoint>
+                     {
+                         new OhlcPoint(32, 35, 30, 32),
+                         new OhlcPoint(33, 38, 31, 37),
+                         new OhlcPoint(35, 42, 30, 40),
+                         new OhlcPoint(37, 40, 35, 38),
+                         new OhlcPoint(35, 38, 32, 33)
+                     }
+                 },
+                 new LineSeries
+                 {
+                     Values = new ChartValues<double> {30, 32, 35, 30, 28},
+                     Fill = Brushes.Transparent
+                 }
+             };
+            Labels = new[]
+            {
+                 DateTime.Now.ToString("dd MMM"),
+                 DateTime.Now.AddDays(1).ToString("dd MMM"),
+                 DateTime.Now.AddDays(2).ToString("dd MMM"),
+                 DateTime.Now.AddDays(3).ToString("dd MMM"),
+                 DateTime.Now.AddDays(4).ToString("dd MMM"),
+             };
+
+            ohlcPoints = new ChartValues<OhlcPoint>();
+            EMALine = new ChartValues<double>();
+
+        }
+        private void LoadData1(string tiker, string skale)
+        {
+            ohlcPoints.Clear();
+            EMALine.Clear();
+            SeriesCollection[0].Values.Clear();
+            SeriesCollection[1].Values.Clear();
+            foreach (PointModel i in iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points)
+            {
+                ohlcPoints.Add(new OhlcPoint
+                {
+                    Close = i.Close,
+                    High = i.High,
+                    Low = i.Low,
+                    Open = i.Open
+                });
+                NLabels.Add(i.Date.ToString("dd MMM"));
+                EMALine.Add(i.IndexPoint[0].Value[0].Value);
+                SeriesCollection[0].Values.Add(new OhlcPoint
+                {
+                    Close = i.Close,
+                    High = i.High,
+                    Low = i.Low,
+                    Open = i.Open
+                });
+                SeriesCollection[1].Values.Add(i.IndexPoint[0].Value[0].Value);
+                //points.Add(i);
+            };
+
+        }
+        private void GetScaleAverage(string tiker, string skale, int KolPoint)
+        {
+
+        }
+        
+
+        #endregion
     }
 }
