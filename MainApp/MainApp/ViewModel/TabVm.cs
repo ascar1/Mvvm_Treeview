@@ -683,7 +683,7 @@ namespace MainApp.View
         #region Код для работы с графиком 
         private double _from;
         private double _to;
-        private double _kolPoint;
+        private int _kolPoint;
 
         public double From
         {
@@ -697,7 +697,7 @@ namespace MainApp.View
             get { return _to; }
             set { _to = value; }
         }
-        public double kolPoint
+        public int kolPoint
             {
             get { return _kolPoint; }
             set { _kolPoint = value; }
@@ -768,11 +768,26 @@ namespace MainApp.View
                 SeriesCollection[1].Values.Add(i.IndexPoint[0].Value[0].Value);
                 //points.Add(i);
             };
+            GetScaleAverage(tiker, skale, 50);
 
+        }
+
+        private double GetSMA()
+        {
+
+            return 0;
         }
         private void GetScaleAverage(string tiker, string skale, int KolPoint)
         {
+            List<PointModel> tmp = iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
+            int count = tmp.Count;
+            int scale1 = count / kolPoint;
 
+            for (int i = 0; i <= kolPoint; i = i + scale1)
+            {
+
+                EMALine.Add(123);
+            }
         }
         
 
