@@ -23,6 +23,7 @@ namespace MainApp.View
         public ChartView()
         {
             InitializeComponent();
+            //this.DataContext = this;
         }
     }
 }

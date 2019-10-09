@@ -7,6 +7,7 @@
              xmlns:local="clr-namespace:MainApp.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
     <Grid>
         <DockPanel LastChildFill="True">
 
@@ -20,8 +21,8 @@
                 <Button Content="Next100" Command="{Binding Next100Command}" Visibility="{Binding flag}"/>
                 <Button  Content="All" Command="{Binding AllCommand}" Visibility="{Binding flag}"/>
                 
-                <Label Content="{Binding From}" Height="26" VerticalAlignment="Top"/>
-                <Label Content="{Binding To}" Height="26" VerticalAlignment="Top"/>
+                <Label Content="{Binding From, Mode=TwoWay}" Height="26" VerticalAlignment="Top"/>
+                <TextBlock Text="{Binding Path=To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="26" VerticalAlignment="Top"/>
 
             </ToolBar>
             <Grid>
@@ -34,19 +35,45 @@
                 <lvc:CartesianChart Grid.Row="1" 
                                     Series="{Binding SeriesCollection}" Grid.ColumnSpan="2" 
                                     >
+                    <lvc:CartesianChart.Resources>
+                        <Style TargetType="lvc:Separator">
+                            <Setter Property="StrokeThickness" Value="2.5"></Setter>
+                            <Setter Property="Stroke" Value="#E7E7E7"></Setter>
+                            <Style.Triggers>
+                                <Trigger Property="AxisOrientation" Value="X">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </lvc:CartesianChart.Resources>
+                    
                     <lvc:CartesianChart.AxisX>
                         <lvc:Axis Labels="{Binding NLabels}"/>
                     </lvc:CartesianChart.AxisX>
                 </lvc:CartesianChart>
-                <!--
-                <lvc:CartesianChart Grid.Row="2" 
-                                    Series="{Binding SeriesCollection}" Grid.ColumnSpan="2" 
+                
+                <lvc:CartesianChart Grid.Row="2" Grid.ColumnSpan="2" 
+                                    ScrollMode="X" 
+                                    ScrollHorizontalFrom="{Binding From, Mode=TwoWay}"
+                                    ScrollHorizontalTo="{Binding To, Mode=TwoWay}"
+                                    ScrollBarFill="#25303030"
+                                    Hoverable="False"
                                     >
+                    <lvc:CartesianChart.Series>
+                        <lvc:LineSeries Values="{Binding EMALine}"
+                                    Fill="Gray"
+                                    StrokeThickness="0"
+                                    PointGeometry="{x:Null}"
+                                    AreaLimit="0"/>
+
+
+                    </lvc:CartesianChart.Series>
                     <lvc:CartesianChart.AxisX>
                         <lvc:Axis Labels="{Binding NLabels}"/>
                     </lvc:CartesianChart.AxisX>
+                    
                 </lvc:CartesianChart>
-                -->
+                
             </Grid>
 
 

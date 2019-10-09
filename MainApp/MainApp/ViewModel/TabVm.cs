@@ -46,13 +46,13 @@ namespace MainApp.View
             {
                 return _CloseCommand ?? (_CloseCommand = new MyCommand(obj =>
                 {
-                    event1.Invoke(this, new PropertyChangedEventArgs("propertyName"));
+                    //event1.Invoke(this, new PropertyChangedEventArgs("propertyName"));
                 }));
             }
         }
 
         #endregion
-        public event PropertyChangedEventHandler PropertyChanged;
+       // public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangedEventHandler event1;
     }
 
@@ -198,6 +198,7 @@ namespace MainApp.View
         }
 
         #region Command
+        /*
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
         {
@@ -205,6 +206,7 @@ namespace MainApp.View
             if (handler != null)
                 handler(this, new PropertyChangedEventArgs("propertyName"));
         }
+        */
         public DelegateCommand<object> Edit { get; private set; }
         private MyCommand myCommand;
         public MyCommand MyCommand
@@ -270,11 +272,11 @@ namespace MainApp.View
                 {
                     if (SelectedLavel != null)
                     {
-                        MessageBox.Show("1");
+                       // MessageBox.Show("1");
                         SelectedLavel.IsEditMode = true;
                         SelectedLavel.IsExpanded = true;
                         SelectedLavel.CNGName = SelectedLavel.name;
-                        NotifyPropertyChanged("LavelList");
+                        //NotifyPropertyChanged("LavelList");
                     }
                 }));
             }
@@ -352,7 +354,7 @@ namespace MainApp.View
                         {
                             SelectedLavel.Delete();
                             FindLavel(SelectedLavel.ID, LavelList);
-                            NotifyPropertyChanged("DeleteLavel");
+                            //NotifyPropertyChanged("DeleteLavel");
                         }
                     }
 
@@ -605,7 +607,8 @@ namespace MainApp.View
             : base("График")
         {
             NewChartData();
-
+             From = 1;
+             To = 3;
             _dataService = data;
             iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
             NLabels = new List<string>();
@@ -632,8 +635,10 @@ namespace MainApp.View
             {
                 return _NextCommand ?? (_NextCommand = new MyCommand(obj =>
                 {
-                    iterator.next();
-                    LoadData1(v, scale);
+                    //iterator.next();
+                    //LoadData1(v, scale);
+                    To = 4;
+                    
                 }));
             }
         }
@@ -689,13 +694,17 @@ namespace MainApp.View
         {
             get { return _from; }
             set {
-                _from = value;
+                _from = value;                
+                OnPropertyChanged("From");
             }
         }
         public double To
         {
             get { return _to; }
-            set { _to = value; }
+            set {
+                _to = value;
+                OnPropertyChanged("To");
+            }
         }
         public int kolPoint
             {
@@ -705,10 +714,10 @@ namespace MainApp.View
 
         private void NewChartData ()
         {
-            From = 1;
-            To = 3;
+           // From = 1;
+           // To = 3;
             kolPoint = 50;
-
+            
             SeriesCollection = new SeriesCollection
              {
                  new OhlcSeries()
@@ -779,18 +788,35 @@ namespace MainApp.View
         }
         private void GetScaleAverage(string tiker, string skale, int KolPoint)
         {
+            EMALine.Clear();
             List<PointModel> tmp = iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
             int count = tmp.Count;
             int scale1 = count / kolPoint;
+            MessageBox.Show(count.ToString() + " " + scale1.ToString());
 
-            for (int i = 0; i <= kolPoint; i = i + scale1)
+            for (int i = 0; i < tmp.Count; i = i + scale1)
             {
 
-                EMALine.Add(123);
+                EMALine.Add(tmp[i].Close);
             }
+            MessageBox.Show(EMALine.Count.ToString());
         }
+        public event PropertyChangedEventHandler PropertyChanged ;
         
 
+        protected void OnPropertyChanged(string name = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+
+            /*  PropertyChangedEventHandler handler = PropertyChanged;
+              if (handler != null)
+              {
+                  handler(this, new PropertyChangedEventArgs(name));
+              }*/
+        }
         #endregion
     }
 }

@@ -31,9 +31,15 @@
 
             <HierarchicalDataTemplate x:Key="LavelItem" ItemsSource="{Binding Children}">
                 <StackPanel>
-                    <TextBlock x:Name="textBlock" Text="{Binding name, UpdateSourceTrigger=PropertyChanged}" Margin="3,0,0,0"/>
+                    <!--
+                    , UpdateSourceTrigger=PropertyChanged
+                    -->
+                    <TextBlock x:Name="textBlock" Text="{Binding name}" Margin="3,0,0,0"/>
                     <TextBox x:Name="editTextBlock" Visibility="Collapsed" MinWidth="100" 
-                             Text="{Binding name, UpdateSourceTrigger=PropertyChanged}">
+                             Text="{Binding name}">
+                        <!--
+                        , UpdateSourceTrigger=PropertyChanged
+                        -->
                     </TextBox>
                 </StackPanel>
                 <HierarchicalDataTemplate.Triggers>

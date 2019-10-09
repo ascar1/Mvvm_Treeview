@@ -75,11 +75,17 @@ namespace MainApp.View
 
             Tabs.Add(new ChartData(_dataService));
             Tabs.Last().event1 += MainViewModel_event1;
+            Tabs.Last().PropertyChanged += MainViewModel_PropertyChanged;
             Tabs.Add(new Tab1Vm());
             Tabs.Last().event1 += MainViewModel_event1;
 
 
             SelectedTab = Tabs.FirstOrDefault();
+        }
+
+        private void MainViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void MainViewModel_event1(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -192,7 +198,7 @@ namespace MainApp.View
                 return _OpenChartViewWorkDataCommand ?? (_OpenChartViewWorkDataCommand = new MyCommand(obj =>
                 {
                     Tabs.Add(new ChartData(_dataService));
-                    Tabs.Last().event1 += MainViewModel_event1;
+                    Tabs.Last().event1 += MainViewModel_event1;                    
                     SelectedTab = Tabs.Last();
                 }));
             }
