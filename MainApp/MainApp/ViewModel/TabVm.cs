@@ -198,7 +198,7 @@ namespace MainApp.View
         }
 
         #region Command
-        /*
+        
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
         {
@@ -206,7 +206,7 @@ namespace MainApp.View
             if (handler != null)
                 handler(this, new PropertyChangedEventArgs("propertyName"));
         }
-        */
+        
         public DelegateCommand<object> Edit { get; private set; }
         private MyCommand myCommand;
         public MyCommand MyCommand
@@ -217,6 +217,7 @@ namespace MainApp.View
                 return myCommand ?? (myCommand = new MyCommand(obj =>
                 {
                     MessageBox.Show("Команда " + " Button !!! " + LavelList.Count());
+                    NotifyPropertyChanged("111");
                     LavelList[1].Children.Remove(SelectedLavel);
 
 
@@ -609,6 +610,7 @@ namespace MainApp.View
             NewChartData();
              From = 1;
              To = 3;
+            ScaleSer = 1;
             _dataService = data;
             iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
             NLabels = new List<string>();
@@ -688,28 +690,43 @@ namespace MainApp.View
         #region Код для работы с графиком 
         private double _from;
         private double _to;
+        private int _scaleSer;
         private int _kolPoint;
 
         public double From
         {
             get { return _from; }
             set {
-                _from = value;                
-                OnPropertyChanged("From");
+                //_from = value;
+                Set<double>(() => this.From, ref _from, value);
+                
             }
         }
         public double To
         {
             get { return _to; }
             set {
-                _to = value;
-                OnPropertyChanged("To");
+                //_to = value;
+                Set<double>(() => this.To, ref _to, value);
+                //OnPropertyChanged("To");
+            }
+        }
+        public int ScaleSer
+        {
+            get { return _scaleSer; }
+            set
+            {
+                Set<int>(() => this.ScaleSer, ref _scaleSer, value);
             }
         }
         public int kolPoint
             {
             get { return _kolPoint; }
-            set { _kolPoint = value; }
+            set
+            {
+
+                Set<int>(() => this.kolPoint, ref _kolPoint, value);
+            }
             }
 
         private void NewChartData ()
@@ -792,30 +809,16 @@ namespace MainApp.View
             List<PointModel> tmp = iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
             int count = tmp.Count;
             int scale1 = count / kolPoint;
-            MessageBox.Show(count.ToString() + " " + scale1.ToString());
+            ScaleSer = scale1;
+         //   MessageBox.Show(count.ToString() + " " + scale1.ToString());
 
             for (int i = 0; i < tmp.Count; i = i + scale1)
             {
 
                 EMALine.Add(tmp[i].Close);
             }
-            MessageBox.Show(EMALine.Count.ToString());
-        }
-        public event PropertyChangedEventHandler PropertyChanged ;
-        
-
-        protected void OnPropertyChanged(string name = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
-
-            /*  PropertyChangedEventHandler handler = PropertyChanged;
-              if (handler != null)
-              {
-                  handler(this, new PropertyChangedEventArgs(name));
-              }*/
+            //kolPoint = EMALine.Count;
+             MessageBox.Show(EMALine.Count.ToString());
         }
         #endregion
     }

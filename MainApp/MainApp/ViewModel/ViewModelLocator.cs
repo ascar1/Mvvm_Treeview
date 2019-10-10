@@ -37,10 +37,12 @@ namespace MainApp.View
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
                 SimpleIoc.Default.Register<IParamDataService, ParamDataService>();
+                SimpleIoc.Default.Register<IDataService, DataService>();
             }
 
             SimpleIoc.Default.Register<MainViewModel>();
             SimpleIoc.Default.Register<Tab1Vm>();
+            SimpleIoc.Default.Register<ChartData>();
         }
 
         /// <summary>
@@ -56,13 +58,21 @@ namespace MainApp.View
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
-        public Tab1Vm Param
+       public Tab1Vm Param
         {
             get
             {
                 return ServiceLocator.Current.GetInstance<Tab1Vm>();
             }
         }
+        public ChartData chartView
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<ChartData>();
+            }
+        }
+
         /// <summary>
         /// Cleans up all the resources.
         /// </summary>

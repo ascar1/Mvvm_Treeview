@@ -4,14 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             xmlns:local="clr-namespace:MainApp.View"
+             
+             xmlns:local="clr-namespace:MainApp.Model" 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding chartView, Source={StaticResource Locator}}">
 
     <Grid>
         <DockPanel LastChildFill="True">
 
-            <Button DockPanel.Dock="Bottom" Background="BlanchedAlmond" Content="Нижняя кнопка" />
+
+            <ToolBarPanel DockPanel.Dock="Bottom" Orientation="Horizontal" >
+                <Label Content="From"/>
+                <TextBox Text="{Binding From}" Width="50"/>
+                <Label Content="To"/>
+                <TextBox Text="{Binding To}" Width="50"/>
+                <Label Content="Scale"/>
+                <TextBox Text="{Binding ScaleSer}" Width="30"/>
+                <Label Content="Kol Point"/>
+                <TextBox Text="{Binding kolPoint}" Width="30"/>                
+            </ToolBarPanel>
+      
             <ToolBar DockPanel.Dock="Top">
                 <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Value}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
                 <ComboBox ItemsSource="{Binding ListScaleItems}" SelectedItem="{Binding Scale}" Name="Scale"  Width="90"  VerticalAlignment="Top"  Visibility="{Binding flag}"/>
@@ -22,7 +35,7 @@
                 <Button  Content="All" Command="{Binding AllCommand}" Visibility="{Binding flag}"/>
                 
                 <Label Content="{Binding From, Mode=TwoWay}" Height="26" VerticalAlignment="Top"/>
-                <TextBlock Text="{Binding Path=To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="26" VerticalAlignment="Top"/>
+                <TextBlock Text="{Binding To, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="26" VerticalAlignment="Top"/>
 
             </ToolBar>
             <Grid>

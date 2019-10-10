@@ -4,6 +4,7 @@ using MainApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 
@@ -81,6 +82,17 @@ namespace MainApp.View
 
 
             SelectedTab = Tabs.FirstOrDefault();
+            Str = "Строка 2 Столбец 1";
+        }
+
+        private string _Str;
+        public string Str
+        {
+            get { return _Str; }
+            set {
+                Set<string>(() => this.Str, ref _Str, value);
+                //_Str = value;
+            }
         }
 
         private void MainViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -124,9 +136,21 @@ namespace MainApp.View
                     Tabs.Add(new Tab2Vm());
                     Tabs.Last().event1 += MainViewModel_event1;
                     SelectedTab = Tabs.Last();
+                    Str = "!!!";
+                    OnPropertyChanged("Str");
                 }));
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
         private MyCommand _DeleteItemCommand;
         public MyCommand DeleteItemCommand
         {

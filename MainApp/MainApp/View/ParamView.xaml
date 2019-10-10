@@ -69,6 +69,8 @@
                         <MenuItem Header="Переименовать" Command="{Binding EditLavel}"></MenuItem>
                         <MenuItem Header="Добавить уровень" Command="{Binding AddLavel}"></MenuItem>
                         <MenuItem Header="Удалить" Command="{Binding DeleteLavel}"></MenuItem>
+                        <MenuItem Header="Тест" Command="{Binding MyCommand}"></MenuItem>
+                        
                     </ContextMenu>
                 </TreeView.ContextMenu>
             </TreeView>

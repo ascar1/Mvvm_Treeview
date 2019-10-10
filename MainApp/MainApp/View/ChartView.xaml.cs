@@ -19,11 +19,10 @@ namespace MainApp.View
     /// Логика взаимодействия для ChartView.xaml
     /// </summary>
     public partial class ChartView : UserControl
-    {
+    {       
         public ChartView()
-        {
-            InitializeComponent();
-            //this.DataContext = this;
+        {            
+            InitializeComponent();            
         }
     }
 }

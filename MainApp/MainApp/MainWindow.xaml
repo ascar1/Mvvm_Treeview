@@ -58,7 +58,7 @@
             <local:UserControl1 Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"/>
             
             <Button Grid.Column="1" Grid.Row="1" Content="Строка 0 Столбец 1" Grid.RowSpan="3" />
-            <Label Grid.Column="0" Grid.Row="3" Content="Строка 2 Столбец 1" />
+            <TextBlock Grid.Column="0" Grid.Row="3" Text="{Binding Str}" />
         </Grid>
     </Grid>
 </Window>
