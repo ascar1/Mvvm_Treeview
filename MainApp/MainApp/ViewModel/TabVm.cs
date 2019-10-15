@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,7 +45,7 @@ namespace MainApp.View
             {
                 return _CloseCommand ?? (_CloseCommand = new MyCommand(obj =>
                 {
-                    //event1.Invoke(this, new PropertyChangedEventArgs("propertyName"));
+                    event1.Invoke(this, new PropertyChangedEventArgs("propertyName"));
                 }));
             }
         }
@@ -239,7 +238,7 @@ namespace MainApp.View
         private MyCommand mouseCommand;
         public MyCommand MouseCommand => mouseCommand ?? (mouseCommand = new MyCommand(obj =>
         {
-            MessageBox.Show("Команда MouseCommand: " /* +  SelectedROW.name.ToString()*/);
+          //  MessageBox.Show("Команда MouseCommand: " /* +  SelectedROW.name.ToString()*/);
         }));
 
         private MyCommand newItem;
@@ -566,6 +565,7 @@ namespace MainApp.View
             }
         }
         public List<string> NLabels { get; set; }
+        public List<string> NLabels1 { get; set; }
         public ChartValues<OhlcPoint> ohlcPoints { get; set; }
         public ChartValues<double> EMALine { get; set; }
 
@@ -601,7 +601,7 @@ namespace MainApp.View
         public string Scale
         {
             get => scale;
-            set => Set(ref scale, value);
+            set => Set(ref scale, value);            
         }
 
         public ChartData(IDataService data)
@@ -614,6 +614,7 @@ namespace MainApp.View
             _dataService = data;
             iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
             NLabels = new List<string>();
+            NLabels1 = new List<string>();
             files = new ObservableCollection<FileViewModel>();
             List<FileArrModel> f = data.GetFileArrs();
             foreach (var i in f)
@@ -668,8 +669,7 @@ namespace MainApp.View
             {
                 return _AllCommand ?? (_AllCommand = new MyCommand(obj =>
                 {
-                    iterator.All();
-                    MessageBox.Show("!");
+                    iterator.All();                    
                     LoadData1(v, scale);
                 }));
             }
@@ -692,14 +692,15 @@ namespace MainApp.View
         private double _to;
         private int _scaleSer;
         private int _kolPoint;
+        private int _indexChart;
 
         public double From
         {
             get { return _from; }
-            set {
-                //_from = value;
-                Set<double>(() => this.From, ref _from, value);
-                
+            set
+            {
+                GetChart(Value, Scale);
+                Set<double>(() => this.From, ref _from, value);                
             }
         }
         public double To
@@ -717,6 +718,7 @@ namespace MainApp.View
             set
             {
                 Set<int>(() => this.ScaleSer, ref _scaleSer, value);
+                To = From + value;
             }
         }
         public int kolPoint
@@ -728,7 +730,14 @@ namespace MainApp.View
                 Set<int>(() => this.kolPoint, ref _kolPoint, value);
             }
             }
-
+        public int indexChart
+        {
+            get { return _indexChart; }
+            set
+            {
+                Set<int>(() => this.indexChart, ref _indexChart, value);
+            }
+        }
         private void NewChartData ()
         {
            // From = 1;
@@ -771,6 +780,7 @@ namespace MainApp.View
         {
             ohlcPoints.Clear();
             EMALine.Clear();
+            NLabels.Clear();
             SeriesCollection[0].Values.Clear();
             SeriesCollection[1].Values.Clear();
             foreach (PointModel i in iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points)
@@ -797,7 +807,6 @@ namespace MainApp.View
             GetScaleAverage(tiker, skale, 50);
 
         }
-
         private double GetSMA()
         {
 
@@ -806,19 +815,60 @@ namespace MainApp.View
         private void GetScaleAverage(string tiker, string skale, int KolPoint)
         {
             EMALine.Clear();
+            NLabels.Clear();
             List<PointModel> tmp = iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
             int count = tmp.Count;
             int scale1 = count / kolPoint;
-            ScaleSer = scale1;
-         //   MessageBox.Show(count.ToString() + " " + scale1.ToString());
-
+            indexChart = scale1;
+            ScaleSer = scale1;         
             for (int i = 0; i < tmp.Count; i = i + scale1)
             {
-
                 EMALine.Add(tmp[i].Close);
+                NLabels.Add(tmp[i].Date.ToString("dd MMM"));
+            }         
+            
+        }
+
+        private void GetChart(string tiker, string skale)
+        {
+            if (tiker == null) return;
+            if (scale == null) return;
+
+            ohlcPoints.Clear();
+            //EMALine.Clear();
+            SeriesCollection[0].Values.Clear();
+            SeriesCollection[1].Values.Clear();
+            NLabels1.Clear();
+
+            List<PointModel> tmp = iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
+
+            for (int i = Convert.ToInt32(From); i<To*indexChart;  i++)
+            {
+                
+                ohlcPoints.Add(new OhlcPoint
+                {
+                    Close =  tmp[i].Close,
+                    High = tmp[i].High,
+                    Low = tmp[i].Low,
+                    Open = tmp[i].Open
+                });
+                NLabels1.Add(tmp[i].Date.ToString("dd MMM"));
+                //EMALine.Add(tmp[i].IndexPoint[0].Value[0].Value);
+                
+                SeriesCollection[0].Values.Add(new OhlcPoint
+                {
+                    Close = tmp[i].Close,
+                    High = tmp[i].High,
+                    Low = tmp[i].Low,
+                    Open = tmp[i].Open
+                });
+                SeriesCollection[1].Values.Add(tmp[i].IndexPoint[0].Value[0].Value);
+                
             }
-            //kolPoint = EMALine.Count;
-             MessageBox.Show(EMALine.Count.ToString());
+
+
+           // MessageBox.Show("!");
+
         }
         #endregion
     }

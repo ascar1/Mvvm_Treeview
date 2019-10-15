@@ -58,44 +58,52 @@ namespace MainApp.Model
                 
             }
         }
+        private double GetValIndex(PointModel point, List<ParamModel> @params)
+        {            
+            return point.IndexPoint.Find(i => i.Name == getStringParam(@params, "Name")).Value[0].Value;
+        }
+        
         public void GetEMA(List<PointModel> points, List<ParamModel> @params)
         {
             int N; string name;
             N = getIntParam(@params, "Period");
             name = getStringParam(@params, "Name");
 
-            int i = 0; Decimal EMA0 = 0; Decimal EMA; Decimal k1; Decimal k2;
+            /*int i = 0;*/ Decimal EMA0 = 0; Decimal EMA; Decimal k1; Decimal k2;
 
             k2 = N + 1;
             k1 = (Decimal)2 / (Decimal)k2;
-
-            foreach (PointModel tmp in points)
+            if (points.Count <= N)
             {
-                if (i==0)
-                {
-                    EMA0 = (Decimal)tmp.Close;
-                }
-                i++;
-                EMA = (Decimal)tmp.Close * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
-                addVal(tmp, name, "EMA", "EMA", (double)EMA);
+                N = points.Count;
+                EMA0 = (Decimal)points[0].Close;
+            }
+            else
+            {
+                EMA0 = (Decimal)GetValIndex(points[points.Count - (N + 1)], @params);
+            }
+            for (int i = points.Count-N;i<points.Count;i++)
+            {
+                EMA = (Decimal)points[i].Close * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
+                addVal(points[i], name, "EMA", "EMA", (double)EMA);
                 EMA0 = EMA;
             }
         }
         public double GetEMA(List<PointModel> points, int N)
         {
-            int i = 0; Decimal EMA0 = 0; Decimal EMA = 0; Decimal k1; Decimal k2;
+            Decimal EMA0 = 0; Decimal EMA = 0; Decimal k1; Decimal k2;
 
             k2 = N + 1;
             k1 = (Decimal)2 / (Decimal)k2;
 
-            foreach (PointModel tmp in points)
+
+            for (int I = points.Count - N; I < points.Count;I++)
             {
-                if (i == 0)
+                if (I == 0)
                 {
-                    EMA0 = (Decimal)tmp.Close;
-                }
-                i++;
-                EMA = (Decimal)tmp.Close * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
+                    EMA0 = (Decimal)points[0].Close;
+                }                
+                EMA = (Decimal)points[0].Close * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
                 EMA0 = EMA;
             }
             return (double)EMA;
@@ -120,7 +128,6 @@ namespace MainApp.Model
             }
             return (double)EMA;            
         }
-
         public void GetMACD(List<PointModel> points, List<ParamModel> @params)
         {
             string name = getStringParam(@params, "Name");
@@ -137,7 +144,6 @@ namespace MainApp.Model
             double EMAa = GetEMA(points, nEMAa, "MACD", "MACD", "_EMAa");
             addVal(points.Last(), "MACD", "MACD", "EMAa", EMAa);
         }
-
         public void GetForceIndex (List<PointModel> points, List<ParamModel> @params)
         {
             string name = getStringParam(@params, "Name");

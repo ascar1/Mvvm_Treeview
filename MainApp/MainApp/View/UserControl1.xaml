@@ -20,7 +20,6 @@
             <DataTemplate DataType="{x:Type vm:TabData}">
                 <local:TikerView></local:TikerView>
             </DataTemplate>
-            
             <DataTemplate DataType="{x:Type vm:ChartData}">
                 <local:ChartView></local:ChartView>
             </DataTemplate>            

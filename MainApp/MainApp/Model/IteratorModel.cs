@@ -128,13 +128,13 @@ namespace MainApp.Model
                         break;
                     case "MACD":
                         //MessageBox.Show("MACD");
-                        //indexModel.GetMACD(dateModels.Find(i => i.Scale == "60").Points, tmp2);
-                        //indexModel.GetMACD(dateModels.Find(i => i.Scale == "D").Points, tmp2);
+                        indexModel.GetMACD(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                        indexModel.GetMACD(dateModels.Find(i => i.Scale == "D").Points, tmp2);
                         break;
                     case "FI":
                         //MessageBox.Show("FI");
-                        //indexModel.GetForceIndex(dateModels.Find(i => i.Scale == "60").Points, tmp2);
-                        //indexModel.GetForceIndex(dateModels.Find(i => i.Scale == "D").Points, tmp2);
+                        indexModel.GetForceIndex(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                        indexModel.GetForceIndex(dateModels.Find(i => i.Scale == "D").Points, tmp2);
                         break;
                 }
             }             
