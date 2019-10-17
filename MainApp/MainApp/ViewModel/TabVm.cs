@@ -196,8 +196,7 @@ namespace MainApp.View
             Find(id, LavelList);
         }
 
-        #region Command
-        
+        #region Command       
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged(string propertyName)
         {
@@ -216,10 +215,8 @@ namespace MainApp.View
                 return myCommand ?? (myCommand = new MyCommand(obj =>
                 {
                     MessageBox.Show("Команда " + " Button !!! " + LavelList.Count());
-                    NotifyPropertyChanged("111");
+                    //NotifyPropertyChanged("111");
                     LavelList[1].Children.Remove(SelectedLavel);
-
-
                 }));
             }
         }
@@ -843,15 +840,14 @@ namespace MainApp.View
             List<PointModel> tmp = iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
 
             for (int i = Convert.ToInt32(From); i<To*indexChart;  i++)
-            {
-                
-                ohlcPoints.Add(new OhlcPoint
+            {                
+              /*  ohlcPoints.Add(new OhlcPoint
                 {
                     Close =  tmp[i].Close,
                     High = tmp[i].High,
                     Low = tmp[i].Low,
                     Open = tmp[i].Open
-                });
+                });*/
                 NLabels1.Add(tmp[i].Date.ToString("dd MMM"));
                 //EMALine.Add(tmp[i].IndexPoint[0].Value[0].Value);
                 
@@ -862,13 +858,9 @@ namespace MainApp.View
                     Low = tmp[i].Low,
                     Open = tmp[i].Open
                 });
-                SeriesCollection[1].Values.Add(tmp[i].IndexPoint[0].Value[0].Value);
-                
+                SeriesCollection[1].Values.Add(tmp[i].IndexPoint[0].Value[0].Value);               
             }
-
-
            // MessageBox.Show("!");
-
         }
         #endregion
     }
