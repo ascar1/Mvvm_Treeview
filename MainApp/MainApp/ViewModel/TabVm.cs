@@ -864,4 +864,28 @@ namespace MainApp.View
         }
         #endregion
     }
+
+    #region Тестовый класс для создания сетки и создания элементов графика диномически
+    public class TestViewModel :TabVm
+    {
+        // TODO: попробовать по этой ссылке  https://stackoverflow.com/questions/4493445/wpf-binding-how-to-databind-to-grid
+        private ObservableCollection<ChartViewModel> _CVM;
+        public ObservableCollection<ChartViewModel> CVM
+        {
+            get
+            {
+                return _CVM ?? (_CVM = new ObservableCollection<ChartViewModel>());
+            }
+        }
+
+
+        public TestViewModel()
+            :base ("Тестовый элимет")
+        {
+            CVM.Add(new ChartViewModel());
+            CVM.Add(new ChartViewModel());
+            CVM.Add(new ChartViewModel());
+        }
+    }
+    #endregion
 }

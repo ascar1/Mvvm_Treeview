@@ -132,12 +132,15 @@ namespace MainApp.View
             get
             {
                 return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
-                {                   
-                    Tabs.Add(new Tab2Vm());
+                {
+                    //Tabs.Add(new Tab2Vm());
+                    //Tabs.Last().event1 += MainViewModel_event1;
+                    //SelectedTab = Tabs.Last();
+                    //Str = "!!!";
+                    //nPropertyChanged("Str");
+                    Tabs.Add(new TestViewModel());
                     Tabs.Last().event1 += MainViewModel_event1;
-                    SelectedTab = Tabs.Last();
-                    Str = "!!!";
-                    OnPropertyChanged("Str");
+
                 }));
             }
         }

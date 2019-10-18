@@ -57,6 +57,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.3.0.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -92,7 +93,11 @@
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\ParamDataService.cs" />
     <Compile Include="Model\ParamModel.cs" />
+    <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\FileViewModel.cs" />
+    <Compile Include="View\ChartUserControl.xaml.cs">
+      <DependentUpon>ChartUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ChartView.xaml.cs">
       <DependentUpon>ChartView.xaml</DependentUpon>
     </Compile>
@@ -103,6 +108,9 @@
     <Compile Include="ViewModel\ParamViewModel.cs" />
     <Compile Include="View\ParamView.xaml.cs">
       <DependentUpon>ParamView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TestView.xaml.cs">
+      <DependentUpon>TestView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TikerView.xaml.cs">
       <DependentUpon>TikerView.xaml</DependentUpon>
@@ -132,6 +140,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="View\ChartUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ChartView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -141,6 +153,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ParamView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TestView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

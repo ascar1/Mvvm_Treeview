@@ -22,8 +22,10 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:ChartData}">
                 <local:ChartView></local:ChartView>
-            </DataTemplate>            
-            
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:TestViewModel}">
+                <local:TestView></local:TestView>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>   
     <Grid>
@@ -39,7 +41,6 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-
         </TabControl>
     </Grid>
 </UserControl>
