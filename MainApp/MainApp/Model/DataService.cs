@@ -69,14 +69,14 @@ namespace MainApp.Model
             while (!reader.EndOfStream)
             {
                 _data = reader.ReadLine().Split(';');
-                if (Double.TryParse(_data[6]/*.Replace(".", ",")*/, out i) == true)
+                if (Double.TryParse(_data[6].Replace(".", ","), out i) == true)
                 {
                     CPModel.Data[0].Points.Add(new PointModel()
                     {
-                        Open = Convert.ToDouble(_data[4]/*.Replace(".", ",")*/),
-                        High = Convert.ToDouble(_data[5]/*.Replace(".", ",")*/),
-                        Low = Convert.ToDouble(_data[6]/*.Replace(".", ",")*/),
-                        Close = Convert.ToDouble(_data[7]/*.Replace(".", ",")*/),
+                        Open = Convert.ToDouble(_data[4].Replace(".", ",")),
+                        High = Convert.ToDouble(_data[5].Replace(".", ",")),
+                        Low = Convert.ToDouble(_data[6].Replace(".", ",")),
+                        Close = Convert.ToDouble(_data[7].Replace(".", ",")),
                         Vol = Convert.ToDouble(_data[8]),
                         Date = Convert.ToDateTime(_data[2] + " " + _data[3])
                     });

@@ -869,6 +869,7 @@ namespace MainApp.View
     public class TestViewModel :TabVm
     {
         // TODO: попробовать по этой ссылке  https://stackoverflow.com/questions/4493445/wpf-binding-how-to-databind-to-grid
+        // TODO: ПОСМОТРЕТЬ СПОСОБ С ПОЛЬЗОАТЕЛЬСКОЙ ПАНЕЛЬЮ https://docs.microsoft.com/ru-ru/dotnet/framework/wpf/controls/panels-overview
         private ObservableCollection<ChartViewModel> _CVM;
         public ObservableCollection<ChartViewModel> CVM
         {

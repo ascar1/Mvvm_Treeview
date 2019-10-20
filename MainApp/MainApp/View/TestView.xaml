@@ -13,12 +13,13 @@
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-
+        
         <ItemsControl ItemsSource="{Binding CVM}"  >
             <ItemsControl.Resources>
 
             </ItemsControl.Resources>
         </ItemsControl>
+        
     </Grid>
 
 </UserControl>
