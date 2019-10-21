@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using MainApp.View;
+using MainApp.ViewModel;
 
 namespace MainApp
 {

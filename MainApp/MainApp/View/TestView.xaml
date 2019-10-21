@@ -3,23 +3,47 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MainApp.View"
+             xmlns:local="clr-namespace:MainApp.View.Chart"
+             xmlns:vm="clr-namespace:MainApp.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
+    <!--
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type local:ChartViewModel}">
             <local:ChartUserControl></local:ChartUserControl>
         </DataTemplate>
     </UserControl.Resources>
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <DataTemplate DataType="{x:Type vm:ChartViewModel}">
+                <local:Chart></local:Chart>
+            </DataTemplate>            
+        </ResourceDictionary>
+    </UserControl.Resources>
+    -->
     <Grid>
+        <ContentPresenter Content="{Binding CVM1}">
+            <ContentPresenter.Resources>
+                <ResourceDictionary>
+                    <DataTemplate DataType="{x:Type vm:ChartViewModel}">
+                        <local:Chart></local:Chart>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:ChartViewModel3}">
+                        <local:Chart3></local:Chart3>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type vm:ChartViewModel4}">
+                        <local:Chart4></local:Chart4>
+                    </DataTemplate>                    
+                </ResourceDictionary>
+            </ContentPresenter.Resources>
+        </ContentPresenter>
+        <!--
+        <Grid DataContext="{Binding CVM}"></Grid>
         
         <ItemsControl ItemsSource="{Binding CVM}"  >
-            <ItemsControl.Resources>
-
-            </ItemsControl.Resources>
         </ItemsControl>
-        
+        -->
     </Grid>
 
 </UserControl>

@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using MainApp.Command;
 using MainApp.Model;
+
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,7 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 
-namespace MainApp.View
+namespace MainApp.ViewModel
 {
     /// <summary>
     /// This class contains properties that the main View can data bind to.

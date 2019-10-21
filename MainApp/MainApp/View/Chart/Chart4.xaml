@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="MainApp.View.Chart.Chart4"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             xmlns:local="clr-namespace:MainApp.View.Chart"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="100"></RowDefinition>
+        </Grid.RowDefinitions>
+        <lvc:CartesianChart Grid.Row="1" 
+                                    Series="{Binding SeriesCollection}" Grid.ColumnSpan="2">
+            <lvc:CartesianChart.Resources>
+                <Style TargetType="lvc:Separator">
+                    <Setter Property="StrokeThickness" Value="2.5"></Setter>
+                    <Setter Property="Stroke" Value="#E7E7E7"></Setter>
+                    <Style.Triggers>
+                        <Trigger Property="AxisOrientation" Value="X">
+                            <Setter Property="IsEnabled" Value="False"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </lvc:CartesianChart.Resources>
+
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Labels="{Binding NLabels1}"/>
+            </lvc:CartesianChart.AxisX>
+        </lvc:CartesianChart>
+
+        <lvc:CartesianChart Grid.Row="4" Grid.ColumnSpan="2" 
+                                    ScrollMode="X" 
+                                    ScrollHorizontalFrom="{Binding From, Mode=TwoWay}"
+                                    ScrollHorizontalTo="{Binding To, Mode=TwoWay}"
+                                    ScrollBarFill="#25303030"
+                                    Hoverable="False"
+                                    >
+            <lvc:CartesianChart.Series>
+                <lvc:LineSeries Values="{Binding EMALine}"
+                                    Fill="Gray"
+                                    StrokeThickness="0"
+                                    PointGeometry="{x:Null}"
+                                    AreaLimit="0"/>
+            </lvc:CartesianChart.Series>
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Labels="{Binding NLabels}"/>
+            </lvc:CartesianChart.AxisX>
+
+        </lvc:CartesianChart>
+    </Grid>
+</UserControl>

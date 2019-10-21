@@ -14,7 +14,7 @@ using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 using MainApp.Model;
 
-namespace MainApp.View
+namespace MainApp.ViewModel
 {
     /// <summary>
     /// This class contains static references to all the view models in the

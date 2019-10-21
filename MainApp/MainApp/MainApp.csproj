@@ -101,6 +101,15 @@
     <Compile Include="View\ChartView.xaml.cs">
       <DependentUpon>ChartView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Chart\Chart.xaml.cs">
+      <DependentUpon>Chart.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Chart\Chart3.xaml.cs">
+      <DependentUpon>Chart3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Chart\Chart4.xaml.cs">
+      <DependentUpon>Chart4.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\DataParamView.xaml.cs">
       <DependentUpon>DataParamView.xaml</DependentUpon>
     </Compile>
@@ -145,6 +154,18 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ChartView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Chart\Chart.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Chart\Chart3.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Chart\Chart4.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

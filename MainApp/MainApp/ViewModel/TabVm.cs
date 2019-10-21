@@ -4,7 +4,6 @@ using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using MainApp.Command;
 using MainApp.Model;
-using MainApp.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,7 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace MainApp.View
+namespace MainApp.ViewModel
 {
     public abstract class TabVm : ViewModelBase, INotifyPropertyChanged
     {
@@ -878,14 +877,22 @@ namespace MainApp.View
                 return _CVM ?? (_CVM = new ObservableCollection<ChartViewModel>());
             }
         }
-
+        private ChartViewModel4 cvm1;
+        public ChartViewModel4 CVM1
+        {
+            get
+            {
+                return cvm1;
+            }
+        }
 
         public TestViewModel()
             :base ("Тестовый элимет")
         {
+            cvm1 = new ChartViewModel4();
             CVM.Add(new ChartViewModel());
-            CVM.Add(new ChartViewModel());
-            CVM.Add(new ChartViewModel());
+           // CVM.Add(new ChartViewModel());
+            //CVM.Add(new ChartViewModel());
         }
     }
     #endregion
