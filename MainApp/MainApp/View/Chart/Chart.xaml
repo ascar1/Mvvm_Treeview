@@ -32,13 +32,16 @@
                 <lvc:Axis Labels="{Binding NLabels1}"/>
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
-        <lvc:CartesianChart Grid.Row="3" Grid.ColumnSpan="2" 
-                                    ScrollMode="X" 
-                                    ScrollHorizontalFrom="{Binding From, Mode=TwoWay}"
-                                    ScrollHorizontalTo="{Binding To, Mode=TwoWay}"
-                                    ScrollBarFill="#25303030"
-                                    Hoverable="False"
-                                    >
+        
+        <lvc:CartesianChart Grid.Row="2"                            
+                            Series="{Binding SeriesCollection1}"
+                            ScrollMode="X" 
+                            ScrollHorizontalFrom="{Binding From, Mode=TwoWay}"
+                            ScrollHorizontalTo="{Binding To, Mode=TwoWay}"
+                            ScrollBarFill="#25303030"
+                            Hoverable="False">
+            <!--
+
             <lvc:CartesianChart.Series>
                 <lvc:LineSeries Values="{Binding EMALine}"
                                     Fill="Gray"
@@ -46,6 +49,7 @@
                                     PointGeometry="{x:Null}"
                                     AreaLimit="0"/>
             </lvc:CartesianChart.Series>
+            -->
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Labels="{Binding NLabels}"/>
             </lvc:CartesianChart.AxisX>

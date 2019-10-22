@@ -1,9 +1,14 @@
-﻿using System;
+﻿using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
+using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace MainApp.Model
 {
@@ -11,11 +16,10 @@ namespace MainApp.Model
     {
         private int Seed = 10;
         private List<MasterPointModel> MasterPoint;        
-        public List<WorkPointModel> WorkPoints;
 
+        public List<WorkPointModel> WorkPoints;
         private List<FileArrModel> fileArrs;
         public bool isClear;
-
         public IteratorModel(List<MasterPointModel> MasterChartPoint,List<FileArrModel> files)
         {
             isClear = true;
@@ -39,35 +43,15 @@ namespace MainApp.Model
             }
             GetSeed();
         }
-
-        public bool next()
-        {
-            bool flag = false;
-            foreach (MasterPointModel i in MasterPoint )
-            {
-                int index = WorkPoints.FindIndex(ii => ii.Tiker == i.Tiker);
-                int tmp1 = WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Count;
-                if (tmp1 < i.Data[0].Points.Count)
-                {
-                    flag = true;
-                    var tmp = i.Data[0].Points[WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Count];
-                    WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Add(tmp);
-                    GetScale(WorkPoints[index].Data);
-                    GetIndex(WorkPoints[index].Data);
-                }
-            }
-            return flag;
-        }
-
-        public void GetSeed ()
+        
+        private void GetSeed ()
         {
             for (int i = 0; i <= Seed; i++)
             {
                 next();
             }
         }
-
-        public void GetScale(List<DateModel> dateModels)
+        private void GetScale(List<DateModel> dateModels)
         {
             DateTime CurrDate;
             DateTime Date1;
@@ -109,7 +93,7 @@ namespace MainApp.Model
                 }
             }
         }
-        public void GetIndex(List<DateModel> dateModels)
+        private void GetIndex(List<DateModel> dateModels)
         {
             IndexModel indexModel = new IndexModel();
             List<LavelModel> lavelModels = new List<LavelModel>();            
@@ -147,5 +131,146 @@ namespace MainApp.Model
             }
           //  MessageBox.Show("All");
         }
+        public bool next()
+        {         
+           bool 
+            flag = false;
+            foreach (MasterPointModel i in MasterPoint )
+            {
+                int index = WorkPoints.FindIndex(ii => ii.Tiker == i.Tiker);
+                int tmp1 = WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Count;
+                if (tmp1 < i.Data[0].Points.Count)
+                {
+                    flag = true;
+                    var tmp = i.Data[0].Points[WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Count];
+                    WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Add(tmp);
+                    GetScale(WorkPoints[index].Data);
+                    GetIndex(WorkPoints[index].Data);
+                }
+            }
+            return flag;
+        }
+        public void NextN(int n)
+        {
+            for(int i=0; i<n;i++)
+            {
+                next();
+            }            
+        }
+        public List<PointModel> GetListPoint (string tiker, string skale)
+        {
+            return WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
+        }
+        #region Методы для работы с графиками
+        public SeriesCollection GetSeriesCollection (string tiker, string skale,string ChartArea, int From, int To)
+        {
+            SeriesCollection result;
+            result = new SeriesCollection
+            {
+                new OhlcSeries()
+                {
+                     Values = new ChartValues<OhlcPoint>()
+                },
+            };
+
+            ParamDataService paramDataService = new ParamDataService();
+            List<PointModel> point = GetListPoint(tiker, skale);
+            // Если To == 0 то выводим всю серию
+            if (To == 0)
+            {
+                To = point.Count - 1;
+            }
+
+            for (int i = Convert.ToInt32(From); i < To; i++)
+            {
+                int ind = 0;
+                // По умолчанию для ChartArea0 выводм серию графика цен
+                if (ChartArea == "0")
+                {
+                    result[ind].Values.Add(new OhlcPoint
+                    {
+                        Close = point[i].Close,
+                        High = point[i].High,
+                        Low = point[i].Low,
+                        Open = point[i].Open
+                    });
+                    ind++;
+                }
+                // Выводим индексы на серию Области графика 
+                foreach (var tmp in paramDataService.GetLavelModels("Index"))
+                {
+                    string type = paramDataService.GetParamValue(tmp.id, "ChartArea");
+                    string name = paramDataService.GetParamValue(tmp.id, "Name");
+                    if (type == ChartArea)
+                    {
+                        if (i == Convert.ToInt32(From))
+                        {
+                            result.Add(new LineSeries
+                            {
+                                Values = new ChartValues<double>(),
+                                Fill = Brushes.Transparent
+                            });
+                        }
+                        double tmpval = point[i].IndexPoint.Find(i1 => i1.Name == name).Value[0].Value;
+                        result[ind].Values.Add(tmpval);
+                        ind++;
+                    }
+                }
+            }           
+            return result;
+        }
+        public List<string> GetArrDate(string tiker, string skale, int From, int To)
+        {
+            List<string> result = new List<string>();
+            List<PointModel> point = GetListPoint(tiker, skale);
+            // Если To == 0 то выводим всю серию
+            if (To == 0)
+            {
+                To = point.Count - 1;
+            }
+
+            for (int i = Convert.ToInt32(From); i < To; i++)
+            {
+                result.Add(point[i].Date.ToString("dd MMM"));
+            }
+            return result;
+        }
+        public SeriesCollection GetScaleSeriesCollection(string tiker, string skale, string ChartArea, int KolPoint)
+        {
+            List<string> NLabels = new List<string>();
+            SeriesCollection result;
+            result = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Values = new ChartValues<double> (),
+                    Fill= Brushes.LightGray,
+                    Stroke=Brushes.Gray,
+                    PointGeometry = Geometry.Empty,
+                    //AreaLimit=0
+                }
+            };
+
+            List<PointModel> point = GetListPoint(tiker, skale);            
+            int count = point.Count;
+            int scale1 = count / KolPoint;
+            for (int i = 0; i < point.Count; i = i + scale1)
+            {                
+                if (result.Count == 0)
+                {
+                    result.Add(new LineSeries { });
+                };
+                result[0].Values.Add(point[i].Close);                
+                NLabels.Add(point[i].Date.ToString("dd MMM"));
+            }        
+            return result;
+        }
+        //private List<string> _NLabels;
+        public List<string> NLabels
+        {
+            get { return NLabels; }
+        }
+        #endregion
+
     }
 }

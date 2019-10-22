@@ -139,7 +139,7 @@ namespace MainApp.ViewModel
                     //SelectedTab = Tabs.Last();
                     //Str = "!!!";
                     //nPropertyChanged("Str");
-                    Tabs.Add(new TestViewModel());
+                    Tabs.Add(new TestViewModel(_dataService));
                     Tabs.Last().event1 += MainViewModel_event1;
 
                 }));

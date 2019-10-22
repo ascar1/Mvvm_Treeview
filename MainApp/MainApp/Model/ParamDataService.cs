@@ -181,9 +181,23 @@ namespace MainApp.Model
             LoadData();
             callback(ParamItem, null);
         }
+        public List<LavelModel> GetLavelModels (string NameLavel)
+        {            
+            return LavelItem.FindAll(i => i.paremtId == LavelItem.Find(i1 => i1.name == NameLavel).id);
+        }
+        public string GetValParam(string lavel, string nameParam)
+        {
+
+            return null;
+        }
+
         public List<ParamModel> GetParam (int id)
         {           
             return ParamItem.FindAll(i => i.ParamID == id);
+        }
+        public string GetParamValue (int id, string name)
+        {
+            return GetParam(id).Find(i1 => i1.name.Trim() == name).val;
         }
         private void writeParam(XElement tmp, ParamModel param)
         {

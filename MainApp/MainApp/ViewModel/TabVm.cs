@@ -741,7 +741,7 @@ namespace MainApp.ViewModel
             kolPoint = 50;
             
             SeriesCollection = new SeriesCollection
-             {
+            {
                  new OhlcSeries()
                  {
                      Values = new ChartValues<OhlcPoint>
@@ -758,7 +758,7 @@ namespace MainApp.ViewModel
                      Values = new ChartValues<double> {30, 32, 35, 30, 28},
                      Fill = Brushes.Transparent
                  }
-             };
+            };
             Labels = new[]
             {
                  DateTime.Now.ToString("dd MMM"),
@@ -766,7 +766,7 @@ namespace MainApp.ViewModel
                  DateTime.Now.AddDays(2).ToString("dd MMM"),
                  DateTime.Now.AddDays(3).ToString("dd MMM"),
                  DateTime.Now.AddDays(4).ToString("dd MMM"),
-             };
+            };
 
             ohlcPoints = new ChartValues<OhlcPoint>();
             EMALine = new ChartValues<double>();
@@ -821,10 +821,8 @@ namespace MainApp.ViewModel
             {
                 EMALine.Add(tmp[i].Close);
                 NLabels.Add(tmp[i].Date.ToString("dd MMM"));
-            }         
-            
+            }                     
         }
-
         private void GetChart(string tiker, string skale)
         {
             if (tiker == null) return;
@@ -840,13 +838,13 @@ namespace MainApp.ViewModel
 
             for (int i = Convert.ToInt32(From); i<To*indexChart;  i++)
             {                
-              /*  ohlcPoints.Add(new OhlcPoint
+                ohlcPoints.Add(new OhlcPoint
                 {
                     Close =  tmp[i].Close,
                     High = tmp[i].High,
                     Low = tmp[i].Low,
                     Open = tmp[i].Open
-                });*/
+                });
                 NLabels1.Add(tmp[i].Date.ToString("dd MMM"));
                 //EMALine.Add(tmp[i].IndexPoint[0].Value[0].Value);
                 
@@ -867,6 +865,8 @@ namespace MainApp.ViewModel
     #region Тестовый класс для создания сетки и создания элементов графика диномически
     public class TestViewModel :TabVm
     {
+        private IteratorModel iterator;
+        private readonly IDataService _dataService;
         // TODO: попробовать по этой ссылке  https://stackoverflow.com/questions/4493445/wpf-binding-how-to-databind-to-grid
         // TODO: ПОСМОТРЕТЬ СПОСОБ С ПОЛЬЗОАТЕЛЬСКОЙ ПАНЕЛЬЮ https://docs.microsoft.com/ru-ru/dotnet/framework/wpf/controls/panels-overview
         private ObservableCollection<ChartViewModel> _CVM;
@@ -877,8 +877,8 @@ namespace MainApp.ViewModel
                 return _CVM ?? (_CVM = new ObservableCollection<ChartViewModel>());
             }
         }
-        private ChartViewModel4 cvm1;
-        public ChartViewModel4 CVM1
+        private ChartViewModel cvm1;
+        public ChartViewModel CVM1
         {
             get
             {
@@ -886,12 +886,17 @@ namespace MainApp.ViewModel
             }
         }
 
-        public TestViewModel()
+        public TestViewModel(IDataService data)
             :base ("Тестовый элимет")
         {
-            cvm1 = new ChartViewModel4();
-            CVM.Add(new ChartViewModel());
-           // CVM.Add(new ChartViewModel());
+            _dataService = data;
+            iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
+            cvm1 = new ChartViewModel();
+            iterator.NextN(50);
+            cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1,30);
+            cvm1.SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30);
+            // CVM.Add(new ChartViewModel());
+            // CVM.Add(new ChartViewModel());
             //CVM.Add(new ChartViewModel());
         }
     }
