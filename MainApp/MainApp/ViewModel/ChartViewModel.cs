@@ -28,22 +28,6 @@ namespace MainApp.ViewModel
 
         public ChartViewModel()
         {
-            /*
-            SeriesCollection = new SeriesCollection
-            {
-                new OhlcSeries()
-                {
-                    Values = new ChartValues<OhlcPoint>
-                    {
-                        new OhlcPoint(32, 35, 30, 32),
-                        new OhlcPoint(33, 38, 31, 37),
-                        new OhlcPoint(35, 42, 30, 40),
-                        new OhlcPoint(37, 40, 35, 38),
-                        new OhlcPoint(35, 38, 32, 33)
-                    }
-                }
-
-            };*/
             Labels = new[]
             {
                 DateTime.Now.ToString("dd MMM"),
@@ -63,8 +47,7 @@ namespace MainApp.ViewModel
                     PointGeometry = Geometry.Empty,
                     //AreaLimit=0
                 }
-            };
-            //MessageBox.Show("!");
+            };            
         }
     }
     public class ChartViewModel3

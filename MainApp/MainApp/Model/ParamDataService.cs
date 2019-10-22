@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Linq;
 using static MainApp.Model.DataService;
 
@@ -189,6 +190,17 @@ namespace MainApp.Model
         {
 
             return null;
+        }
+        public int GetQuantity (string lavel, string nameParam)
+        {
+            HashSet<string> arr = new HashSet<string>();
+            List<LavelModel> ListTMP = GetLavelModels(lavel);
+            foreach(var tmp in ListTMP)
+            {
+                List<ParamModel> paramModels = GetParam(tmp.id);
+                arr.Add(paramModels.Find(i => i.name == nameParam).val);                
+            }            
+            return arr.Count-1;
         }
 
         public List<ParamModel> GetParam (int id)

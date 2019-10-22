@@ -889,12 +889,27 @@ namespace MainApp.ViewModel
         public TestViewModel(IDataService data)
             :base ("Тестовый элимет")
         {
+            ParamDataService paramDataService = new ParamDataService();
             _dataService = data;
             iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
             cvm1 = new ChartViewModel();
             iterator.NextN(50);
             cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1,30);
             cvm1.SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30);
+            int i = paramDataService.GetQuantity("Index", "ChartArea");
+            switch (i)
+            {
+                case 0:
+                    MessageBox.Show("0");
+
+                    break;
+                case 1:
+                    MessageBox.Show("1");
+                    break;
+                case 2:
+                    MessageBox.Show("2");
+                    break;
+            }
             // CVM.Add(new ChartViewModel());
             // CVM.Add(new ChartViewModel());
             //CVM.Add(new ChartViewModel());
