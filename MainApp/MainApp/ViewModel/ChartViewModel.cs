@@ -27,6 +27,7 @@ namespace MainApp.ViewModel
             set
             {
                 _SeriesCollection = value;
+                UpdateIndex();
                 NotifyPropertyChanged();
             }
         }
@@ -39,7 +40,7 @@ namespace MainApp.ViewModel
             } 
             set
             {
-                _SeriesCollection1 = value;
+                _SeriesCollection1 = value;                
                 NotifyPropertyChanged();
             }
         }
@@ -91,24 +92,58 @@ namespace MainApp.ViewModel
             }
         }
 
-        #region пока не опреденные переменые 
+        // Длина маштабируемой серии 
         private int _scaleSer;
         public int scaleSer
         {
-            get;set;
+            get { return _scaleSer; }
+            set
+            {
+                _scaleSer = value;
+                NotifyPropertyChanged();
+            }
         }
+        // Количество всего знаков 
         private int _kolPoint;
         public int kolPoint
         {
-            get;set;
+            get { return _kolPoint; }
+            set
+            {
+                _kolPoint = value;
+                UpdateIndex();
+                NotifyPropertyChanged();
+            }
         }
 
+        private int _kolScale;
+        public int kolSkale
+        {
+            get { return _kolScale; }
+            set
+            {
+                _kolScale = value;
+                NotifyPropertyChanged();
+            }
+
+        }
+
+        // Коофициент маштабирования 
         private int _indexChart;
         public int indexChart
         {
-            get;set;
+            get
+            {
+                if (_indexChart == 0) { return 1; }
+                return _indexChart;
+            }
+            set
+            {
+                _indexChart = value;
+                NotifyPropertyChanged();
+            }
         }
-        #endregion
+        
 
         private List<string> _labels;
         public List<string> Labels
@@ -131,6 +166,10 @@ namespace MainApp.ViewModel
             }
         }
 
+        private void UpdateIndex()
+        {
+            indexChart = kolPoint / kolSkale;
+        }
         public abstract void Update();
 
         public abstract void Update1();
@@ -159,10 +198,12 @@ namespace MainApp.ViewModel
         }
 
 
-        public ChartViewModel0(IteratorModel _iterator)
+        public ChartViewModel0()
         {
-            Iterator = _iterator;
+            //Iterator = _iterator;
             //iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
+            From = 1;
+            To = 10;
             Labels = new List<string>()
             {
                 DateTime.Now.ToString("dd MMM"),
@@ -171,7 +212,6 @@ namespace MainApp.ViewModel
                 DateTime.Now.AddDays(3).ToString("dd MMM"),
                 DateTime.Now.AddDays(4).ToString("dd MMM"),
             };
-
             SeriesCollection1 = new SeriesCollection
             {
                 new LineSeries
@@ -182,7 +222,8 @@ namespace MainApp.ViewModel
                     PointGeometry = Geometry.Empty,
                     //AreaLimit=0
                 }
-            };            
+            };
+            kolSkale = 50;
         }
     }
     public class ChartViewModel3: ChartViewModel
@@ -200,6 +241,9 @@ namespace MainApp.ViewModel
 
         public ChartViewModel3(IteratorModel _iterator)
         {
+            From = 1;
+            To = 10;
+
             Iterator = _iterator;
             SeriesCollection = new SeriesCollection
             {
@@ -239,6 +283,9 @@ namespace MainApp.ViewModel
         }
         public ChartViewModel4(IteratorModel _iterator)
         {
+            From = 1;
+            To = 10;
+
             Iterator = _iterator;
 
             SeriesCollection = new SeriesCollection

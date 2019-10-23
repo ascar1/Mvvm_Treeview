@@ -18,12 +18,12 @@
                 <TextBox Text="{Binding CVM1.From}" Width="50"/>
                 <Label Content="To"/>
                 <TextBox Text="{Binding CVM1.To}" Width="50"/>
-                <Label Content="Scale"/>
-                <TextBox Text="{Binding ScaleSer}" Width="30"/>
+                <Label Content="Kol Scale"/>
+                <TextBox Text="{Binding CVM1.kolSkale}" Width="30"/>
                 <Label Content="Kol Point"/>
-                <TextBox Text="{Binding kolPoint}" Width="30"/>
+                <TextBox Text="{Binding CVM1.kolPoint}" Width="30"/>
                 <Label Content="Index Chart"/>
-                <TextBox Text="{Binding indexChart}" Width="30"/>
+                <TextBox Text="{Binding CVM1.indexChart}" Width="30"/>
             </ToolBarPanel>
       
             <ToolBar DockPanel.Dock="Top">

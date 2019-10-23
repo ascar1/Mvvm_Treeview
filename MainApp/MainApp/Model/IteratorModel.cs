@@ -162,7 +162,33 @@ namespace MainApp.Model
             return WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
         }
         #region Методы для работы с графиками
-        public SeriesCollection GetSeriesCollection (string tiker, string skale,string ChartArea, int From, int To)
+        private void ChecSeries(SeriesCollection series,string name)
+        {
+            //TODO: Сделать проверку на наличие серии и добовление новой серии 
+            int tmp = series.Select(i => i.Title == name).Count();
+            if (tmp == 0)
+            {
+                series.Add(new LineSeries
+                {
+                    Title = name,
+                    Name = name,
+                    Values = new ChartValues<double>(),
+                    Fill = Brushes.Transparent
+                });
+                // MessageBox.Show(name);
+            }
+            else
+            {
+                //MessageBox.Show("Есть");
+            }
+            /*
+            foreach(var tmp in series)
+            {
+                if (tmp.Title == name)
+                
+            }*/
+        }
+        public SeriesCollection GetSeriesCollection (string tiker, string skale,string ChartArea, int From, int To, int index)
         {
             SeriesCollection result;
             if (ChartArea == "0")
@@ -171,6 +197,7 @@ namespace MainApp.Model
                 {
                     new OhlcSeries()
                     {
+                        Title = tiker,
                          Name = tiker,
                          Values = new ChartValues<OhlcPoint>()
                     }
@@ -186,7 +213,7 @@ namespace MainApp.Model
                     }
                 };
             }
-
+            //ChecSeries(result, tiker);
             ParamDataService paramDataService = new ParamDataService();
             List<PointModel> point = GetListPoint(tiker, skale);
             // Если To == 0 то выводим всю серию
@@ -195,7 +222,7 @@ namespace MainApp.Model
                 To = point.Count - 1;
             }
 
-            for (int i = Convert.ToInt32(From); i < To; i++)
+            for (int i = From*index; i <= To*index; i++)
             {
                 int ind = 0;
                 // По умолчанию для ChartArea0 выводм серию графика цен
@@ -215,17 +242,11 @@ namespace MainApp.Model
                 {
                     string type = paramDataService.GetParamValue(tmp.id, "ChartArea");
                     string name = paramDataService.GetParamValue(tmp.id, "Name");
+                    
                     if (type == ChartArea)
                     {
-                        if (i == Convert.ToInt32(From))
-                        {
-                            result.Add(new LineSeries
-                            {
-                                Name = name,
-                                Values = new ChartValues<double>(),
-                                Fill = Brushes.Transparent
-                            });
-                        }
+                       
+                        ChecSeries(result,name);
                         double tmpval = point[i].IndexPoint.Find(i1 => i1.Name == name).Value[0].Value;
                         result[ind].Values.Add(tmpval);
                         ind++;

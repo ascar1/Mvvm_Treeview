@@ -559,6 +559,7 @@ namespace MainApp.ViewModel
         private readonly IDataService _dataService;
         private ParamDataService paramDataService = new ParamDataService();
         public ObservableCollection<FileViewModel> files { get; set; }
+
         private ObservableCollection<string> listComboBoxItems = new ObservableCollection<string>();
         public ObservableCollection<string> ListComboBoxItems
         {
@@ -672,32 +673,18 @@ namespace MainApp.ViewModel
         }
         #endregion
 
-        #region Код для работы с графиком 
+        #region Старый код для работы с графикой 
         private double _from;
-        private double _to;
-        private int _scaleSer;
-        private int _kolPoint;
-        private int _indexChart;
-        private int TypeViewChart;
-
         public double From
         {
             get { return _from; }
-            set
-            {
-                //GetChart(Value, Scale);
-                Set<double>(() => this.From, ref _from, value);
-                
-            }
+            set {Set<double>(() => this.From, ref _from, value);}
         }
+        private double _to;
         public double To
         {
             get { return _to; }
-            set {
-                //_to = value;
-                Set<double>(() => this.To, ref _to, value);
-                //OnPropertyChanged("To");
-            }
+            set {Set<double>(() => this.To, ref _to, value);}
         }
         public int ScaleSer
         {
@@ -708,6 +695,7 @@ namespace MainApp.ViewModel
                 To = From + value;
             }
         }
+        private int _kolPoint;
         public int kolPoint
             {
             get { return _kolPoint; }
@@ -720,12 +708,8 @@ namespace MainApp.ViewModel
         public int indexChart
         {
             get { return _indexChart; }
-            set
-            {
-                Set<int>(() => this.indexChart, ref _indexChart, value);
-            }
+            set {Set<int>(() => this.indexChart, ref _indexChart, value);}
         }
-
         private void LoadData1(string tiker, string skale)
         {
             ohlcPoints.Clear();
@@ -755,9 +739,7 @@ namespace MainApp.ViewModel
                 //points.Add(i);
             };
             GetScaleAverage(tiker, skale, 50);
-
         }
-
         private void GetScaleAverage(string tiker, string skale, int KolPoint)
         {
             EMALine.Clear();
@@ -809,6 +791,14 @@ namespace MainApp.ViewModel
             }
            // MessageBox.Show("!");
         }
+
+        #endregion
+
+        #region Новый код для работы с графиком 
+
+        private int _scaleSer;        
+        private int _indexChart;
+        private int TypeViewChart;
         
         private ChartViewModel cvm1;
         public ChartViewModel CVM1
@@ -829,10 +819,10 @@ namespace MainApp.ViewModel
         }
         private void LoadChartData(string tiker, string skale, bool flag)
         {
-            CVM1.SeriesCollection = iterator.GetSeriesCollection(tiker, skale, "0", CVM1.From, CVM1.To);
-            CVM1.SeriesCollection1 = iterator.GetScaleSeriesCollection(tiker, skale, "0", 50);
-            if (flag) { CVM1.PropertyChanged += CVM1_PropertyChanged; }
-            
+            CVM1.SeriesCollection = iterator.GetSeriesCollection(tiker, skale, "0", CVM1.From, CVM1.To,CVM1.indexChart);
+            CVM1.SeriesCollection1 = iterator.GetScaleSeriesCollection(tiker, skale, "0", CVM1.kolSkale);
+            CVM1.kolPoint = iterator.GetListPoint(tiker, skale).Count ;            
+            if (flag) { CVM1.PropertyChanged += CVM1_PropertyChanged; }            
         }
         private void ClearSeries ()
         {
@@ -848,26 +838,25 @@ namespace MainApp.ViewModel
             switch (TypeViewChart)
             {
                 case 0:                    
-                    CVM1 = new ChartViewModel0(iterator);
+                    CVM1 = new ChartViewModel0();
                     LoadChartData(tiker, skale,true);
                     AddLabelData(tiker, skale);                    
                     break;
                 case 1:
                     CVM1 = new ChartViewModel3(iterator);                    
                     LoadChartData(tiker, skale, true);
-                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To);
+                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.indexChart);
                     AddLabelData(tiker, skale);
                     break;
                 case 2:
                     CVM1 = new ChartViewModel4(iterator);                    
                     LoadChartData(tiker, skale, true);
-                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To);
-                    CVM1.SeriesCollection3 = iterator.GetSeriesCollection(tiker, skale, "2", CVM1.From, CVM1.To);
+                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.indexChart);
+                    CVM1.SeriesCollection3 = iterator.GetSeriesCollection(tiker, skale, "2", CVM1.From, CVM1.To, CVM1.indexChart);
                     AddLabelData(tiker, skale);
                     break;
             }
         }
-
         private void GetDataChart(string tiker, string skale)
         {
             switch (TypeViewChart)
@@ -880,19 +869,18 @@ namespace MainApp.ViewModel
                 case 1:
                     ClearSeries();
                     LoadChartData(tiker, skale, false);
-                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To);
+                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.indexChart);
                     AddLabelData(tiker, skale);
                     break;
                 case 2:
                     ClearSeries();
                     LoadChartData(tiker, skale, false);
-                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To);
-                    CVM1.SeriesCollection3 = iterator.GetSeriesCollection(tiker, skale, "2", CVM1.From, CVM1.To);
+                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.indexChart);
+                    CVM1.SeriesCollection3 = iterator.GetSeriesCollection(tiker, skale, "2", CVM1.From, CVM1.To, CVM1.indexChart);
                     AddLabelData(tiker, skale);
                     break;
             }
         }
-
         private void CVM1_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "From")
@@ -901,7 +889,6 @@ namespace MainApp.ViewModel
                 // MessageBox.Show("!");
             }
         }
-
         #endregion
     }
 
@@ -923,10 +910,7 @@ namespace MainApp.ViewModel
         private ChartViewModel cvm1;
         public ChartViewModel CVM1
         {
-            get
-            {
-                return cvm1;
-            }
+            get{ return cvm1; }
         }
 
         public TestViewModel(IDataService data)
@@ -941,27 +925,27 @@ namespace MainApp.ViewModel
             {
                 case 0:
                     MessageBox.Show("0");
-                    cvm1 = new ChartViewModel0(iterator);
+                    cvm1 = new ChartViewModel0();
                     cvm1.From = 3;
-                    cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1,30);
+                    cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1,30,2);
                     cvm1.SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30);
 
                     break;
                 case 1:
                     cvm1 = new ChartViewModel3(iterator);
                     cvm1.From = 3;
-                    cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1, 30);
+                    cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1, 30, 2);
                     cvm1.SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30);
-                    cvm1.SeriesCollection2 = iterator.GetSeriesCollection("BANE", "60", "1", 1, 30);
+                    cvm1.SeriesCollection2 = iterator.GetSeriesCollection("BANE", "60", "1", 1, 30, 2);
 
                     break;
                 case 2:
                     cvm1 = new ChartViewModel4(iterator);
                     cvm1.From = 3;
-                    cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1, 30);
+                    cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1, 30, 2);
                     cvm1.SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30);
-                    cvm1.SeriesCollection2 = iterator.GetSeriesCollection("BANE", "60", "1", 1, 30);
-                    cvm1.SeriesCollection3 = iterator.GetSeriesCollection("BANE", "60", "2", 1, 30);
+                    cvm1.SeriesCollection2 = iterator.GetSeriesCollection("BANE", "60", "1", 1, 30, 2);
+                    cvm1.SeriesCollection3 = iterator.GetSeriesCollection("BANE", "60", "2", 1, 30, 2);
                     break;
             }
             //CVM.Add(new ChartViewModel0());
