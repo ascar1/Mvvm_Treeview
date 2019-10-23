@@ -26,7 +26,7 @@
         <ContentPresenter Content="{Binding CVM1}">
             <ContentPresenter.Resources>
                 <ResourceDictionary>
-                    <DataTemplate DataType="{x:Type vm:ChartViewModel}">
+                    <DataTemplate DataType="{x:Type vm:ChartViewModel0}">
                         <local:Chart></local:Chart>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type vm:ChartViewModel3}">
@@ -34,7 +34,7 @@
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type vm:ChartViewModel4}">
                         <local:Chart4></local:Chart4>
-                    </DataTemplate>                    
+                    </DataTemplate>
                 </ResourceDictionary>
             </ContentPresenter.Resources>
         </ContentPresenter>

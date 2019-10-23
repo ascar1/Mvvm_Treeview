@@ -11,12 +11,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition Height="100"></RowDefinition>
+            <RowDefinition Height="80"></RowDefinition>
+            <RowDefinition Height="80"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <lvc:CartesianChart Grid.Row="1" 
-                                    Series="{Binding SeriesCollection}" Grid.ColumnSpan="2">
+        <lvc:CartesianChart Grid.Row="1" Series="{Binding SeriesCollection}" Grid.ColumnSpan="2">
             <lvc:CartesianChart.Resources>
                 <Style TargetType="lvc:Separator">
                     <Setter Property="StrokeThickness" Value="2.5"></Setter>
@@ -30,26 +29,34 @@
             </lvc:CartesianChart.Resources>
 
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Labels="{Binding NLabels1}"/>
+                <lvc:Axis Labels="{Binding Labels}"/>
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
-                
-        <lvc:CartesianChart Grid.Row="3" Grid.ColumnSpan="2" 
-                                    ScrollMode="X" 
-                                    ScrollHorizontalFrom="{Binding From, Mode=TwoWay}"
-                                    ScrollHorizontalTo="{Binding To, Mode=TwoWay}"
-                                    ScrollBarFill="#25303030"
-                                    Hoverable="False"
-                                    >
-            <lvc:CartesianChart.Series>
-                <lvc:LineSeries Values="{Binding EMALine}"
-                                    Fill="Gray"
-                                    StrokeThickness="0"
-                                    PointGeometry="{x:Null}"
-                                    AreaLimit="0"/>
-            </lvc:CartesianChart.Series>
+        <lvc:CartesianChart Grid.Row="2" Series="{Binding SeriesCollection2}" Grid.ColumnSpan="2">
+            <lvc:CartesianChart.Resources>
+                <Style TargetType="lvc:Separator">
+                    <Setter Property="StrokeThickness" Value="2.5"></Setter>
+                    <Setter Property="Stroke" Value="#E7E7E7"></Setter>
+                    <Style.Triggers>
+                        <Trigger Property="AxisOrientation" Value="X">
+                            <Setter Property="IsEnabled" Value="False"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </lvc:CartesianChart.Resources>
+
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Labels="{Binding NLabels}"/>
+                <lvc:Axis Labels="{Binding Labels}"/>
+            </lvc:CartesianChart.AxisX>
+        </lvc:CartesianChart>
+        <lvc:CartesianChart Grid.Row="3" Series="{Binding SeriesCollection1}"
+                            ScrollMode="X" 
+                            ScrollHorizontalFrom="{Binding From, Mode=TwoWay}"
+                            ScrollHorizontalTo="{Binding To, Mode=TwoWay}"
+                            ScrollBarFill="#25303030"
+                            Hoverable="False">
+            <lvc:CartesianChart.AxisX>
+                <lvc:Axis Labels="{Binding LabelsScale}"/>
             </lvc:CartesianChart.AxisX>
 
         </lvc:CartesianChart>

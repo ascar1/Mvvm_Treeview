@@ -3,9 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-             
-             xmlns:local="clr-namespace:MainApp.Model" 
+             xmlns:local1="clr-namespace:MainApp.View.Chart"
+             xmlns:vm="clr-namespace:MainApp.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              DataContext="{Binding chartView, Source={StaticResource Locator}}">
@@ -16,9 +15,9 @@
 
             <ToolBarPanel DockPanel.Dock="Bottom" Orientation="Horizontal" >
                 <Label Content="From"/>
-                <TextBox Text="{Binding From}" Width="50"/>
+                <TextBox Text="{Binding CVM1.From}" Width="50"/>
                 <Label Content="To"/>
-                <TextBox Text="{Binding To}" Width="50"/>
+                <TextBox Text="{Binding CVM1.To}" Width="50"/>
                 <Label Content="Scale"/>
                 <TextBox Text="{Binding ScaleSer}" Width="30"/>
                 <Label Content="Kol Point"/>
@@ -37,15 +36,34 @@
                 <Button  Content="All" Command="{Binding AllCommand}" Visibility="{Binding flag}"/>
             </ToolBar>
             <Grid>
+                <ContentPresenter Content="{Binding CVM1}">
+                    <ContentPresenter.Resources>
+                        <ResourceDictionary>
+                            <DataTemplate DataType="{x:Type vm:ChartViewModel0}">
+                                <local1:Chart></local1:Chart>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type vm:ChartViewModel3}">
+                                <local1:Chart3></local1:Chart3>
+                            </DataTemplate>
+                            <DataTemplate DataType="{x:Type vm:ChartViewModel4}">
+                                <local1:Chart4></local1:Chart4>
+                            </DataTemplate>
+                        </ResourceDictionary>
+                    </ContentPresenter.Resources>
+                </ContentPresenter>
+          
+            </Grid>
+        </DockPanel>
+    </Grid>
+</UserControl>
+<!--
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                     <RowDefinition Height="100"></RowDefinition>
                     <RowDefinition Height="100"></RowDefinition>
                 </Grid.RowDefinitions>
-                
-                <lvc:CartesianChart Grid.Row="1" 
-                                    Series="{Binding SeriesCollection}" Grid.ColumnSpan="2">
+                <lvc:CartesianChart Grid.Row="1" Series="{Binding SeriesCollection}" Grid.ColumnSpan="2">
                     <lvc:CartesianChart.Resources>
                         <Style TargetType="lvc:Separator">
                             <Setter Property="StrokeThickness" Value="2.5"></Setter>
@@ -81,8 +99,4 @@
                     </lvc:CartesianChart.AxisX>
                     
                 </lvc:CartesianChart>
-                
-            </Grid>
-        </DockPanel>
-    </Grid>
-</UserControl>
+    -->  

@@ -12,7 +12,7 @@ using System.Windows.Media;
 
 namespace MainApp.Model
 {
-    class IteratorModel
+    public class IteratorModel
     {
         private int Seed = 10;
         private List<MasterPointModel> MasterPoint;        
@@ -165,13 +165,27 @@ namespace MainApp.Model
         public SeriesCollection GetSeriesCollection (string tiker, string skale,string ChartArea, int From, int To)
         {
             SeriesCollection result;
-            result = new SeriesCollection
+            if (ChartArea == "0")
             {
-                new OhlcSeries()
+                result = new SeriesCollection
                 {
-                     Values = new ChartValues<OhlcPoint>()
-                },
-            };
+                    new OhlcSeries()
+                    {
+                         Name = tiker,
+                         Values = new ChartValues<OhlcPoint>()
+                    }
+                };
+            }
+            else
+            {
+                result = new SeriesCollection
+                {
+                    new LineSeries()
+                    {
+                         Values = new ChartValues<double>()
+                    }
+                };
+            }
 
             ParamDataService paramDataService = new ParamDataService();
             List<PointModel> point = GetListPoint(tiker, skale);
@@ -207,6 +221,7 @@ namespace MainApp.Model
                         {
                             result.Add(new LineSeries
                             {
+                                Name = name,
                                 Values = new ChartValues<double>(),
                                 Fill = Brushes.Transparent
                             });
@@ -235,6 +250,19 @@ namespace MainApp.Model
             }
             return result;
         }
+
+        public List<string> GetScaleArrDate(string tiker, string skale, int KolPoint)
+        {
+            List<string> result = new List<string>();
+            List<PointModel> point = GetListPoint(tiker, skale);
+
+            int scale1 = point.Count / KolPoint;
+            for (int i = 0; i < point.Count; i = i + scale1  )
+            {
+                result.Add(point[i].Date.ToString("dd MMM"));
+            }
+            return result;
+        }
         public SeriesCollection GetScaleSeriesCollection(string tiker, string skale, string ChartArea, int KolPoint)
         {
             List<string> NLabels = new List<string>();
@@ -252,8 +280,8 @@ namespace MainApp.Model
             };
 
             List<PointModel> point = GetListPoint(tiker, skale);            
-            int count = point.Count;
-            int scale1 = count / KolPoint;
+            
+            int scale1 = point.Count / KolPoint;
             for (int i = 0; i < point.Count; i = i + scale1)
             {                
                 if (result.Count == 0)
@@ -265,11 +293,7 @@ namespace MainApp.Model
             }        
             return result;
         }
-        //private List<string> _NLabels;
-        public List<string> NLabels
-        {
-            get { return NLabels; }
-        }
+
         #endregion
 
     }

@@ -1,9 +1,13 @@
 ﻿using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
+using GalaSoft.MvvmLight;
+using MainApp.Model;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,24 +15,155 @@ using System.Windows.Media;
 
 namespace MainApp.ViewModel
 {
-    public class ChartViewModel
+    public abstract class ChartViewModel: ViewModelBase, INotifyPropertyChanged
     {
-        public SeriesCollection SeriesCollection { get; set; }
-        public SeriesCollection SeriesCollection1 { get; set; }
-        private string[] _labels;
-        public string[] Labels
+        private SeriesCollection _SeriesCollection;
+        public SeriesCollection SeriesCollection
+        {
+            get
+            {
+                return _SeriesCollection;
+            }
+            set
+            {
+                _SeriesCollection = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private SeriesCollection _SeriesCollection1;
+        public SeriesCollection SeriesCollection1
+        {
+            get
+            {
+                return _SeriesCollection1;
+            } 
+            set
+            {
+                _SeriesCollection1 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private SeriesCollection _SeriesCollection2;
+        public SeriesCollection SeriesCollection2
+        {   get { return _SeriesCollection2; }
+            set
+            {
+                _SeriesCollection2 = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private SeriesCollection _SeriesCollection3;
+        public SeriesCollection SeriesCollection3
+        {
+            get { return _SeriesCollection3; }
+            set
+            {
+                _SeriesCollection3 = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public IteratorModel Iterator;
+        private int _From;
+        public int From
+        {
+            get
+            {
+                return _From;
+            }
+            set
+            {
+                _From = value;                
+                NotifyPropertyChanged();               
+            }
+        }
+        private int _To;
+        public int To
+        {
+            get
+            {
+                return _To;
+            }
+            set
+            {
+                _To = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        #region пока не опреденные переменые 
+        private int _scaleSer;
+        public int scaleSer
+        {
+            get;set;
+        }
+        private int _kolPoint;
+        public int kolPoint
+        {
+            get;set;
+        }
+
+        private int _indexChart;
+        public int indexChart
+        {
+            get;set;
+        }
+        #endregion
+
+        private List<string> _labels;
+        public List<string> Labels
         {
             get { return _labels; }
             set
             {
                 _labels = value;
-                //OnPropertyChanged("Labels");
+                NotifyPropertyChanged();
+            }
+        }
+        private List<string> _labelsScale;
+        public List<string> LabelsScale
+        {
+            get { return _labelsScale; }
+            set
+            {
+                _labelsScale = value;
+                NotifyPropertyChanged();
             }
         }
 
-        public ChartViewModel()
+        public abstract void Update();
+
+        public abstract void Update1();
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
-            Labels = new[]
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+    }
+    public class ChartViewModel0: ChartViewModel
+    {
+        
+        public override void Update()
+        {
+            MessageBox.Show("class ChartViewModel0");
+        }
+
+        public override void Update1()
+        {
+            MessageBox.Show("class ChartViewModel0");
+            //base.Update1();
+        }
+
+
+        public ChartViewModel0(IteratorModel _iterator)
+        {
+            Iterator = _iterator;
+            //iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
+            Labels = new List<string>()
             {
                 DateTime.Now.ToString("dd MMM"),
                 DateTime.Now.AddDays(1).ToString("dd MMM"),
@@ -36,7 +171,7 @@ namespace MainApp.ViewModel
                 DateTime.Now.AddDays(3).ToString("dd MMM"),
                 DateTime.Now.AddDays(4).ToString("dd MMM"),
             };
-            
+
             SeriesCollection1 = new SeriesCollection
             {
                 new LineSeries
@@ -50,22 +185,22 @@ namespace MainApp.ViewModel
             };            
         }
     }
-    public class ChartViewModel3
+    public class ChartViewModel3: ChartViewModel
     {
-        public SeriesCollection SeriesCollection { get; set; }
-        private string[] _labels;
-        public string[] Labels
+        
+        public override void Update()
         {
-            get { return _labels; }
-            set
-            {
-                _labels = value;
-                //OnPropertyChanged("Labels");
-            }
+            MessageBox.Show("class ChartViewModel3");
         }
 
-        public ChartViewModel3()
+        public override void Update1()
         {
+            throw new NotImplementedException();
+        }
+
+        public ChartViewModel3(IteratorModel _iterator)
+        {
+            Iterator = _iterator;
             SeriesCollection = new SeriesCollection
             {
                 new OhlcSeries()
@@ -86,7 +221,7 @@ namespace MainApp.ViewModel
                 }
             };
 
-            Labels = new[]
+            Labels = new List<string>()
             {
                 DateTime.Now.ToString("dd MMM"),
                 DateTime.Now.AddDays(1).ToString("dd MMM"),
@@ -96,22 +231,16 @@ namespace MainApp.ViewModel
             };
         }
     }
-    public class ChartViewModel4
+    public class ChartViewModel4: ChartViewModel
     {
-        public SeriesCollection SeriesCollection { get; set; }
-        private string[] _labels;
-        public string[] Labels
+        public override void Update()
         {
-            get { return _labels; }
-            set
-            {
-                _labels = value;
-                //OnPropertyChanged("Labels");
-            }
+            MessageBox.Show("class ChartViewModel4");
         }
-
-        public ChartViewModel4()
+        public ChartViewModel4(IteratorModel _iterator)
         {
+            Iterator = _iterator;
+
             SeriesCollection = new SeriesCollection
             {
                 new OhlcSeries()
@@ -132,7 +261,36 @@ namespace MainApp.ViewModel
                 }
             };
 
-            Labels = new[]
+            SeriesCollection2 = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Stroke = Brushes.Gray,
+                    Values = new ChartValues<double> {30, 32, 35, 30, 28},
+                    Fill = Brushes.Transparent
+                }
+            };
+
+            SeriesCollection3 = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Stroke = Brushes.Green,
+                    Values = new ChartValues<double> {30, 32, 35, 30, 28},
+                    Fill = Brushes.Transparent
+                }
+            };
+            SeriesCollection1 = new SeriesCollection
+            {
+                new LineSeries
+                {
+                    Stroke = Brushes.Black,
+                    Values = new ChartValues<double> {30, 32, 35, 30, 28},
+                    Fill = Brushes.Transparent
+                }
+            };
+
+            Labels = new List<string>()
             {
                 DateTime.Now.ToString("dd MMM"),
                 DateTime.Now.AddDays(1).ToString("dd MMM"),
@@ -140,6 +298,33 @@ namespace MainApp.ViewModel
                 DateTime.Now.AddDays(3).ToString("dd MMM"),
                 DateTime.Now.AddDays(4).ToString("dd MMM"),
             };
+        }
+        
+
+
+        public override void Update1()
+        {
+           /* SeriesCollection[0].Values.Add(new OhlcPoint(32, 35, 30, 32));
+            SeriesCollection[0].Values.Add(new OhlcPoint(32, 35, 30, 32));
+            SeriesCollection[0].Values.Add(new OhlcPoint(32, 35, 30, 32));
+            SeriesCollection[0].Values.Add(new OhlcPoint(32, 35, 30, 32));
+            double i = 30;
+            SeriesCollection[1].Values.Add(i);
+            SeriesCollection[1].Values.Add(i);
+            SeriesCollection[1].Values.Add(i);
+            SeriesCollection[1].Values.Add(i);
+            SeriesCollection1[0].Values.Add(i);
+            SeriesCollection1[0].Values.Add(i);
+            SeriesCollection1[0].Values.Add(i);
+            SeriesCollection1[0].Values.Add(i);
+            SeriesCollection2[0].Values.Add(i);
+            SeriesCollection2[0].Values.Add(i);
+            SeriesCollection2[0].Values.Add(i);
+            SeriesCollection2[0].Values.Add(i);
+            SeriesCollection3[0].Values.Add(i);
+            SeriesCollection3[0].Values.Add(i);
+            SeriesCollection3[0].Values.Add(i);
+            SeriesCollection3[0].Values.Add(i);*/
         }
     }
 }
