@@ -56,8 +56,6 @@ namespace MainApp.Model
         public string Name { get; set; }
         public double Value { get; set; }
     }
-
-
     public class FileArrModel
     {
         public string Tiker { get; set; }

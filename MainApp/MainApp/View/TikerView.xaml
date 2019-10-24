@@ -18,7 +18,7 @@
                 <Button  Content="Next" Command="{Binding NextCommand}" Visibility="{Binding flag}"/>
                 <Button  Content="All" Command="{Binding AllCommand}" Visibility="{Binding flag}"/>
             </ToolBar>
-            <DataGrid ItemsSource="{Binding Path=points}" AutoGenerateColumns="False">
+            <DataGrid ItemsSource="{Binding Path=Points}" AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Дата" Binding="{Binding Path=Date, TargetNullValue=(enter a name)}" Width="90"  />
                     <DataGridTextColumn Header="Open" Binding="{Binding Path=Open, TargetNullValue=(enter a name)}" Width="90"  />

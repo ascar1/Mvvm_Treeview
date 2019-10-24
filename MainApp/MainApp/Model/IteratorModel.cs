@@ -1,6 +1,7 @@
 ﻿using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
+using MainApp.Model.Analysis;
 using System;
 using System.Collections.Generic;
 
@@ -76,7 +77,7 @@ namespace MainApp.Model
                     PointModel pointD = dateModels.Find(i => i.Scale == "D").Points.Last();
                     PointModel point60 = dateModels.Find(i => i.Scale == "60").Points.Last();
                     pointD.High = Math.Max(pointD.High, point60.High);
-                    pointD.Low = Math.Min(pointD.High, point60.High);
+                    pointD.Low = Math.Min(pointD.Low, point60.Low);
                     pointD.Close = point60.Close;
                     pointD.Vol = pointD.Vol + point60.Vol;
                 }
@@ -125,6 +126,10 @@ namespace MainApp.Model
                 }
             }             
         }
+        private void GetAnalis(List<DateModel> dateModels)
+        {
+            IAnalysis1 analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"));
+        }
         public void All()
         {
             while(Next())
@@ -164,7 +169,6 @@ namespace MainApp.Model
             return WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
         }
         #region Методы для работы с графиками
-
         private int GetIndexSeries(SeriesCollection series, string name)
         {
             int i = 0;
@@ -309,13 +313,13 @@ namespace MainApp.Model
             }
             return result;
         }
-
         public List<string> GetScaleArrDate(string tiker, string skale, int KolPoint)
         {
             List<string> result = new List<string>();
             List<PointModel> point = GetListPoint(tiker, skale);
 
             int scale1 = point.Count / KolPoint;
+            if (scale1 == 0) { scale1 = 1; }
             for (int i = 0; i < point.Count; i = i + scale1  )
             {
                 result.Add(point[i].Date.ToString("dd MMM"));
@@ -341,6 +345,7 @@ namespace MainApp.Model
             List<PointModel> point = GetListPoint(tiker, skale);            
             
             int scale1 = point.Count / KolPoint;
+            if (scale1 == 0) { scale1 = 1; }
             for (int i = 0; i < point.Count; i = i + scale1)
             {                
                 if (result.Count == 0)
@@ -352,7 +357,6 @@ namespace MainApp.Model
             }        
             return result;
         }
-
         #endregion
 
     }

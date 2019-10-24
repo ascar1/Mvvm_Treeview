@@ -81,6 +81,8 @@
     <Compile Include="Command\DelegateCommand.cs" />
     <Compile Include="Command\MyCommand.cs" />
     <Compile Include="Design\DesignDataService.cs" />
+    <Compile Include="Model\Analysis\Analysis.cs" />
+    <Compile Include="Model\Analysis\IAnalysis.cs" />
     <Compile Include="Model\ChartPointModel.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />

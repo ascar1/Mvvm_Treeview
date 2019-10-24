@@ -458,11 +458,7 @@ namespace MainApp.ViewModel
             set => Set(ref scale, value);
         }
 
-        public Visibility Flag
-        {
-            get;
-            set; 
-        }
+        public Visibility Flag { get; set; }
         private MyCommand _NextCommand;
         public MyCommand NextCommand
         {
@@ -478,7 +474,7 @@ namespace MainApp.ViewModel
                     else
                     {
 
-                        iterator.Next();
+                        iterator.NextN(100);
                         LoadData1(v,scale);
                     }
                 }));
@@ -627,7 +623,7 @@ namespace MainApp.ViewModel
             {
                 return _NextCommand ?? (_NextCommand = new MyCommand(obj =>
                 {
-                    //iterator.next();
+                    iterator.Next();
                     //LoadData1(v, scale);
                     //To = 4;
                     CVM1.To = 10; CVM1.From = 1;
