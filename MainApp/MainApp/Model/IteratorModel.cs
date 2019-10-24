@@ -164,31 +164,26 @@ namespace MainApp.Model
             return WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
         }
         #region Методы для работы с графиками
-        private void ChecSeries(SeriesCollection series,string name)
+
+        private int GetIndexSeries(SeriesCollection series, string name)
         {
-            //TODO: Сделать проверку на наличие серии и добовление новой серии 
-            int tmp = series.Select(i => i.Title == name).Count();
-            if (tmp == 0)
-            {
-                series.Add(new LineSeries
-                {
-                    Title = name,
-                    Name = name,
-                    Values = new ChartValues<double>(),
-                    Fill = Brushes.Transparent
-                });
-                // MessageBox.Show(name);
-            }
-            else
-            {
-                //MessageBox.Show("Есть");
-            }
-            /*
-            foreach(var tmp in series)
+            int i = 0;
+            foreach (var tmp in series)
             {
                 if (tmp.Title == name)
-                
-            }*/
+                {
+                    return i;
+                }
+                i++;
+            }
+            series.Add(new LineSeries
+            {
+                Title = name,
+                Name = name,
+                Values = new ChartValues<double>(),
+                Fill = Brushes.Transparent
+            });
+            return i;
         }
         public SeriesCollection GetSeriesCollection (string tiker, string skale,string ChartArea, int From, int To, int index)
         {
@@ -215,7 +210,7 @@ namespace MainApp.Model
                     }
                 };
             }
-            //ChecSeries(result, tiker);
+            
             ParamDataService paramDataService = new ParamDataService();
             List<PointModel> point = GetListPoint(tiker, skale);
             // Если To == 0 то выводим всю серию
@@ -247,10 +242,9 @@ namespace MainApp.Model
                     
                     if (type == ChartArea)
                     {
-                       
-                        ChecSeries(result,name);
+                        int tmpind = GetIndexSeries(result, name);
                         double tmpval = point[i].IndexPoint.Find(i1 => i1.Name == name).Value[0].Value;
-                        result[ind].Values.Add(tmpval);
+                        result[tmpind].Values.Add(tmpval);
                         ind++;
                     }
                 }

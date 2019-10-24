@@ -18,9 +18,7 @@ namespace MainApp.ViewModel
         private IParamDataService _dataService = new ParamDataService();
         private ParamViewModel backupCopy;
         public ObservableCollection<ParamViewModel> Param;
-#pragma warning disable CS0414 // Полю "ParamViewModel.isNew" присвоено значение, но оно ни разу не использовано.
         private bool isNew;
-#pragma warning restore CS0414 // Полю "ParamViewModel.isNew" присвоено значение, но оно ни разу не использовано.
         private bool inEdit;
         #region constructor
         public ParamViewModel()

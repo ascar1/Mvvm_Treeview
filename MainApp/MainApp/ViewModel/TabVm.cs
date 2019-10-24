@@ -215,7 +215,7 @@ namespace MainApp.ViewModel
             {
                 return myCommand ?? (myCommand = new MyCommand(obj =>
                 {
-                    MessageBox.Show("Команда " + " Button !!! " + LavelList.Count());
+                    //MessageBox.Show("Команда " + " Button !!! " + LavelList.Count());
                     //NotifyPropertyChanged("111");
                     LavelList[1].Children.Remove(SelectedLavel);
                 }));
@@ -615,7 +615,7 @@ namespace MainApp.ViewModel
             listScaleItems.Add("D");
 
             TypeViewChart = paramDataService.GetQuantity("Index", "ChartArea");
-            TypeViewChart = 0;
+            //TypeViewChart = 0;
         }
 
 
@@ -821,9 +821,11 @@ namespace MainApp.ViewModel
         }
         private void LoadChartData(string tiker, string skale, bool flag)
         {
+            CVM1.KolPoint = iterator.GetListPoint(tiker, skale).Count;
+
             CVM1.SeriesCollection = iterator.GetSeriesCollection(tiker, skale, "0", CVM1.From, CVM1.To,CVM1.IndexChart);
             CVM1.SeriesCollection1 = iterator.GetScaleSeriesCollection(tiker, skale, "0", CVM1.KolSkale);
-            CVM1.KolPoint = iterator.GetListPoint(tiker, skale).Count ;            
+                        
             if (flag) { CVM1.PropertyChanged += CVM1_PropertyChanged; }            
         }
         private void ClearSeries ()

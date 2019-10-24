@@ -31,15 +31,8 @@
 
             <HierarchicalDataTemplate x:Key="LavelItem" ItemsSource="{Binding Children}">
                 <StackPanel>
-                    <!--
-                    , UpdateSourceTrigger=PropertyChanged
-                    -->
-                    <TextBlock x:Name="textBlock" Text="{Binding name}" Margin="3,0,0,0"/>
-                    <TextBox x:Name="editTextBlock" Visibility="Collapsed" MinWidth="100" 
-                             Text="{Binding name}">
-                        <!--
-                        , UpdateSourceTrigger=PropertyChanged
-                        -->
+                    <TextBlock x:Name="textBlock" Text="{Binding Name}" Margin="3,0,0,0"/>
+                    <TextBox x:Name="editTextBlock" Visibility="Collapsed" MinWidth="100" Text="{Binding name}">
                     </TextBox>
                 </StackPanel>
                 <HierarchicalDataTemplate.Triggers>
@@ -90,10 +83,10 @@
                 </i:Interaction.Triggers>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Имя" Binding="{Binding Path=name, TargetNullValue=(enter a name)}" Width="90"  />
-                    <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />
-                    <DataGridTextColumn Header="Значение" Binding="{Binding Path=val, TargetNullValue=(enter a val)}" Width="100" />
-                    <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=comment, TargetNullValue=(enter a comment)}" Width="300" />
+                    <DataGridTextColumn Header="Имя" Binding="{Binding Path=Name, TargetNullValue=(enter a name)}" Width="90"  />
+                    <DataGridComboBoxColumn Header="Тип" SelectedItemBinding ="{Binding Path=Type}" ItemsSource="{Binding Source={StaticResource myEnum}}" />
+                    <DataGridTextColumn Header="Значение" Binding="{Binding Path=Val, TargetNullValue=(enter a val)}" Width="100" />
+                    <DataGridTextColumn Header="Коментарий" Binding="{Binding Path=Comment, TargetNullValue=(enter a comment)}" Width="300" />
                 </DataGrid.Columns>
 
                 <DataGrid.ContextMenu>

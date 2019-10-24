@@ -27,7 +27,7 @@ namespace MainApp.ViewModel
             set
             {
                 _SeriesCollection = value;
-                UpdateIndex();
+                //UpdateIndex();
                 NotifyPropertyChanged();
             }
         }
@@ -245,7 +245,8 @@ namespace MainApp.ViewModel
         {
             From = 1;
             To = 10;
-
+            KolSkale = 50;
+             
             Iterator = _iterator;
             SeriesCollection = new SeriesCollection
             {
@@ -287,6 +288,7 @@ namespace MainApp.ViewModel
         {
             From = 1;
             To = 10;
+            KolSkale = 50;
 
             Iterator = _iterator;
 
