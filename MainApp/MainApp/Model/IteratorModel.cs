@@ -176,14 +176,52 @@ namespace MainApp.Model
                 }
                 i++;
             }
-            series.Add(new LineSeries
+            if (name.IndexOf("Bar_Graph") == -1)
             {
-                Title = name,
-                Name = name,
-                Values = new ChartValues<double>(),
-                Fill = Brushes.Transparent
-            });
+                series.Add(new LineSeries
+                {
+                    Title = name,
+                    Name = name,
+                    Values = new ChartValues<double>(),
+                    Fill = Brushes.Transparent,
+                    PointGeometry = Geometry.Empty
+
+                });
+            }
+            else
+            {
+                series.Add(new ColumnSeries
+                {
+                    Title = name,
+                    Name = name,
+                    Values = new ChartValues<double>(),
+                    
+                    PointGeometry = Geometry.Empty
+
+                });
+            }
+
             return i;
+        }
+        private void AddSeries (SeriesCollection series, List<IndexPoint> points, string name)
+        {
+           // int i = GetIndexSeries(series, name);
+            foreach(var tmp in points)
+            {
+                if (tmp.Name.Substring(0,1) != "_")
+                {
+                    int i = GetIndexSeries(series, name + "_" + tmp.Name);
+                    if (tmp.Name.IndexOf("FI") == -1)
+                    {
+                        series[i].Values.Add(tmp.Value);
+                    }
+                    else
+                    {
+                        series[i].Values.Add(tmp.Value);
+                    }
+                        
+                }
+            }
         }
         public SeriesCollection GetSeriesCollection (string tiker, string skale,string ChartArea, int From, int To, int index)
         {
@@ -206,7 +244,8 @@ namespace MainApp.Model
                 {
                     new LineSeries()
                     {
-                         Values = new ChartValues<double>()
+                         Values = new ChartValues<double>(),
+                         PointGeometry = Geometry.Empty
                     }
                 };
             }
@@ -242,16 +281,19 @@ namespace MainApp.Model
                     
                     if (type == ChartArea)
                     {
-                        int tmpind = GetIndexSeries(result, name);
-                        double tmpval = point[i].IndexPoint.Find(i1 => i1.Name == name).Value[0].Value;
-                        result[tmpind].Values.Add(tmpval);
+                        //int tmpind = GetIndexSeries(result, name);
+                        //double tmpval = point[i].IndexPoint.Find(i1 => i1.Name == name).Value[0].Value;
+
+                        AddSeries(result, point[i].IndexPoint.Find(i1 => i1.Name == name).Value, name);
+                        
+                        //result[tmpind].Values.Add(tmpval);
                         ind++;
                     }
                 }
             }           
             return result;
         }
-        public List<string> GetArrDate(string tiker, string skale, int From, int To)
+        public List<string> GetArrDate(string tiker, string skale, int From, int To, int index)
         {
             List<string> result = new List<string>();
             List<PointModel> point = GetListPoint(tiker, skale);
@@ -261,7 +303,7 @@ namespace MainApp.Model
                 To = point.Count - 1;
             }
 
-            for (int i = Convert.ToInt32(From); i < To; i++)
+            for (int i = From*index; i < To*index; i++)
             {
                 result.Add(point[i].Date.ToString("dd MMM"));
             }

@@ -74,7 +74,14 @@ namespace MainApp.ViewModel
             }
             set
             {
-                _From = value;                
+                if (value > 0)
+                {
+                    _From = value;
+                }
+                else
+                {
+                    _From = 0;
+                }                
                 NotifyPropertyChanged();               
             }
         }
@@ -350,9 +357,6 @@ namespace MainApp.ViewModel
                 DateTime.Now.AddDays(4).ToString("dd MMM"),
             };
         }
-        
-
-
         public override void Update1()
         {
            /* SeriesCollection[0].Values.Add(new OhlcPoint(32, 35, 30, 32));

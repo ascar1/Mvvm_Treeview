@@ -615,7 +615,7 @@ namespace MainApp.ViewModel
             listScaleItems.Add("D");
 
             TypeViewChart = paramDataService.GetQuantity("Index", "ChartArea");
-            //TypeViewChart = 0;
+            //TypeViewChart = 1;
         }
 
 
@@ -642,7 +642,7 @@ namespace MainApp.ViewModel
             {
                 return _Next100Command ?? (_Next100Command = new MyCommand(obj =>
                 {
-                    iterator.NextN(50);
+                    iterator.NextN(200);
 
                     //LoadData1(v, scale);
 
@@ -816,7 +816,10 @@ namespace MainApp.ViewModel
         }
         private void AddLabelData(string tiker, string skale)
         {
-            CVM1.Labels = iterator.GetArrDate(tiker, skale, CVM1.From, CVM1.To);
+            if (CVM1.Labels != null) { CVM1.Labels.Clear(); }
+            if (CVM1.LabelsScale != null) { CVM1.LabelsScale.Clear(); }
+            
+            CVM1.Labels = iterator.GetArrDate(tiker, skale, CVM1.From, CVM1.To,CVM1.IndexChart);
             CVM1.LabelsScale = iterator.GetScaleArrDate(tiker, skale, 50);
         }
         private void LoadChartData(string tiker, string skale, bool flag)

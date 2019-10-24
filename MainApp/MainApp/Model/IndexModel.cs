@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MainApp.Model
 {
@@ -12,7 +13,6 @@ namespace MainApp.Model
         {
 
         }
-
         private string GetStringParam (List<ParamModel> @params, string NameParam)
         {
             return @params.Find(tmp => tmp.Name == NameParam).Val; 
@@ -68,33 +68,7 @@ namespace MainApp.Model
         {
             return point.IndexPoint.Find(i => i.Name == name).Value.Find(i1=>i1.Name == namePoint).Value;
         }        
-        public void GetEMA(List<PointModel> points, List<ParamModel> @params)
-        {
-            // Расчитать и записать EMA по параметрам из файла настроек 
-            int N; string name;
-            N = GetIntParam(@params, "Period");
-            name = GetStringParam(@params, "Name");
-
-            /*int i = 0;*/ Decimal EMA0 = 0; Decimal EMA; Decimal k1; Decimal k2;
-
-            k2 = N + 1;
-            k1 = (Decimal)2 / (Decimal)k2;
-            if (points.Count <= N)
-            {
-                N = points.Count;
-                EMA0 = (Decimal)points[0].Close;
-            }
-            else
-            {
-                EMA0 = (Decimal)GetValIndex(points[points.Count - (N + 1)], @params);
-            }
-            for (int i = points.Count-N;i<points.Count;i++)
-            {
-                EMA = (Decimal)points[i].Close * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
-                AddVal(points[i], name, "EMA", "EMA", (double)EMA);
-                EMA0 = EMA;
-            }
-        }
+        
         private double GetEMA(List<PointModel> points, int N, string name , string namePoint)
         {
             // Расчитать и вернуть значение EMA 
@@ -152,35 +126,81 @@ namespace MainApp.Model
 
             return (double)EMA;            
         }
+        public void GetEMA(List<PointModel> points, List<ParamModel> @params)
+                {
+                    // Расчитать и записать EMA по параметрам из файла настроек 
+                    int N; string name;
+                    N = GetIntParam(@params, "Period");
+                    name = GetStringParam(@params, "Name");
+
+                    /*int i = 0;*/ Decimal EMA0 = 0; Decimal EMA; Decimal k1; Decimal k2;
+
+                    k2 = N + 1;
+                    k1 = (Decimal)2 / (Decimal)k2;
+                    if (points.Count <= N)
+                    {
+                        N = points.Count;
+                        EMA0 = (Decimal)points[0].Close;
+                    }
+                    else
+                    {
+                        EMA0 = (Decimal)GetValIndex(points[points.Count - (N + 1)], @params);
+                    }
+                    for (int i = points.Count-N;i<points.Count;i++)
+                    {
+                        EMA = (Decimal)points[i].Close * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
+                        AddVal(points[i], name, "EMA", "EMA", (double)EMA);
+                        EMA0 = EMA;
+                    }
+                }
         public void GetMACD(List<PointModel> points, List<ParamModel> @params)
         {
             string name = GetStringParam(@params, "Name");
-            int nEMAi = GetIntParam(@params, "EMAl"); 
-            int nEMAs = GetIntParam(@params, "EMAs"); 
+            int NEMA26 = GetIntParam(@params, "EMAl"); //26
+            int NEMA12 = GetIntParam(@params, "EMAs"); //12
             int nEMAa = GetIntParam(@params, "EMAa");
 
-            double EMAi = GetEMA(points, nEMAi, name ,"EMAi");
-            AddVal(points.Last(), "MACD", "MACD", "EMAi", EMAi);
-            double EMAs = GetEMA(points, nEMAs, name, "EMAs");
-            AddVal(points.Last(), "MACD", "MACD", "EMAs", EMAs);
-            double _EMAa = EMAs - EMAi;
-            AddVal(points.Last(), "MACD", "MACD", "_EMAa", _EMAa);
-            double EMAa = GetEMA(points, nEMAa, "MACD", "MACD", "_EMAa");
-            AddVal(points.Last(), "MACD", "MACD", "EMAa", EMAa);
+            double EMA12 = GetEMA(points, NEMA12, name, "_EMA12");
+            AddVal(points.Last(), "MACD", "MACD", "_EMA12", EMA12);
+
+            double EMA26 = GetEMA(points, NEMA26, name ,"_EMA26");
+            AddVal(points.Last(), "MACD", "MACD", "_EMA26", EMA26);
+
+            double Fast = EMA26 - EMA12;
+            AddVal(points.Last(), "MACD", "MACD", "_Fast", Fast);
+
+            double Slow = GetEMA(points, nEMAa, "MACD", "MACD", "_Fast");
+            AddVal(points.Last(), "MACD", "MACD", "_Slow", Slow);
+
+            double Bar_Graph = Fast - Slow;
+            AddVal(points.Last(), "MACD", "MACD", "Bar_Graph", Bar_Graph);
+
         }
         public void GetForceIndex (List<PointModel> points, List<ParamModel> @params)
         {
             string name = GetStringParam(@params, "Name");
             int n = GetIntParam(@params, "Period");
-
-            double RawFI = points.Last().Vol * (points.Last().Close - points[points.Count-1].Close) ;
-            AddVal(points.Last(), name, "FI", "RawFI", RawFI);
-            double FI = GetEMA(points, n, name, "FI", "RawFI");
+            double RawFI;
+            
+            if (points.Count != 1)
+            {
+                RawFI = points.Last().Vol * (points.Last().Close - points[points.Count - 2].Close);
+            }
+            else
+            {
+                RawFI = points.Last().Vol;
+            }
+            
+            AddVal(points.Last(), name, "FI", "_RawFI", RawFI);
+            double FI = GetEMA(points, n, name, "FI", "_RawFI");
             AddVal(points.Last(), name, "FI", "FI", FI);
             //
         }
         // TODO: Добавить каналы 
+        public void GetEnvelopes (List<PointModel> points, List<ParamModel> @params)
+        {
 
+        }
         // TODO: Добавить ATR или  другой показатель волатитильности 
     }
 }

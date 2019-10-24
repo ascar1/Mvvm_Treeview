@@ -15,7 +15,7 @@
             <RowDefinition Height="80"></RowDefinition>
             <RowDefinition Height="80"></RowDefinition>
         </Grid.RowDefinitions>
-        <lvc:CartesianChart Grid.Row="1" Series="{Binding SeriesCollection}" Grid.ColumnSpan="2">
+        <lvc:CartesianChart Grid.Row="1" Series="{Binding SeriesCollection}" Grid.ColumnSpan="2" >
             <lvc:CartesianChart.Resources>
                 <Style TargetType="lvc:Separator">
                     <Setter Property="StrokeThickness" Value="2.5"></Setter>
@@ -32,7 +32,7 @@
                 <lvc:Axis Labels="{Binding Labels}"/>
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
-        <lvc:CartesianChart Grid.Row="2" Series="{Binding SeriesCollection2}" Grid.ColumnSpan="2">
+        <lvc:CartesianChart Grid.Row="2" Series="{Binding SeriesCollection2}" Grid.ColumnSpan="2"  DisableAnimations="True" >
             <lvc:CartesianChart.Resources>
                 <Style TargetType="lvc:Separator">
                     <Setter Property="StrokeThickness" Value="2.5"></Setter>
@@ -46,10 +46,13 @@
             </lvc:CartesianChart.Resources>
 
             <lvc:CartesianChart.AxisX>
-                <lvc:Axis Labels="{Binding Labels}"/>
+                
+                <lvc:Axis Labels="{Binding Labels}" ShowLabels="False"/>
+                
             </lvc:CartesianChart.AxisX>
+
         </lvc:CartesianChart>
-        <lvc:CartesianChart Grid.Row="3" Series="{Binding SeriesCollection3}" Grid.ColumnSpan="2">
+        <lvc:CartesianChart Grid.Row="3" Series="{Binding SeriesCollection3}" Grid.ColumnSpan="2"  DisableAnimations="True">
             <lvc:CartesianChart.Resources>
                 <Style TargetType="lvc:Separator">
                     <Setter Property="StrokeThickness" Value="2.5"></Setter>
@@ -71,7 +74,8 @@
                             ScrollHorizontalFrom="{Binding From, Mode=TwoWay}"
                             ScrollHorizontalTo="{Binding To, Mode=TwoWay}"
                             ScrollBarFill="#25303030"
-                            Hoverable="False">
+                            Hoverable="False"
+                             DisableAnimations="True">
             <lvc:CartesianChart.AxisX>
                 <lvc:Axis Labels="{Binding LabelsScale}"/>
             </lvc:CartesianChart.AxisX>
