@@ -26,15 +26,15 @@ namespace MainApp.ViewModel
             get => _fileArr.Fname;
             set => _fileArr.Fname = value;
         }
-        public DateTime sDate
+        public DateTime SDate
         {
-            get => _fileArr.sDate;
-            set => _fileArr.sDate = value;
+            get => _fileArr.SDate;
+            set => _fileArr.SDate = value;
         }
-        public DateTime eDate
+        public DateTime EDate
         {
-            get => _fileArr.eDate;
-            set => _fileArr.eDate = value;
+            get => _fileArr.EDate;
+            set => _fileArr.EDate = value;
         }
         public bool Work
         {

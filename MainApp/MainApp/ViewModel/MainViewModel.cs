@@ -45,7 +45,7 @@ namespace MainApp.ViewModel
         }
 
         public List<MasterPointModel> MasterChartPoint { get; set; }
-        public List<FileArrModel> fileArr { get; set; }
+        public List<FileArrModel> FileArr { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -73,13 +73,13 @@ namespace MainApp.ViewModel
                     }
                     MasterChartPoint = item;
                 });
-            fileArr = _dataService.GetFileArrs();
+            FileArr = _dataService.GetFileArrs();
 
             Tabs.Add(new ChartData(_dataService));
-            Tabs.Last().event1 += MainViewModel_event1;
+            Tabs.Last().Event1 += MainViewModel_event1;
             Tabs.Last().PropertyChanged += MainViewModel_PropertyChanged;
             Tabs.Add(new Tab1Vm());
-            Tabs.Last().event1 += MainViewModel_event1;
+            Tabs.Last().Event1 += MainViewModel_event1;
 
 
             SelectedTab = Tabs.FirstOrDefault();
@@ -140,19 +140,18 @@ namespace MainApp.ViewModel
                     //Str = "!!!";
                     //nPropertyChanged("Str");
                     Tabs.Add(new TestViewModel(_dataService));
-                    Tabs.Last().event1 += MainViewModel_event1;
+                    Tabs.Last().Event1 += MainViewModel_event1;
 
                 }));
             }
         }
 
+#pragma warning disable CS0108 // "MainViewModel.PropertyChanged" скрывает наследуемый член "ObservableObject.PropertyChanged". Если скрытие было намеренным, используйте ключевое слово new.
         public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore CS0108 // "MainViewModel.PropertyChanged" скрывает наследуемый член "ObservableObject.PropertyChanged". Если скрытие было намеренным, используйте ключевое слово new.
         protected void OnPropertyChanged(string name = "")
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         private MyCommand _DeleteItemCommand;
@@ -174,7 +173,7 @@ namespace MainApp.ViewModel
                 return _OpenParamCommand ?? (_OpenParamCommand = new MyCommand(obj =>
                 {
                     Tabs.Add(new Tab1Vm());
-                    Tabs.Last().event1 += MainViewModel_event1;
+                    Tabs.Last().Event1 += MainViewModel_event1;
                     SelectedTab = Tabs.Last();
                 }));
             }
@@ -187,7 +186,7 @@ namespace MainApp.ViewModel
                 return _OpenDataCommand ?? (_OpenDataCommand = new MyCommand(obj =>
                 {
                     Tabs.Add(new TabDataParam(_dataService));
-                    Tabs.Last().event1 += MainViewModel_event1;
+                    Tabs.Last().Event1 += MainViewModel_event1;
                     SelectedTab = Tabs.Last();
                 }));
             }
@@ -200,7 +199,7 @@ namespace MainApp.ViewModel
                 return _OpenViewDataCommand ?? (_OpenViewDataCommand = new MyCommand(obj =>
                 {
                     Tabs.Add(new TabData(_dataService, true));
-                    Tabs.Last().event1 += MainViewModel_event1;
+                    Tabs.Last().Event1 += MainViewModel_event1;
                     SelectedTab = Tabs.Last();
                 }));
             }
@@ -213,7 +212,7 @@ namespace MainApp.ViewModel
                 return _OpenViewWorkDataCommand ?? (_OpenViewWorkDataCommand = new MyCommand(obj =>
                 {
                     Tabs.Add(new TabData(_dataService, false));
-                    Tabs.Last().event1 += MainViewModel_event1;
+                    Tabs.Last().Event1 += MainViewModel_event1;
                     SelectedTab = Tabs.Last();
                 }));
             }
@@ -226,7 +225,7 @@ namespace MainApp.ViewModel
                 return _OpenChartViewWorkDataCommand ?? (_OpenChartViewWorkDataCommand = new MyCommand(obj =>
                 {
                     Tabs.Add(new ChartData(_dataService));
-                    Tabs.Last().event1 += MainViewModel_event1;                    
+                    Tabs.Last().Event1 += MainViewModel_event1;                    
                     SelectedTab = Tabs.Last();
                 }));
             }

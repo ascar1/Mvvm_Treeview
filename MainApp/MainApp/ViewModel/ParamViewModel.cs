@@ -18,7 +18,9 @@ namespace MainApp.ViewModel
         private IParamDataService _dataService = new ParamDataService();
         private ParamViewModel backupCopy;
         public ObservableCollection<ParamViewModel> Param;
+#pragma warning disable CS0414 // Полю "ParamViewModel.isNew" присвоено значение, но оно ни разу не использовано.
         private bool isNew;
+#pragma warning restore CS0414 // Полю "ParamViewModel.isNew" присвоено значение, но оно ни разу не использовано.
         private bool inEdit;
         #region constructor
         public ParamViewModel()
@@ -33,49 +35,49 @@ namespace MainApp.ViewModel
         }
         #endregion
 
-        public int id
+        public int Id
         {
-            get => _param.id;
-            set => _param.id = value;
+            get => _param.Id;
+            set => _param.Id = value;
         }
-        public int perentID
+        public int PerentID
         {
             get => _param.ParamID;
             set => _param.ParamID = value;
         }
-        public string name
+        public string Name
         {
-            get { return _param.name; }
-            set { _param.name = value; }
+            get { return _param.Name; }
+            set { _param.Name = value; }
         }
-        public DataType type
+        public DataType Type
         {
-            get { return _param.type; }
+            get { return _param.Type; }
             set
             {
-                _param.type = value;
+                _param.Type = value;
             }
         }
-        public string comment
+        public string Comment
         {
-            get { return _param.comment; }
+            get { return _param.Comment; }
             set
             {
-                _param.comment = value;
+                _param.Comment = value;
             }
         }
-        public string val
+        public string Val
         {
-            get { return _param.val; }
+            get { return _param.Val; }
             set
             {
-                _param.val = value;
+                _param.Val = value;
             }
         }
         public void BeginEdit()
         {
             if (inEdit) return;
-            if (_param.id == 0) isNew = true;
+            if (_param.Id == 0) isNew = true;
             inEdit = true;
             backupCopy = this.MemberwiseClone() as ParamViewModel;
         }
@@ -84,10 +86,10 @@ namespace MainApp.ViewModel
         {
             if (!inEdit) return;
             inEdit = false;
-            this.name = backupCopy.name;
-            this.type = backupCopy.type;
-            this.val = backupCopy.val;
-            this.comment = backupCopy.comment;
+            this.Name = backupCopy.Name;
+            this.Type = backupCopy.Type;
+            this.Val = backupCopy.Val;
+            this.Comment = backupCopy.Comment;
         }
 
         public void EndEdit()

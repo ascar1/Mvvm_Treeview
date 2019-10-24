@@ -10,14 +10,14 @@ namespace MainApp.Model
     {
         public string Tiker { get; set; }
         public string FName { get; set; }
-        public DateTime sDate { get; set; }
-        public DateTime eDate { get; set; }
+        public DateTime SDate { get; set; }
+        public DateTime EDate { get; set; }
         public List<DateModel> Data { get; set; }         
     }
     public class WorkPointModel
     {
         public string Tiker { get; set; }
-        public DateTime sDate { get; set; }
+        public DateTime SDate { get; set; }
         public DateTime CurrDate { get; set;}
         public List<DateModel> Data { get; set; }
     }
@@ -62,8 +62,8 @@ namespace MainApp.Model
     {
         public string Tiker { get; set; }
         public string Fname { get; set; }
-        public DateTime sDate { get; set; }
-        public DateTime eDate { get; set; }
+        public DateTime SDate { get; set; }
+        public DateTime EDate { get; set; }
         public bool Work { get; set; }
         public FileArrModel()
         {
@@ -73,8 +73,8 @@ namespace MainApp.Model
         {
             Tiker = master.Tiker;
             Fname = master.FName;
-            sDate = master.sDate;
-            eDate = master.eDate;
+            SDate = master.SDate;
+            EDate = master.EDate;
             Work = flag;
         }
     }

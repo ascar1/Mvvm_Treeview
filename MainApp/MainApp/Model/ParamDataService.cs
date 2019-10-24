@@ -11,7 +11,7 @@ namespace MainApp.Model
 {
     class ParamDataService : IParamDataService
     {
-        private string NameFile = "C:\\newparam_.xml";
+        private readonly string NameFile = "C:\\newparam_.xml";
         private List<LavelModel> LavelItem = new List<LavelModel>();
         private List<ParamModel> ParamItem = new List<ParamModel>();
         private List<string> TypeDataList = new List<string>();
@@ -24,7 +24,7 @@ namespace MainApp.Model
             LavelItem.Clear();
             ParamItem.Clear();
         }
-        private DataType getType(string type)
+        private DataType GetType(string type)
         {
             switch (type)
             {
@@ -34,15 +34,18 @@ namespace MainApp.Model
                 default: return DataType.String;
             }
         }
-        private int getNewIndexParam()
+        private int GetNewIndexParam()
         {
-            int i = ParamItem.Max(I => I.id);
+            int i = ParamItem.Max(I => I.Id);
             return ++i;
         }
-        public int getNewIndexLavel()
+        public int NewIndexLavel
         {
-            int i = LavelItem.Max(I => I.id);
-            return ++i;
+            get
+            {
+                int i = LavelItem.Max(I => I.id);
+                return ++i;
+            }
         }
         private void LoadData()
         {
@@ -52,8 +55,8 @@ namespace MainApp.Model
             {
                 LavelItem.Add(new LavelModel()
                 {
-                    id = chekInt(tmp.Attribute("Id")),
-                    paremtId = chekInt(tmp.Attribute("paremtId")),
+                    id = ChekInt(tmp.Attribute("Id")),
+                    paremtId = ChekInt(tmp.Attribute("paremtId")),
                     name = tmp.Attribute("Name").Value,
                     comment = tmp.Attribute("Comment").Value,
                 });
@@ -61,8 +64,8 @@ namespace MainApp.Model
                 {
                     LavelItem.Add(new LavelModel()
                     {
-                        id = chekInt(tmp1.Attribute("Id")),
-                        paremtId = chekInt(tmp1.Attribute("paremtId")),
+                        id = ChekInt(tmp1.Attribute("Id")),
+                        paremtId = ChekInt(tmp1.Attribute("paremtId")),
                         name = tmp1.Attribute("Name").Value,
                         comment = tmp1.Attribute("Comment").Value,
                     });
@@ -71,18 +74,18 @@ namespace MainApp.Model
                     {
                         ParamItem.Add(new ParamModel()
                         {
-                            id = chekInt(tmp2.Attribute("Id")),
-                            ParamID = chekInt(tmp2.Attribute("ParamID")),
-                            name = tmp2.Attribute("Name").Value,
-                            type = getType(tmp2.Attribute("Type").Value),
-                            val = tmp2.Attribute("Val").Value,
-                            comment = tmp2.Attribute("Comment").Value,
+                            Id = ChekInt(tmp2.Attribute("Id")),
+                            ParamID = ChekInt(tmp2.Attribute("ParamID")),
+                            Name = tmp2.Attribute("Name").Value,
+                            Type = GetType(tmp2.Attribute("Type").Value),
+                            Val = tmp2.Attribute("Val").Value,
+                            Comment = tmp2.Attribute("Comment").Value,
                         });
                     }
                 }
             }
         }
-        private int chekInt(XAttribute str)
+        private int ChekInt(XAttribute str)
         {
             if (str == null)
             {
@@ -144,7 +147,7 @@ namespace MainApp.Model
             XDocument xDoc = XDocument.Load(NameFile);
             var tmp = xDoc.Element("ProgramParam").Elements("level").First(i => i.Attribute("Id").Value.ToString() == id.ToString());
             tmp.Add(new XElement("level",
-                        new XAttribute("Id", getNewIndexLavel()),
+                        new XAttribute("Id", NewIndexLavel),
                         new XAttribute("paremtId", id),
                         new XAttribute("Name", "New Lavel"),
                         new XAttribute("Comment", "")
@@ -198,7 +201,7 @@ namespace MainApp.Model
             foreach(var tmp in ListTMP)
             {
                 List<ParamModel> paramModels = GetParam(tmp.id);
-                arr.Add(paramModels.Find(i => i.name == nameParam).val);                
+                arr.Add(paramModels.Find(i => i.Name == nameParam).Val);                
             }            
             return arr.Count-1;
         }
@@ -209,25 +212,25 @@ namespace MainApp.Model
         }
         public string GetParamValue (int id, string name)
         {
-            return GetParam(id).Find(i1 => i1.name.Trim() == name).val;
+            return GetParam(id).Find(i1 => i1.Name.Trim() == name).Val;
         }
-        private void writeParam(XElement tmp, ParamModel param)
+        private void WriteParam(XElement tmp, ParamModel param)
         {
             tmp.Add(new XElement("Param",
-                      new XAttribute("Id", getNewIndexParam()),
+                      new XAttribute("Id", GetNewIndexParam()),
                       new XAttribute("ParamID", param.ParamID),
-                      new XAttribute("Name", param.name),
-                      new XAttribute("Type", param.type),
-                      new XAttribute("Val", param.val),
-                      new XAttribute("Comment", param.comment)
+                      new XAttribute("Name", param.Name),
+                      new XAttribute("Type", param.Type),
+                      new XAttribute("Val", param.Val),
+                      new XAttribute("Comment", param.Comment)
                       ));
         }
-        private void updateParam(XElement tmp, ParamModel param)
+        private void UpdateParam(XElement tmp, ParamModel param)
         {
-            tmp.Attribute("Name").Value = param.name;
-            tmp.Attribute("Type").Value = param.type.ToString();
-            tmp.Attribute("Val").Value = param.val;
-            tmp.Attribute("Comment").Value = param.comment;
+            tmp.Attribute("Name").Value = param.Name;
+            tmp.Attribute("Type").Value = param.Type.ToString();
+            tmp.Attribute("Val").Value = param.Val;
+            tmp.Attribute("Comment").Value = param.Comment;
         }
         public void SaveParam(ParamModel param)
         {
@@ -237,18 +240,18 @@ namespace MainApp.Model
             {
                 foreach (XElement tmp1 in tmp.Elements("level"))
                 {
-                    if ((tmp1.Attribute("Id").Value.ToString() == param.ParamID.ToString()) && (param.id == 0))
+                    if ((tmp1.Attribute("Id").Value.ToString() == param.ParamID.ToString()) && (param.Id == 0))
                     {
-                        writeParam(tmp1, param);
+                        WriteParam(tmp1, param);
                         break;
                     }
                     foreach (XElement tmp2 in tmp1.Elements("Param"))
                     {
-                        if (param.id != 0)
+                        if (param.Id != 0)
                         {
-                            if (tmp2.Attribute("Id").Value.ToString() == param.id.ToString())
+                            if (tmp2.Attribute("Id").Value.ToString() == param.Id.ToString())
                             {
-                                updateParam(tmp2, param);
+                                UpdateParam(tmp2, param);
                                 break;
                             }
                         }

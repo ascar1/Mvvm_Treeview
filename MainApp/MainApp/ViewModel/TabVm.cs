@@ -44,14 +44,14 @@ namespace MainApp.ViewModel
             {
                 return _CloseCommand ?? (_CloseCommand = new MyCommand(obj =>
                 {
-                    event1.Invoke(this, new PropertyChangedEventArgs("propertyName"));
+                    Event1.Invoke(this, new PropertyChangedEventArgs("propertyName"));
                 }));
             }
         }
 
         #endregion
        // public event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangedEventHandler event1;
+        public event PropertyChangedEventHandler Event1;
     }
 
     public class Tab1Vm : TabVm
@@ -59,7 +59,7 @@ namespace MainApp.ViewModel
         private readonly IParamDataService _paramDataService;
         public ObservableCollection<LavelViewModel> LavelList { get; set; }
         public ObservableCollection<ParamViewModel> ParamList { get; private set; }
-        public ObservableCollection<string> type { get; private set; }
+        public ObservableCollection<string> Type { get; private set; }
         public LavelViewModel SelectedLavel { get; private set; }
         public ParamViewModel SelectedROW { get; set; }
         public int parentSelected;
@@ -69,7 +69,7 @@ namespace MainApp.ViewModel
         {
             LavelList = new ObservableCollection<LavelViewModel>();
             ParamList = new ObservableCollection<ParamViewModel>();
-            type = new ObservableCollection<string>();
+            Type = new ObservableCollection<string>();
 
             _paramDataService = new ParamDataService();
             _paramDataService.GetData(
@@ -99,7 +99,7 @@ namespace MainApp.ViewModel
                 LavelViewModel tmp = new LavelViewModel(rootCategory);
                 tmp.PropertyChanged += ItemsOnCollectionChanged1;
                 LavelList.Add(tmp);
-                setChild(tmp, list);
+                SetChild(tmp, list);
             }
         }
         private void ItemsOnCollectionChanged1(object sender, PropertyChangedEventArgs e)
@@ -130,7 +130,7 @@ namespace MainApp.ViewModel
                     });
             }
         }
-        public void setChild(LavelViewModel root, IList<LavelModel> source)
+        public void SetChild(LavelViewModel root, IList<LavelModel> source)
         {
             for (var i = 0; i < source.Count; i++)
             {
@@ -141,7 +141,7 @@ namespace MainApp.ViewModel
                         LavelViewModel tmp = new LavelViewModel(source[i]);
                         tmp.PropertyChanged += ItemsOnCollectionChanged1;
                         root.Children.Add(tmp);
-                        setChild(tmp, source);
+                        SetChild(tmp, source);
                     }
                 }
             }
@@ -163,10 +163,12 @@ namespace MainApp.ViewModel
             {
                 if (tmp1.ID == id)
                 {
-                    LavelModel _tmp = new LavelModel();
-                    _tmp.name = "new";
-                    _tmp.id = _paramDataService.getNewIndexLavel();
-                    _tmp.paremtId = id;
+                    LavelModel _tmp = new LavelModel
+                    {
+                        name = "new",
+                        id = _paramDataService.NewIndexLavel,
+                        paremtId = id
+                    };
 
                     LavelViewModel _tmp_ = new LavelViewModel(_tmp);
                     _tmp_.PropertyChanged += ItemsOnCollectionChanged1;
@@ -196,12 +198,12 @@ namespace MainApp.ViewModel
         }
 
         #region Command       
+#pragma warning disable CS0108 // "Tab1Vm.PropertyChanged" скрывает наследуемый член "ObservableObject.PropertyChanged". Если скрытие было намеренным, используйте ключевое слово new.
         public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore CS0108 // "Tab1Vm.PropertyChanged" скрывает наследуемый член "ObservableObject.PropertyChanged". Если скрытие было намеренным, используйте ключевое слово new.
         private void NotifyPropertyChanged(string propertyName)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs("propertyName"));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
         }
         
         public DelegateCommand<object> Edit { get; private set; }
@@ -240,15 +242,15 @@ namespace MainApp.ViewModel
         private MyCommand newItem;
         public MyCommand NewItem => newItem ?? (newItem = new MyCommand(obj =>
         {
-            ParamList[ParamList.Count - 1].perentID = parentSelected;
+            ParamList[ParamList.Count - 1].PerentID = parentSelected;
         }));
         private MyCommand deleteRow;
         public MyCommand DeleteRow => deleteRow ?? (deleteRow = new MyCommand(obj =>
         {
             if ((MessageBox.Show("Delete selected element?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes))
             {
-                int id = SelectedROW.id;
-                int ind = ParamList.IndexOf(ParamList.Where(i => i.id == id).FirstOrDefault());
+                int id = SelectedROW.Id;
+                int ind = ParamList.IndexOf(ParamList.Where(i => i.Id == id).FirstOrDefault());
                 ParamList.RemoveAt(ind);
                 _paramDataService.DeleteParam(id);
             }
@@ -271,7 +273,7 @@ namespace MainApp.ViewModel
                        // MessageBox.Show("1");
                         SelectedLavel.IsEditMode = true;
                         SelectedLavel.IsExpanded = true;
-                        SelectedLavel.CNGName = SelectedLavel.name;
+                        SelectedLavel.CNGName = SelectedLavel.Name;
                         //NotifyPropertyChanged("LavelList");
                     }
                 }));
@@ -285,7 +287,7 @@ namespace MainApp.ViewModel
             {
                 return commitLavel ?? (commitLavel = new MyCommand(obj =>
                 {
-                    if (SelectedLavel.name != SelectedLavel.CNGName)
+                    if (SelectedLavel.Name != SelectedLavel.CNGName)
                     {
                         if (MessageBox.Show("Save changes?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                         {
@@ -295,7 +297,7 @@ namespace MainApp.ViewModel
                         {
                             if (SelectedLavel.CNGName != null)
                             {
-                                SelectedLavel.name = SelectedLavel.CNGName;
+                                SelectedLavel.Name = SelectedLavel.CNGName;
                             }
                             else
                             {
@@ -371,8 +373,8 @@ namespace MainApp.ViewModel
     public class TabData: TabVm
     {
         private readonly IDataService _dataService;
-        public ObservableCollection<FileViewModel> files { get; set; }
-        public ObservableCollection<PointModel> points { get; set; }
+        public ObservableCollection<FileViewModel> Files { get; set; }
+        public ObservableCollection<PointModel> Points { get; set; }
         private bool FlagMaster;
         private IteratorModel iterator;
         public TabData(IDataService data, bool flagMaster )
@@ -382,22 +384,22 @@ namespace MainApp.ViewModel
             if (flagMaster)
             {
                 base.Header = "Master Data";
-                flag = Visibility.Collapsed;
+                Flag = Visibility.Collapsed;
             }
             else
             {
                 base.Header = "Work Data";
-                flag = Visibility.Visible;
+                Flag = Visibility.Visible;
             }
-            files = new ObservableCollection<FileViewModel>();
-            points = new ObservableCollection<PointModel>();
+            Files = new ObservableCollection<FileViewModel>();
+            Points = new ObservableCollection<PointModel>();
             _dataService = data;
             List<FileArrModel> f = data.GetFileArrs();
             foreach (var i in f)
             {
                 if (i.Work)
                 {
-                    files.Add(new FileViewModel(i));
+                    Files.Add(new FileViewModel(i));
                     ListComboBoxItems.Add(i.Tiker);
                 }                
             }
@@ -407,19 +409,19 @@ namespace MainApp.ViewModel
         }
         private void LoadData(string tiker)
         {
-            points.Clear();
+            Points.Clear();
             foreach (PointModel i in _dataService.GetMasterPoint("60", Value))
             {
-                points.Add(i);
+                Points.Add(i);
             };
         }
 
         private void LoadData1(string tiker, string skale)
         {
-            points.Clear();
+            Points.Clear();
             foreach (PointModel i in iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1=>i1.Scale==skale).Points)
             {
-                points.Add(i);
+                Points.Add(i);
             };
         }
 
@@ -456,7 +458,7 @@ namespace MainApp.ViewModel
             set => Set(ref scale, value);
         }
 
-        public Visibility flag
+        public Visibility Flag
         {
             get;
             set; 
@@ -476,7 +478,7 @@ namespace MainApp.ViewModel
                     else
                     {
 
-                        iterator.next();
+                        iterator.Next();
                         LoadData1(v,scale);
                     }
                 }));
@@ -519,17 +521,17 @@ namespace MainApp.ViewModel
     public class TabDataParam: TabVm
     {
         private readonly IDataService _dataService;
-        public ObservableCollection<FileViewModel> files { get; set; }
+        public ObservableCollection<FileViewModel> Files { get; set; }
 
         public TabDataParam(IDataService data)
             : base("Настройка данных")
         {
-            files = new ObservableCollection<FileViewModel>();
+            Files = new ObservableCollection<FileViewModel>();
             _dataService = data;
             List<FileArrModel> f = data.GetFileArrs();
             foreach(var i in f)
             {                
-                files.Add(new FileViewModel( i));
+                Files.Add(new FileViewModel( i));
             }
             
         }
@@ -541,7 +543,7 @@ namespace MainApp.ViewModel
                 return _TestCommand1 ?? (_TestCommand1 = new MyCommand(obj =>
                 {
                     MessageBox.Show("Команда TestCommand1 в TabDataParam");
-                    MessageBox.Show(files.Count().ToString());
+                    MessageBox.Show(Files.Count().ToString());
                 }));
             }
         }
@@ -552,13 +554,13 @@ namespace MainApp.ViewModel
         public SeriesCollection SeriesCollection { get; set; }
         public List<string> NLabels { get; set; }
         public List<string> NLabels1 { get; set; }
-        public ChartValues<OhlcPoint> ohlcPoints { get; set; }
+        public ChartValues<OhlcPoint> OhlcPoints { get; set; }
         public ChartValues<double> EMALine { get; set; }
 
         private IteratorModel iterator;
         private readonly IDataService _dataService;
         private ParamDataService paramDataService = new ParamDataService();
-        public ObservableCollection<FileViewModel> files { get; set; }
+        public ObservableCollection<FileViewModel> Files { get; set; }
 
         private ObservableCollection<string> listComboBoxItems = new ObservableCollection<string>();
         public ObservableCollection<string> ListComboBoxItems
@@ -599,13 +601,13 @@ namespace MainApp.ViewModel
             iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
             NLabels = new List<string>();
             NLabels1 = new List<string>();
-            files = new ObservableCollection<FileViewModel>();
+            Files = new ObservableCollection<FileViewModel>();
             List<FileArrModel> f = data.GetFileArrs();
             foreach (var i in f)
             {
                 if (i.Work)
                 {
-                    files.Add(new FileViewModel(i));
+                    Files.Add(new FileViewModel(i));
                     ListComboBoxItems.Add(i.Tiker);
                 }
             }
@@ -696,30 +698,30 @@ namespace MainApp.ViewModel
             }
         }
         private int _kolPoint;
-        public int kolPoint
+        public int KolPoint
             {
             get { return _kolPoint; }
             set
             {
 
-                Set<int>(() => this.kolPoint, ref _kolPoint, value);
+                Set<int>(() => this.KolPoint, ref _kolPoint, value);
             }
             }
-        public int indexChart
+        public int IndexChart
         {
             get { return _indexChart; }
-            set {Set<int>(() => this.indexChart, ref _indexChart, value);}
+            set {Set<int>(() => this.IndexChart, ref _indexChart, value);}
         }
         private void LoadData1(string tiker, string skale)
         {
-            ohlcPoints.Clear();
+            OhlcPoints.Clear();
             EMALine.Clear();
             NLabels.Clear();
             SeriesCollection[0].Values.Clear();
             SeriesCollection[1].Values.Clear();
             foreach (PointModel i in iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points)
             {
-                ohlcPoints.Add(new OhlcPoint
+                OhlcPoints.Add(new OhlcPoint
                 {
                     Close = i.Close,
                     High = i.High,
@@ -746,8 +748,8 @@ namespace MainApp.ViewModel
             NLabels.Clear();
             List<PointModel> tmp = iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
             
-            int scale1 = tmp.Count / kolPoint;
-            indexChart = scale1;
+            int scale1 = tmp.Count / this.KolPoint;
+            IndexChart = scale1;
             ScaleSer = scale1;         
             for (int i = 0; i < tmp.Count; i = i + scale1)
             {
@@ -760,7 +762,7 @@ namespace MainApp.ViewModel
             if (tiker == null) return;
             if (scale == null) return;
 
-            ohlcPoints.Clear();
+            OhlcPoints.Clear();
             //EMALine.Clear();
             SeriesCollection[0].Values.Clear();
             SeriesCollection[1].Values.Clear();
@@ -768,9 +770,9 @@ namespace MainApp.ViewModel
 
             List<PointModel> tmp = iterator.WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
 
-            for (int i = Convert.ToInt32(From); i<To*indexChart;  i++)
+            for (int i = Convert.ToInt32(From); i<To*IndexChart;  i++)
             {                
-                ohlcPoints.Add(new OhlcPoint
+                OhlcPoints.Add(new OhlcPoint
                 {
                     Close =  tmp[i].Close,
                     High = tmp[i].High,
@@ -819,9 +821,9 @@ namespace MainApp.ViewModel
         }
         private void LoadChartData(string tiker, string skale, bool flag)
         {
-            CVM1.SeriesCollection = iterator.GetSeriesCollection(tiker, skale, "0", CVM1.From, CVM1.To,CVM1.indexChart);
-            CVM1.SeriesCollection1 = iterator.GetScaleSeriesCollection(tiker, skale, "0", CVM1.kolSkale);
-            CVM1.kolPoint = iterator.GetListPoint(tiker, skale).Count ;            
+            CVM1.SeriesCollection = iterator.GetSeriesCollection(tiker, skale, "0", CVM1.From, CVM1.To,CVM1.IndexChart);
+            CVM1.SeriesCollection1 = iterator.GetScaleSeriesCollection(tiker, skale, "0", CVM1.KolSkale);
+            CVM1.KolPoint = iterator.GetListPoint(tiker, skale).Count ;            
             if (flag) { CVM1.PropertyChanged += CVM1_PropertyChanged; }            
         }
         private void ClearSeries ()
@@ -845,14 +847,14 @@ namespace MainApp.ViewModel
                 case 1:
                     CVM1 = new ChartViewModel3(iterator);                    
                     LoadChartData(tiker, skale, true);
-                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.indexChart);
+                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.IndexChart);
                     AddLabelData(tiker, skale);
                     break;
                 case 2:
                     CVM1 = new ChartViewModel4(iterator);                    
                     LoadChartData(tiker, skale, true);
-                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.indexChart);
-                    CVM1.SeriesCollection3 = iterator.GetSeriesCollection(tiker, skale, "2", CVM1.From, CVM1.To, CVM1.indexChart);
+                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.IndexChart);
+                    CVM1.SeriesCollection3 = iterator.GetSeriesCollection(tiker, skale, "2", CVM1.From, CVM1.To, CVM1.IndexChart);
                     AddLabelData(tiker, skale);
                     break;
             }
@@ -869,14 +871,14 @@ namespace MainApp.ViewModel
                 case 1:
                     ClearSeries();
                     LoadChartData(tiker, skale, false);
-                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.indexChart);
+                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.IndexChart);
                     AddLabelData(tiker, skale);
                     break;
                 case 2:
                     ClearSeries();
                     LoadChartData(tiker, skale, false);
-                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.indexChart);
-                    CVM1.SeriesCollection3 = iterator.GetSeriesCollection(tiker, skale, "2", CVM1.From, CVM1.To, CVM1.indexChart);
+                    CVM1.SeriesCollection2 = iterator.GetSeriesCollection(tiker, skale, "1", CVM1.From, CVM1.To, CVM1.IndexChart);
+                    CVM1.SeriesCollection3 = iterator.GetSeriesCollection(tiker, skale, "2", CVM1.From, CVM1.To, CVM1.IndexChart);
                     AddLabelData(tiker, skale);
                     break;
             }
@@ -925,27 +927,33 @@ namespace MainApp.ViewModel
             {
                 case 0:
                     MessageBox.Show("0");
-                    cvm1 = new ChartViewModel0();
-                    cvm1.From = 3;
-                    cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1,30,2);
-                    cvm1.SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30);
+                    cvm1 = new ChartViewModel0
+                    {
+                        From = 3,
+                        SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1, 30, 2),
+                        SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30)
+                    };
 
                     break;
                 case 1:
-                    cvm1 = new ChartViewModel3(iterator);
-                    cvm1.From = 3;
-                    cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1, 30, 2);
-                    cvm1.SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30);
-                    cvm1.SeriesCollection2 = iterator.GetSeriesCollection("BANE", "60", "1", 1, 30, 2);
+                    cvm1 = new ChartViewModel3(iterator)
+                    {
+                        From = 3,
+                        SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1, 30, 2),
+                        SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30),
+                        SeriesCollection2 = iterator.GetSeriesCollection("BANE", "60", "1", 1, 30, 2)
+                    };
 
                     break;
                 case 2:
-                    cvm1 = new ChartViewModel4(iterator);
-                    cvm1.From = 3;
-                    cvm1.SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1, 30, 2);
-                    cvm1.SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30);
-                    cvm1.SeriesCollection2 = iterator.GetSeriesCollection("BANE", "60", "1", 1, 30, 2);
-                    cvm1.SeriesCollection3 = iterator.GetSeriesCollection("BANE", "60", "2", 1, 30, 2);
+                    cvm1 = new ChartViewModel4(iterator)
+                    {
+                        From = 3,
+                        SeriesCollection = iterator.GetSeriesCollection("BANE", "60", "0", 1, 30, 2),
+                        SeriesCollection1 = iterator.GetScaleSeriesCollection("BANE", "60", "0", 30),
+                        SeriesCollection2 = iterator.GetSeriesCollection("BANE", "60", "1", 1, 30, 2),
+                        SeriesCollection3 = iterator.GetSeriesCollection("BANE", "60", "2", 1, 30, 2)
+                    };
                     break;
             }
             //CVM.Add(new ChartViewModel0());

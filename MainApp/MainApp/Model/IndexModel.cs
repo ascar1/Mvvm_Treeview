@@ -13,25 +13,27 @@ namespace MainApp.Model
 
         }
 
-        private string getStringParam (List<ParamModel> @params, string NameParam)
+        private string GetStringParam (List<ParamModel> @params, string NameParam)
         {
-            return @params.Find(tmp => tmp.name == NameParam).val; 
+            return @params.Find(tmp => tmp.Name == NameParam).Val; 
         }
-        private int getIntParam (List<ParamModel> @params, string NameParam)
+        private int GetIntParam (List<ParamModel> @params, string NameParam)
         {
-            return Convert.ToInt32(@params.Find(tmp => tmp.name == NameParam).val); ;
+            return Convert.ToInt32(@params.Find(tmp => tmp.Name == NameParam).Val); ;
         }
-        private void addVal (PointModel point, string name, string type, string namePoint, double val)
+        private void AddVal (PointModel point, string name, string type, string namePoint, double val)
         {
             int ii = point.IndexPoint.FindIndex(I1 => I1.Name == name);
             if (ii == -1)
             {
-                List<IndexPoint> indexPoints = new List<IndexPoint>();
-                indexPoints.Add(new IndexPoint
+                List<IndexPoint> indexPoints = new List<IndexPoint>
                 {
-                    Name = namePoint,
-                    Value = val
-                });
+                    new IndexPoint
+                    {
+                        Name = namePoint,
+                        Value = val
+                    }
+                };
                 point.IndexPoint.Add(new Index()
                 {
                     Name = name,
@@ -60,7 +62,7 @@ namespace MainApp.Model
         }
         private double GetValIndex(PointModel point, List<ParamModel> @params)
         {            
-            return point.IndexPoint.Find(i => i.Name == getStringParam(@params, "Name")).Value[0].Value;
+            return point.IndexPoint.Find(i => i.Name == GetStringParam(@params, "Name")).Value[0].Value;
         }
         private double GetValIndex(PointModel point, string name, string namePoint)
         {
@@ -70,8 +72,8 @@ namespace MainApp.Model
         {
             // Расчитать и записать EMA по параметрам из файла настроек 
             int N; string name;
-            N = getIntParam(@params, "Period");
-            name = getStringParam(@params, "Name");
+            N = GetIntParam(@params, "Period");
+            name = GetStringParam(@params, "Name");
 
             /*int i = 0;*/ Decimal EMA0 = 0; Decimal EMA; Decimal k1; Decimal k2;
 
@@ -89,7 +91,7 @@ namespace MainApp.Model
             for (int i = points.Count-N;i<points.Count;i++)
             {
                 EMA = (Decimal)points[i].Close * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
-                addVal(points[i], name, "EMA", "EMA", (double)EMA);
+                AddVal(points[i], name, "EMA", "EMA", (double)EMA);
                 EMA0 = EMA;
             }
         }
@@ -152,32 +154,33 @@ namespace MainApp.Model
         }
         public void GetMACD(List<PointModel> points, List<ParamModel> @params)
         {
-            string name = getStringParam(@params, "Name");
-            int nEMAi = getIntParam(@params, "EMAl"); 
-            int nEMAs = getIntParam(@params, "EMAs"); 
-            int nEMAa = getIntParam(@params, "EMAa");
+            string name = GetStringParam(@params, "Name");
+            int nEMAi = GetIntParam(@params, "EMAl"); 
+            int nEMAs = GetIntParam(@params, "EMAs"); 
+            int nEMAa = GetIntParam(@params, "EMAa");
 
             double EMAi = GetEMA(points, nEMAi, name ,"EMAi");
-            addVal(points.Last(), "MACD", "MACD", "EMAi", EMAi);
+            AddVal(points.Last(), "MACD", "MACD", "EMAi", EMAi);
             double EMAs = GetEMA(points, nEMAs, name, "EMAs");
-            addVal(points.Last(), "MACD", "MACD", "EMAs", EMAs);
+            AddVal(points.Last(), "MACD", "MACD", "EMAs", EMAs);
             double _EMAa = EMAs - EMAi;
-            addVal(points.Last(), "MACD", "MACD", "_EMAa", _EMAa);
+            AddVal(points.Last(), "MACD", "MACD", "_EMAa", _EMAa);
             double EMAa = GetEMA(points, nEMAa, "MACD", "MACD", "_EMAa");
-            addVal(points.Last(), "MACD", "MACD", "EMAa", EMAa);
+            AddVal(points.Last(), "MACD", "MACD", "EMAa", EMAa);
         }
         public void GetForceIndex (List<PointModel> points, List<ParamModel> @params)
         {
-            string name = getStringParam(@params, "Name");
-            int n = getIntParam(@params, "Period");
+            string name = GetStringParam(@params, "Name");
+            int n = GetIntParam(@params, "Period");
 
             double RawFI = points.Last().Vol * (points.Last().Close - points[points.Count-1].Close) ;
-            addVal(points.Last(), name, "FI", "RawFI", RawFI);
+            AddVal(points.Last(), name, "FI", "RawFI", RawFI);
             double FI = GetEMA(points, n, name, "FI", "RawFI");
-            addVal(points.Last(), name, "FI", "FI", FI);
+            AddVal(points.Last(), name, "FI", "FI", FI);
             //
         }
-
         // TODO: Добавить каналы 
+
+        // TODO: Добавить ATR или  другой показатель волатитильности 
     }
 }

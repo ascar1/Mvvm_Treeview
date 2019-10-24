@@ -18,7 +18,9 @@ namespace MainApp.Command
             this.canExecute = canExecute;
         }
 
+#pragma warning disable CS0067 // Событие "MyCommand.CanExecuteChanged" никогда не используется.
         public event EventHandler CanExecuteChanged;
+#pragma warning restore CS0067 // Событие "MyCommand.CanExecuteChanged" никогда не используется.
 
         public bool CanExecute(object parameter)
         {

@@ -17,6 +17,6 @@ namespace MainApp.Model
         void DeleteLavel(int i);
         void SaveLavel(LavelModel lavel);
         void InsertLavel(LavelModel lavel);
-        int getNewIndexLavel();
+        int NewIndexLavel { get; }
     }
 }

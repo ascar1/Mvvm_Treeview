@@ -50,11 +50,12 @@ namespace MainApp.Model
         private void LoadFile (string FName,string Tiker,string Scale)
         {
             string[] _data;
-            double i;
-            MasterPointModel CPModel = new MasterPointModel();
-            CPModel.Tiker = Tiker;
-            CPModel.FName = Path.GetFileName( FName);
-            CPModel.Data = new List<DateModel>();
+            MasterPointModel CPModel = new MasterPointModel
+            {
+                Tiker = Tiker,
+                FName = Path.GetFileName(FName),
+                Data = new List<DateModel>()
+            };
             CPModel.Data.Add(new DateModel());
             CPModel.Data[0].Scale = Scale;
             CPModel.Data[0].Points = new List<PointModel>();
@@ -69,7 +70,7 @@ namespace MainApp.Model
             while (!reader.EndOfStream)
             {
                 _data = reader.ReadLine().Split(';');
-                if (Double.TryParse(_data[6]/*.Replace(".", ",")*/, out i) == true)
+                if (Double.TryParse(_data[6]/*.Replace(".", ",")*/, out double i) == true)
                 {
                     CPModel.Data[0].Points.Add(new PointModel()
                     {
@@ -86,13 +87,13 @@ namespace MainApp.Model
                     //MessageBox.Show("!");
                 }
             }
-            CPModel.sDate = CPModel.Data[0].Points.First().Date;
-            CPModel.eDate = CPModel.Data[0].Points.Last().Date;
+            CPModel.SDate = CPModel.Data[0].Points.First().Date;
+            CPModel.EDate = CPModel.Data[0].Points.Last().Date;
 
             CPModel_.Add(CPModel);
         }
 
-        private DataType getType(string type)
+        private DataType GetType(string type)
         {
             switch (type)
             {

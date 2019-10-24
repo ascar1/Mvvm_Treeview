@@ -14,7 +14,7 @@ namespace MainApp.Model
 {
     public class IteratorModel
     {
-        private int Seed = 10;
+        private readonly int Seed = 10;
         private List<MasterPointModel> MasterPoint;        
 
         public List<WorkPointModel> WorkPoints;
@@ -28,16 +28,18 @@ namespace MainApp.Model
             fileArrs = files;
             foreach (var i in MasterPoint)
             {
-                List<DateModel> dateModels = new List<DateModel>();
-                dateModels.Add(new DateModel()
+                List<DateModel> dateModels = new List<DateModel>
                 {
-                    Scale = "60",
-                    Points = new List<PointModel>()
-                });
+                    new DateModel()
+                    {
+                        Scale = "60",
+                        Points = new List<PointModel>()
+                    }
+                };
                 WorkPoints.Add(new WorkPointModel() {
                     Tiker = i.Tiker,
-                    CurrDate = i.sDate,
-                    sDate = i.sDate,
+                    CurrDate = i.SDate,
+                    SDate = i.SDate,
                     Data = dateModels
                 });
             }
@@ -48,7 +50,7 @@ namespace MainApp.Model
         {
             for (int i = 0; i <= Seed; i++)
             {
-                next();
+                Next();
             }
         }
         private void GetScale(List<DateModel> dateModels)
@@ -102,7 +104,7 @@ namespace MainApp.Model
             foreach(var tmp in lavelModels.FindAll(i=> i.paremtId == lavelModels.Find(i1 => i1.name == "Index").id))
             {                
                 List<ParamModel> tmp2 = paramDataService.GetParam(tmp.id);
-                string type = tmp2.Find(i => i.name.Trim() == "Type").val;                
+                string type = tmp2.Find(i => i.Name.Trim() == "Type").Val;                
                 switch (type)
                 {
                     case "EMA":
@@ -125,13 +127,13 @@ namespace MainApp.Model
         }
         public void All()
         {
-            while(next())
+            while(Next())
             {
 
             }
           //  MessageBox.Show("All");
         }
-        public bool next()
+        public bool Next()
         {         
            bool 
             flag = false;
@@ -154,7 +156,7 @@ namespace MainApp.Model
         {
             for(int i=0; i<n;i++)
             {
-                next();
+                Next();
             }            
         }
         public List<PointModel> GetListPoint (string tiker, string skale)

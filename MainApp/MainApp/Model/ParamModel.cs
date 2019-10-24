@@ -9,28 +9,28 @@ namespace MainApp.Model
 {
     public class ParamModel
     {
-        public int id { get; set; }
+        public int Id { get; set; }
         public int ParamID
         {
             get;
             set;
         }
-        public string name
+        public string Name
         {
             get;
             set;
         }
-        public DataType type
+        public DataType Type
         {
             get;
             set;
         }
-        public string val
+        public string Val
         {
             get;
             set;
         }
-        public string comment
+        public string Comment
         {
             get;
             set;

@@ -94,7 +94,7 @@ namespace MainApp.ViewModel
 
         // Длина маштабируемой серии 
         private int _scaleSer;
-        public int scaleSer
+        public int ScaleSer
         {
             get { return _scaleSer; }
             set
@@ -105,7 +105,7 @@ namespace MainApp.ViewModel
         }
         // Количество всего знаков 
         private int _kolPoint;
-        public int kolPoint
+        public int KolPoint
         {
             get { return _kolPoint; }
             set
@@ -117,7 +117,7 @@ namespace MainApp.ViewModel
         }
 
         private int _kolScale;
-        public int kolSkale
+        public int KolSkale
         {
             get { return _kolScale; }
             set
@@ -130,7 +130,7 @@ namespace MainApp.ViewModel
 
         // Коофициент маштабирования 
         private int _indexChart;
-        public int indexChart
+        public int IndexChart
         {
             get
             {
@@ -168,13 +168,15 @@ namespace MainApp.ViewModel
 
         private void UpdateIndex()
         {
-            indexChart = kolPoint / kolSkale;
+            IndexChart = KolPoint / KolSkale;
         }
         public abstract void Update();
 
         public abstract void Update1();
 
+#pragma warning disable CS0108 // "ChartViewModel.PropertyChanged" скрывает наследуемый член "ObservableObject.PropertyChanged". Если скрытие было намеренным, используйте ключевое слово new.
         public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore CS0108 // "ChartViewModel.PropertyChanged" скрывает наследуемый член "ObservableObject.PropertyChanged". Если скрытие было намеренным, используйте ключевое слово new.
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {
@@ -223,7 +225,7 @@ namespace MainApp.ViewModel
                     //AreaLimit=0
                 }
             };
-            kolSkale = 50;
+            KolSkale = 50;
         }
     }
     public class ChartViewModel3: ChartViewModel

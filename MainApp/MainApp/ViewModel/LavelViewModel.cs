@@ -41,9 +41,7 @@ namespace MainApp.ViewModel
             set
             {
                 _IsSelected = value;
-                PropertyChangedEventHandler handler = PropertyChanged;
-                if (handler != null)
-                    handler(this, new PropertyChangedEventArgs("IsSelected"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsSelected"));
             }
         }
 
@@ -69,12 +67,12 @@ namespace MainApp.ViewModel
             {
 
                 _isEditMode = value;
-                PropertyChangedEventHandler handler = PropertyChanged;
-                if (handler != null)
-                    handler(this, new PropertyChangedEventArgs("IsEditMode"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsEditMode"));
             }
         }
+#pragma warning disable CS0108 // "LavelViewModel.PropertyChanged" скрывает наследуемый член "ObservableObject.PropertyChanged". Если скрытие было намеренным, используйте ключевое слово new.
         public event PropertyChangedEventHandler PropertyChanged;
+#pragma warning restore CS0108 // "LavelViewModel.PropertyChanged" скрывает наследуемый член "ObservableObject.PropertyChanged". Если скрытие было намеренным, используйте ключевое слово new.
 
         #endregion
         public int ID
@@ -93,7 +91,7 @@ namespace MainApp.ViewModel
                 _lavelModel.paremtId = value;
             }
         }
-        public string name
+        public string Name
         {
             get
             {
@@ -118,7 +116,7 @@ namespace MainApp.ViewModel
                 _CNGName = value;
             }
         }
-        public bool test
+        public bool Test
         {
             get
             {
@@ -128,7 +126,7 @@ namespace MainApp.ViewModel
                 return _IsSelected;
             }
         }
-        public bool isRoot
+        public bool IsRoot
         {
             get { return _lavelModel.paremtId == -1; }
         }
@@ -138,7 +136,7 @@ namespace MainApp.ViewModel
             get => _IsNew;
             set => _IsNew = value;
         }
-        public LavelViewModel parent
+        public LavelViewModel Parent
         {
             get
             {
