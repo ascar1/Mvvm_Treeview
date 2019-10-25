@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="MainApp.View.UserControl2"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"              
+             xmlns:local="clr-namespace:MainApp.View"
+             xmlns:vm ="clr-namespace:MainApp.ViewModel"             
+             mc:Ignorable="d" d:DesignWidth="341" d:DesignHeight="759">
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <ToolBar DockPanel.Dock="Top">
+                <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Value}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
+                <ComboBox ItemsSource="{Binding ListScaleItems}" SelectedItem="{Binding Scale}" Name="Scale"  Width="90"  VerticalAlignment="Top"  Visibility="{Binding flag}"/>
+                <Button  Content="Show" Command="{Binding ShowCommand}"/>
+                <Separator />
+                <Button  Content="Next" Command="{Binding NextCommand}" Visibility="{Binding flag}"/>
+                <Button Content="Next100" Command="{Binding Next100Command}" Visibility="{Binding flag}"/>
+                <Button  Content="All" Command="{Binding AllCommand}" Visibility="{Binding flag}"/>
+            </ToolBar>
+
+            <ToolBarPanel DockPanel.Dock="Bottom" Orientation="Horizontal" >
+                <Label Content="From"/>
+                <TextBox Text="{Binding CVM1.From}" Width="50"/>
+                <Label Content="To"/>
+                <TextBox Text="{Binding CVM1.To}" Width="50"/>
+                <Label Content="Kol Scale"/>
+                <TextBox Text="{Binding CVM1.kolSkale}" Width="30"/>
+                <Label Content="Kol Point"/>
+                <TextBox Text="{Binding CVM1.kolPoint}" Width="30"/>
+                <Label Content="Index Chart"/>
+                <TextBox Text="{Binding CVM1.indexChart}" Width="30"/>
+            </ToolBarPanel>
+            <Button Content="123"/>
+        </DockPanel>
+    </Grid>
+</UserControl>

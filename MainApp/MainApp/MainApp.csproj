@@ -97,6 +97,8 @@
     <Compile Include="Model\ParamModel.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\FileViewModel.cs" />
+    <Compile Include="ViewModel\TabVM1.cs" />
+    <Compile Include="ViewModel\TabVM2.cs" />
     <Compile Include="View\ChartUserControl.xaml.cs">
       <DependentUpon>ChartUserControl.xaml</DependentUpon>
     </Compile>
@@ -134,6 +136,9 @@
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\CloseItemHeader.xaml.cs">
       <DependentUpon>CloseItemHeader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\UserControl2.xaml.cs">
+      <DependentUpon>UserControl2.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -192,6 +197,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\CloseItemHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\UserControl2.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

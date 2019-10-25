@@ -128,7 +128,7 @@ namespace MainApp.Model
         }
         private void GetAnalis(List<DateModel> dateModels)
         {
-            IAnalysis1 analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"));
+            IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"));
         }
         public void All()
         {

@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
-        xmlns:local="clr-namespace:MainApp.Main"
+        xmlns:local="clr-namespace:MainApp.View"
         mc:Ignorable="d ignore"
-        Height="463.348"
-        Width="690.254"
+        Height="837.364"
+        Width="1161.455"
         Title="MVVM Light Application"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
 
@@ -31,15 +31,18 @@
                 <ColumnDefinition Width="185*"></ColumnDefinition>
                 <ColumnDefinition Width="84*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            
+
             <Menu Height="25" VerticalAlignment="Top" Grid.Column="0" Grid.ColumnSpan="2">
-                <MenuItem Header="File">
-                    <MenuItem Header="New Project" ></MenuItem>
+                <MenuItem Header="Work">
+                    <MenuItem Header="Analysis 1" ></MenuItem>
+                    <MenuItem Header="Analysis 2" ></MenuItem>
+                    <MenuItem Header="Analysis 3" ></MenuItem>
+                    <Separator />
                     <MenuItem Header="Open Project" >
                         <MenuItem Header="WinForms"></MenuItem>
                         <MenuItem Header="WPF" ></MenuItem>
                     </MenuItem>
-                    <Separator />
+                    
                     <MenuItem Header="Exit" ></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Edit" ></MenuItem>
@@ -56,8 +59,10 @@
             </Menu>
 
             <local:UserControl1 Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"/>
-            
+            <local:UserControl2  Grid.Column="1" Grid.Row="1"  Grid.RowSpan="3"/>
+<!--
             <Button Grid.Column="1" Grid.Row="1" Content="Строка 0 Столбец 1" Grid.RowSpan="3" />
+            -->
             <TextBlock Grid.Column="0" Grid.Row="3" Text="{Binding Str}" />
         </Grid>
     </Grid>

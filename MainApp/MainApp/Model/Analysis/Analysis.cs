@@ -11,7 +11,7 @@ namespace MainApp.Model.Analysis
     /// <summary>
     /// Анализ 1 по тредовый 
     /// </summary>
-    class Analysis1 : IAnalysis1
+    class Analysis1 : IAnalysis
     {
         public Analysis1(DateModel dateModel )
         {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MainApp.Model.Analysis
 {
-    public interface IAnalysis1
+    public interface IAnalysis
     {
         List<string> ResultArr ();
         string result();

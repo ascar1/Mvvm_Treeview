@@ -16,14 +16,13 @@ using System.Windows.Shapes;
 namespace MainApp.View
 {
     /// <summary>
-    /// Логика взаимодействия для UserControl1.xaml
+    /// Логика взаимодействия для UserControl2.xaml
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class UserControl2 : UserControl
     {
-        public UserControl1()
+        public UserControl2()
         {
             InitializeComponent();
-
         }
     }
 }
