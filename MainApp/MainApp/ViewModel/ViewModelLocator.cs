@@ -37,7 +37,7 @@ namespace MainApp.ViewModel
             {
                 SimpleIoc.Default.Register<IDataService, DataService>();
                 SimpleIoc.Default.Register<IParamDataService, ParamDataService>();
-                SimpleIoc.Default.Register<IDataService, DataService>();
+                //SimpleIoc.Default.Register<IDataService, DataService>();
             }
 
             SimpleIoc.Default.Register<MainViewModel>();

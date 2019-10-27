@@ -93,8 +93,20 @@ namespace MainApp.ViewModel
                 return _To;
             }
             set
-            {
-                _To = value;
+            {                
+                if (value < KolPoint)
+                {
+                    _To = value;
+                }
+                else if (KolPoint == 0)
+                {
+                    _To = value;
+                }
+                else
+                {
+                    _To = KolPoint;
+                }
+                
                 NotifyPropertyChanged();
             }
         }
@@ -380,6 +392,6 @@ namespace MainApp.ViewModel
             SeriesCollection3[0].Values.Add(i);
             SeriesCollection3[0].Values.Add(i);
             SeriesCollection3[0].Values.Add(i);*/
+            }
         }
-    }
 }

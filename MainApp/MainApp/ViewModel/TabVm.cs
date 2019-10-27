@@ -72,14 +72,6 @@ namespace MainApp.ViewModel
             Type = new ObservableCollection<string>();
 
             _paramDataService = new ParamDataService();
-            _paramDataService.GetData(
-                (item, error) =>
-                {
-                    if (error != null)
-                    {
-                        return;
-                    }
-                });
             _paramDataService.GetDataLevel((item, error) => { if (error != null) { return; } LoadLavel(item); });
 
             Edit = new DelegateCommand<object>(arg =>

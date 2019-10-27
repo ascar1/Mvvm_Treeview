@@ -9,6 +9,7 @@ using static MainApp.Model.DataService;
 
 namespace MainApp.Model
 {
+    // TODO: Изменить использование данного класса на Сиглтон Нужно что бы был только один энкземпляр класса 
     class ParamDataService : IParamDataService
     {
         private readonly string NameFile = "C:\\newparam_.xml";
@@ -98,8 +99,8 @@ namespace MainApp.Model
         public void GetData(Action<DataItem, Exception> callback)
         {
             // Use this to connect to the actual data service
-            var item = new DataItem("Welcome to MVVM Light");
-            callback(item, null);
+           // var item = new DataItem("Welcome to MVVM Light");
+           // callback(item, null);
         }
         #region функции для работы с уровнями
         public void GetDataLevel(Action<List<LavelModel>, Exception> callback)

@@ -15,7 +15,7 @@ namespace MainApp.Model.Analysis
     {
         public Analysis1(DateModel dateModel )
         {
-
+            
         }
 
         public void GetAnalysis()

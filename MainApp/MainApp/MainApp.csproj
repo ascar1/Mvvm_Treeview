@@ -83,6 +83,7 @@
     <Compile Include="Design\DesignDataService.cs" />
     <Compile Include="Model\Analysis\Analysis.cs" />
     <Compile Include="Model\Analysis\IAnalysis.cs" />
+    <Compile Include="Model\Analysis\SupportingClass.cs" />
     <Compile Include="Model\ChartPointModel.cs" />
     <Compile Include="Model\DataItem.cs" />
     <Compile Include="Model\DataService.cs" />
