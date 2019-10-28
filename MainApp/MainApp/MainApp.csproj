@@ -100,6 +100,9 @@
     <Compile Include="ViewModel\FileViewModel.cs" />
     <Compile Include="ViewModel\TabVM1.cs" />
     <Compile Include="ViewModel\TabVM2.cs" />
+    <Compile Include="View\Analysis\AnalysisView.xaml.cs">
+      <DependentUpon>AnalysisView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ChartUserControl.xaml.cs">
       <DependentUpon>ChartUserControl.xaml</DependentUpon>
     </Compile>
@@ -156,6 +159,10 @@
     <Page Include="Skins\MainSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\Analysis\AnalysisView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ChartUserControl.xaml">
       <SubType>Designer</SubType>

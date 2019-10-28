@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="MainApp.View.Analysis.AnalysisView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MainApp.View.Analysis"
+             mc:Ignorable="d" 
+             d:DesignHeight="850" d:DesignWidth="300">
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <ToolBar DockPanel.Dock="Top">
+                <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Value}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
+                <ComboBox ItemsSource="{Binding ListScaleItems}" SelectedItem="{Binding Scale}" Name="Scale"  Width="90"  VerticalAlignment="Top"  Visibility="{Binding flag}"/>
+                <Button  Content="Show" Command="{Binding ShowCommand}"/>
+                <Separator />
+            </ToolBar>
+
+            <ToolBarPanel DockPanel.Dock="Bottom" Orientation="Horizontal" >
+                <Button Content="123"/>
+            </ToolBarPanel>
+            <Button Content="123"/>
+        </DockPanel>
+
+    </Grid>
+</UserControl>

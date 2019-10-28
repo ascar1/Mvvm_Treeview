@@ -81,6 +81,9 @@ namespace MainApp.ViewModel
             Tabs.Add(new Tab1Vm());
             Tabs.Last().Event1 += MainViewModel_event1;
 
+            Tabs2.Add(new TabAnalizResult());
+            Tabs2.Last().Event1 += MainViewModel_event1;
+            SelectedTab2 = Tabs2.FirstOrDefault();
 
             SelectedTab = Tabs.FirstOrDefault();
             Str = "Строка 2 Столбец 1";
@@ -108,6 +111,7 @@ namespace MainApp.ViewModel
             
         }
 
+        private ObservableCollection<TabVm> _tabs;
         public ObservableCollection<TabVm> Tabs
         {
             get {
@@ -116,15 +120,28 @@ namespace MainApp.ViewModel
                 }
             
         }
-        private ObservableCollection<TabVm> _tabs;
-
+        private TabVm _selectedTab;
         public TabVm SelectedTab
         {
             get { return _selectedTab; }
             set { _selectedTab = value; }
         }
-        
-        private TabVm _selectedTab;
+
+        private ObservableCollection<TabVM2> _Tabs2;
+        public ObservableCollection<TabVM2> Tabs2
+        {
+            get
+            {
+                return _Tabs2 ?? (_Tabs2 = new ObservableCollection<TabVM2>());
+            }
+        }
+        private TabVM2 _selectedTab2;
+        public TabVM2 SelectedTab2
+        {
+            get { return _selectedTab2; }
+            set { _selectedTab2 = value; }
+        }
+
 
         #region Обработка команд
         private MyCommand _TestCommand;

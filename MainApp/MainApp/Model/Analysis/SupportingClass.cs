@@ -9,8 +9,11 @@ namespace MainApp.Model.Analysis
     /// <summary>
     /// Класс где реализованны вспомогательные функции 
     /// </summary>
+    
     class SupportingClass
     {
+        // TODO: Реализовать нормализацию данных
+
         private static SupportingClass instance;
 
         private SupportingClass()
