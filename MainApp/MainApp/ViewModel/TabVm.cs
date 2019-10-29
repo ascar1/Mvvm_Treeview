@@ -85,7 +85,7 @@ namespace MainApp.ViewModel
         }
         private void LoadLavel(List<LavelModel> list)
         {
-            var rootElement = list.Where(c => c.paremtId == -1);
+            var rootElement = list.Where(c => c.ParemtId == -1);
             foreach (var rootCategory in rootElement)
             {
                 LavelViewModel tmp = new LavelViewModel(rootCategory);
@@ -126,9 +126,9 @@ namespace MainApp.ViewModel
         {
             for (var i = 0; i < source.Count; i++)
             {
-                if (root.ID != source[i].id && root.ID == source[i].paremtId)
+                if (root.ID != source[i].Id && root.ID == source[i].ParemtId)
                 {
-                    if (source[i].paremtId != -1)
+                    if (source[i].ParemtId != -1)
                     {
                         LavelViewModel tmp = new LavelViewModel(source[i]);
                         tmp.PropertyChanged += ItemsOnCollectionChanged1;
@@ -157,9 +157,9 @@ namespace MainApp.ViewModel
                 {
                     LavelModel _tmp = new LavelModel
                     {
-                        name = "new",
-                        id = _paramDataService.NewIndexLavel,
-                        paremtId = id
+                        Name = "new",
+                        Id = _paramDataService.NewIndexLavel,
+                        ParemtId = id
                     };
 
                     LavelViewModel _tmp_ = new LavelViewModel(_tmp);

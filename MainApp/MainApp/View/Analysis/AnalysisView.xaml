@@ -10,7 +10,6 @@
         <DockPanel LastChildFill="True">
             <ToolBar DockPanel.Dock="Top">
                 <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Value}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
-                <ComboBox ItemsSource="{Binding ListScaleItems}" SelectedItem="{Binding Scale}" Name="Scale"  Width="90"  VerticalAlignment="Top"  Visibility="{Binding flag}"/>
                 <Button  Content="Show" Command="{Binding ShowCommand}"/>
                 <Separator />
             </ToolBar>
@@ -18,7 +17,7 @@
             <ToolBarPanel DockPanel.Dock="Bottom" Orientation="Horizontal" >
                 <Button Content="123"/>
             </ToolBarPanel>
-            <Button Content="123"/>
+            <DataGrid />
         </DockPanel>
 
     </Grid>

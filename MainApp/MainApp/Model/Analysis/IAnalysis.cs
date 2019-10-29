@@ -8,7 +8,7 @@ namespace MainApp.Model.Analysis
 {
     public interface IAnalysis
     {
-        List<string> ResultArr ();
+        
         string result();
         void GetAnalysis();
     }

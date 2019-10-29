@@ -13,11 +13,19 @@ namespace MainApp.Model.Analysis
     /// </summary>
     class Analysis1 : IAnalysis
     {
-        public Analysis1(DateModel dateModel )
+        public Analysis1(DateModel dateModel, string name )
         {
-            
+            this.Name = name;
+            AnalysisResults = new AnalysisResult(name);
         }
+        
+        public string Name { get => name; set => name = value; }
+        private string name;
+        public AnalysisResult AnalysisResults { get => analysisResults; set => analysisResults = value; }
+        private AnalysisResult analysisResults;
 
+
+        #region Публичные методы 
         public void GetAnalysis()
         {
             throw new NotImplementedException();
@@ -28,9 +36,10 @@ namespace MainApp.Model.Analysis
             throw new NotImplementedException();
         }
 
-        public List<string> ResultArr()
+        public List<ResultAnalysis> ResultArr()
         {
-            throw new NotImplementedException();
+            return AnalysisResults.ResultAnalyses;            
         }
+        #endregion
     }
 }

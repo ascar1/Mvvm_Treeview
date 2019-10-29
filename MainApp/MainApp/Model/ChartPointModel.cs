@@ -36,6 +36,7 @@ namespace MainApp.Model
         public Double Vol { get; set; }
         public Double OpenInt { get; set; }
         public List<Index> IndexPoint { get; set; }
+        public List<AnalysisResult> AnalysisResults { get; set; }
         public PointModel()
         {
             IndexPoint = new List<Index>();
@@ -75,5 +76,21 @@ namespace MainApp.Model
             EDate = master.EDate;
             Work = flag;
         }
+    }
+    public class AnalysisResult
+    {
+        public AnalysisResult(string name)
+        {
+            this.Name = name;
+            ResultAnalyses = new List<ResultAnalysis>();
+        }
+        public string Name { get; set; }
+        public string Result { get; set; }
+        public List<ResultAnalysis> ResultAnalyses { get; set; }
+    }
+    public class ResultAnalysis
+    {
+        public string Name { get; set; }
+        public double Val { get; set; }
     }
 }

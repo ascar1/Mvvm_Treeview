@@ -77,29 +77,29 @@ namespace MainApp.ViewModel
         #endregion
         public int ID
         {
-            get => _lavelModel.id;
-            set => _lavelModel.id = value;
+            get => _lavelModel.Id;
+            set => _lavelModel.Id = value;
         }
         public int ParentID
         {
             get
             {
-                return _lavelModel.paremtId;
+                return _lavelModel.ParemtId;
             }
             set
             {
-                _lavelModel.paremtId = value;
+                _lavelModel.ParemtId = value;
             }
         }
         public string Name
         {
             get
             {
-                return _lavelModel.name;
+                return _lavelModel.Name;
             }
             set
             {
-                _lavelModel.name = value;
+                _lavelModel.Name = value;
                 //Вызвать событие обновление для интефейса  
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("name"));
             }
@@ -128,7 +128,7 @@ namespace MainApp.ViewModel
         }
         public bool IsRoot
         {
-            get { return _lavelModel.paremtId == -1; }
+            get { return _lavelModel.ParemtId == -1; }
         }
         private bool _IsNew;
         public bool IsNew

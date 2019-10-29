@@ -17,7 +17,6 @@ namespace MainApp.Model
     {
         private readonly int Seed = 10;
         private List<MasterPointModel> MasterPoint;        
-
         public List<WorkPointModel> WorkPoints;
         private List<FileArrModel> fileArrs;
         public bool isClear;
@@ -102,9 +101,9 @@ namespace MainApp.Model
             List<LavelModel> lavelModels = new List<LavelModel>();            
             ParamDataService paramDataService = new ParamDataService();           
             paramDataService.GetDataLevel((item, error) => { if (error != null) { return; } lavelModels = item; });
-            foreach(var tmp in lavelModels.FindAll(i=> i.paremtId == lavelModels.Find(i1 => i1.name == "Index").id))
+            foreach(var tmp in lavelModels.FindAll(i=> i.ParemtId == lavelModels.Find(i1 => i1.Name == "Index").Id))
             {                
-                List<ParamModel> tmp2 = paramDataService.GetParam(tmp.id);
+                List<ParamModel> tmp2 = paramDataService.GetParam(tmp.Id);
                 string type = tmp2.Find(i => i.Name.Trim() == "Type").Val;                
                 switch (type)
                 {
@@ -128,7 +127,7 @@ namespace MainApp.Model
         }
         private void GetAnalis(List<DateModel> dateModels)
         {
-            IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"));
+            IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"),"Analysis1");
         }
         public void All()
         {
@@ -280,8 +279,8 @@ namespace MainApp.Model
                 // Выводим индексы на серию Области графика 
                 foreach (var tmp in paramDataService.GetLavelModels("Index"))
                 {
-                    string type = paramDataService.GetParamValue(tmp.id, "ChartArea");
-                    string name = paramDataService.GetParamValue(tmp.id, "Name");
+                    string type = paramDataService.GetParamValue(tmp.Id, "ChartArea");
+                    string name = paramDataService.GetParamValue(tmp.Id, "Name");
                     
                     if (type == ChartArea)
                     {

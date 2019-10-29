@@ -13,10 +13,7 @@ namespace MainApp.Model
         {
 
         }
-        private string GetStringParam (List<ParamModel> @params, string NameParam)
-        {
-            return @params.Find(tmp => tmp.Name == NameParam).Val; 
-        }
+        private string GetStringParam(List<ParamModel> @params, string NameParam) => @params.Find(tmp => tmp.Name == NameParam).Val;
         private int GetIntParam (List<ParamModel> @params, string NameParam)
         {
             return Convert.ToInt32(@params.Find(tmp => tmp.Name == NameParam).Val); ;
@@ -60,15 +57,8 @@ namespace MainApp.Model
                 
             }
         }
-        private double GetValIndex(PointModel point, List<ParamModel> @params)
-        {            
-            return point.IndexPoint.Find(i => i.Name == GetStringParam(@params, "Name")).Value[0].Value;
-        }
-        private double GetValIndex(PointModel point, string name, string namePoint)
-        {
-            return point.IndexPoint.Find(i => i.Name == name).Value.Find(i1=>i1.Name == namePoint).Value;
-        }        
-        
+        private double GetValIndex(PointModel point, List<ParamModel> @params) => point.IndexPoint.Find(i => i.Name == GetStringParam(@params, "Name")).Value[0].Value;
+        private double GetValIndex(PointModel point, string name, string namePoint) => point.IndexPoint.Find(i => i.Name == name).Value.Find(i1 => i1.Name == namePoint).Value;
         private double GetEMA(List<PointModel> points, int N, string name , string namePoint)
         {
             // Расчитать и вернуть значение EMA 

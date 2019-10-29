@@ -10,11 +10,11 @@ namespace MainApp.Model
     {
         public LavelModel()
         {
-            this.paremtId = -1;
+            this.ParemtId = -1;
         }
-        public string name { get; set; }
-        public string comment { get; set; }
-        public int id { get; set; }
-        public int paremtId { get; set; }
+        public string Name { get; set; }
+        public string Comment { get; set; }
+        public int Id { get; set; }
+        public int ParemtId { get; set; }
     }
 }

@@ -44,7 +44,7 @@ namespace MainApp.Model
         {
             get
             {
-                int i = LavelItem.Max(I => I.id);
+                int i = LavelItem.Max(I => I.Id);
                 return ++i;
             }
         }
@@ -56,19 +56,19 @@ namespace MainApp.Model
             {
                 LavelItem.Add(new LavelModel()
                 {
-                    id = ChekInt(tmp.Attribute("Id")),
-                    paremtId = ChekInt(tmp.Attribute("paremtId")),
-                    name = tmp.Attribute("Name").Value,
-                    comment = tmp.Attribute("Comment").Value,
+                    Id = ChekInt(tmp.Attribute("Id")),
+                    ParemtId = ChekInt(tmp.Attribute("paremtId")),
+                    Name = tmp.Attribute("Name").Value,
+                    Comment = tmp.Attribute("Comment").Value,
                 });
                 foreach (var tmp1 in tmp.Elements("level"))
                 {
                     LavelItem.Add(new LavelModel()
                     {
-                        id = ChekInt(tmp1.Attribute("Id")),
-                        paremtId = ChekInt(tmp1.Attribute("paremtId")),
-                        name = tmp1.Attribute("Name").Value,
-                        comment = tmp1.Attribute("Comment").Value,
+                        Id = ChekInt(tmp1.Attribute("Id")),
+                        ParemtId = ChekInt(tmp1.Attribute("paremtId")),
+                        Name = tmp1.Attribute("Name").Value,
+                        Comment = tmp1.Attribute("Comment").Value,
                     });
 
                     foreach (var tmp2 in tmp1.Elements("Param"))
@@ -117,12 +117,12 @@ namespace MainApp.Model
             {
                 foreach (XElement tmp1 in tmp.Elements("level"))
                 {
-                    if (lavel.id != 0)
+                    if (lavel.Id != 0)
                     {
-                        if (tmp1.Attribute("Id").Value.ToString() == lavel.id.ToString())
+                        if (tmp1.Attribute("Id").Value.ToString() == lavel.Id.ToString())
                         {
-                            tmp1.Attribute("Name").Value = lavel.name;
-                            tmp1.Attribute("Comment").Value = lavel.comment;
+                            tmp1.Attribute("Name").Value = lavel.Name;
+                            tmp1.Attribute("Comment").Value = lavel.Comment;
                             break;
                         }
                     }
@@ -134,11 +134,11 @@ namespace MainApp.Model
         {
             // Вставить новый уровень
             XDocument xDoc = XDocument.Load(NameFile);
-            var tmp = xDoc.Element("ProgramParam").Elements("level").First(i => i.Attribute("Id").Value.ToString() == lavel.paremtId.ToString());
+            var tmp = xDoc.Element("ProgramParam").Elements("level").First(i => i.Attribute("Id").Value.ToString() == lavel.ParemtId.ToString());
             tmp.Add(new XElement("level",
-                        new XAttribute("Id", lavel.id),
-                        new XAttribute("paremtId", lavel.paremtId),
-                        new XAttribute("Name", lavel.name),
+                        new XAttribute("Id", lavel.Id),
+                        new XAttribute("paremtId", lavel.ParemtId),
+                        new XAttribute("Name", lavel.Name),
                         new XAttribute("Comment", "")
                 ));
             xDoc.Save(NameFile);
@@ -186,10 +186,7 @@ namespace MainApp.Model
             LoadData();
             callback(ParamItem, null);
         }
-        public List<LavelModel> GetLavelModels (string NameLavel)
-        {            
-            return LavelItem.FindAll(i => i.paremtId == LavelItem.Find(i1 => i1.name == NameLavel).id);
-        }
+        public List<LavelModel> GetLavelModels(string NameLavel) => LavelItem.FindAll(i => i.ParemtId == LavelItem.Find(i1 => i1.Name == NameLavel).Id);
         public string GetValParam(string lavel, string nameParam)
         {
 
@@ -201,20 +198,14 @@ namespace MainApp.Model
             List<LavelModel> ListTMP = GetLavelModels(lavel);
             foreach(var tmp in ListTMP)
             {
-                List<ParamModel> paramModels = GetParam(tmp.id);
+                List<ParamModel> paramModels = GetParam(tmp.Id);
                 arr.Add(paramModels.Find(i => i.Name == nameParam).Val);                
             }            
             return arr.Count-1;
         }
 
-        public List<ParamModel> GetParam (int id)
-        {           
-            return ParamItem.FindAll(i => i.ParamID == id);
-        }
-        public string GetParamValue (int id, string name)
-        {
-            return GetParam(id).Find(i1 => i1.Name.Trim() == name).Val;
-        }
+        public List<ParamModel> GetParam(int id) => ParamItem.FindAll(i => i.ParamID == id);
+        public string GetParamValue(int id, string name) => GetParam(id).Find(i1 => i1.Name.Trim() == name).Val;
         private void WriteParam(XElement tmp, ParamModel param)
         {
             tmp.Add(new XElement("Param",
