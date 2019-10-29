@@ -17,7 +17,7 @@
             <ToolBarPanel DockPanel.Dock="Bottom" Orientation="Horizontal" >
                 <Button Content="123"/>
             </ToolBarPanel>
-            <DataGrid />
+            <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Path=myData}" IsSynchronizedWithCurrentItem ="True" Name="anyDataGrid" />
         </DockPanel>
 
     </Grid>

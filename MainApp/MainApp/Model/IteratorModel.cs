@@ -19,6 +19,7 @@ namespace MainApp.Model
         private List<MasterPointModel> MasterPoint;        
         public List<WorkPointModel> WorkPoints;
         private List<FileArrModel> fileArrs;
+
         public bool isClear;
         public IteratorModel(List<MasterPointModel> MasterChartPoint,List<FileArrModel> files)
         {
@@ -99,7 +100,7 @@ namespace MainApp.Model
         {
             IndexModel indexModel = new IndexModel();
             List<LavelModel> lavelModels = new List<LavelModel>();            
-            ParamDataService paramDataService = paramDataService.;           
+            ParamDataService paramDataService = new ParamDataService();           
             paramDataService.GetDataLevel((item, error) => { if (error != null) { return; } lavelModels = item; });
             foreach(var tmp in lavelModels.FindAll(i=> i.ParemtId == lavelModels.Find(i1 => i1.Name == "Index").Id))
             {                
@@ -129,7 +130,7 @@ namespace MainApp.Model
         {
             IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"),"Analysis1");
             analysis1.GetAnalysis();
-            MessageBox.Show("!");
+            //MessageBox.Show("!");
 
         }
         public void All()
@@ -141,9 +142,8 @@ namespace MainApp.Model
           //  MessageBox.Show("All");
         }
         public bool Next()
-        {         
-           bool 
-            flag = false;
+        {
+            bool flag = false;
             foreach (MasterPointModel i in MasterPoint )
             {
                 int index = WorkPoints.FindIndex(ii => ii.Tiker == i.Tiker);
@@ -164,10 +164,15 @@ namespace MainApp.Model
         {
             for(int i=0; i<n;i++)
             {
-                Next();
+               
+                if (!Next())
+                {
+                    break;
+                }
             }            
         }
         public List<PointModel> GetListPoint(string tiker, string skale) => WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
+
         #region Методы для работы с графиками
         private int GetIndexSeries(SeriesCollection series, string name)
         {
@@ -253,8 +258,8 @@ namespace MainApp.Model
                     }
                 };
             }
-            
-            //ParamDataService paramDataService = 
+
+            ParamDataService paramDataService = new ParamDataService();
             List<PointModel> point = GetListPoint(tiker, skale);
             // Если To == 0 то выводим всю серию
             if (To == 0)

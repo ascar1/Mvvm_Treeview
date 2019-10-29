@@ -114,10 +114,11 @@ namespace MainApp.Model
         {
             return CPModel_;
         }
-
+        /*
         public ParamDataService ParamDS ()
         {
             return ParamDataService.GetInstance();
         }
+        */
     }
 }

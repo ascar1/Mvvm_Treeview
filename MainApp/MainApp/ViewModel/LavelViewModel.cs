@@ -13,7 +13,7 @@ namespace MainApp.ViewModel
     public class LavelViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private readonly LavelModel _lavelModel;
-        private ParamDataService _dataService = _dataService.getin //= new ParamDataService();
+        private ParamDataService _ParamDataService = new ParamDataService();
         private LavelViewModel _parent;
         #region constructor
         public LavelViewModel(LavelModel model)
@@ -156,15 +156,15 @@ namespace MainApp.ViewModel
         {
             if (!IsNew)
                 //Обновить запись
-                _dataService.SaveLavel(this._lavelModel);
+                _ParamDataService.SaveLavel(this._lavelModel);
             else
                 // Добавить новую запись 
-                _dataService.InsertLavel(this._lavelModel);
+                _ParamDataService.InsertLavel(this._lavelModel);
                 
         }
         public void Delete()
         {
-            _dataService.DeleteLavel(this.ID);
+            _ParamDataService.DeleteLavel(this.ID);
         }
     }
 }

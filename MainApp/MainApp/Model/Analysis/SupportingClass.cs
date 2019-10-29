@@ -10,7 +10,7 @@ namespace MainApp.Model.Analysis
     /// Класс где реализованны вспомогательные функции 
     /// </summary>
     
-    class SupportingClass
+    public class SupportingClass
     {
         // TODO: Реализовать нормализацию данных
 
@@ -19,11 +19,20 @@ namespace MainApp.Model.Analysis
         {
 
         }
-        public List<double> GetNormData ()
+        public List<double> GetNormData (List<double> InputArr)
         {
-            return null;
+            List<double> Result = new List<double>();
+            double Max = InputArr.Max();
+            double Min = InputArr.Min();
+            double Denominator = (Max - Min);
+            foreach (var item in InputArr)
+            {
+                double tmp = (item - Min) / Denominator;
+                Result.Add(tmp);
+            }
+            return Result;
         }
-        public static SupportingClass getInstance()
+        public static SupportingClass GetInstance()
         {
             if (instance == null)
                 instance = new SupportingClass();

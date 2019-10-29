@@ -52,7 +52,17 @@ namespace MainApp.ViewModel
         public TabAnalizResult()
             : base("Результаты анализа")
         {
+
         }
+
+        //public 
+
+        private void GetListAnalysis ()
+        {
+
+        }
+
+
     }
 
     public class TabOrder : TabVM2

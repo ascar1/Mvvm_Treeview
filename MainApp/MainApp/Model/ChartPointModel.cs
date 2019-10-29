@@ -83,15 +83,16 @@ namespace MainApp.Model
         public AnalysisResult(string name)
         {
             this.Name = name;
-            ResultAnalyses = new List<ResultAnalysis>();
+            ResultArr = new List<ResultArr>();
         }
         public string Name { get; set; }
         public string Result { get; set; }
-        public List<ResultAnalysis> ResultAnalyses { get; set; }
+        public List<ResultArr> ResultArr { get; set; }
     }
-    public class ResultAnalysis
+    public class ResultArr
     {
         public string Name { get; set; }
         public double Val { get; set; }
+        public string ValStr { get; set; }
     }
 }
