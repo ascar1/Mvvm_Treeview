@@ -99,7 +99,7 @@ namespace MainApp.Model
         {
             IndexModel indexModel = new IndexModel();
             List<LavelModel> lavelModels = new List<LavelModel>();            
-            ParamDataService paramDataService = new ParamDataService();           
+            ParamDataService paramDataService = paramDataService.;           
             paramDataService.GetDataLevel((item, error) => { if (error != null) { return; } lavelModels = item; });
             foreach(var tmp in lavelModels.FindAll(i=> i.ParemtId == lavelModels.Find(i1 => i1.Name == "Index").Id))
             {                
@@ -125,9 +125,12 @@ namespace MainApp.Model
                 }
             }             
         }
-        private void GetAnalis(List<DateModel> dateModels)
+        private void GetAnalysis(List<DateModel> dateModels)
         {
             IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"),"Analysis1");
+            analysis1.GetAnalysis();
+            MessageBox.Show("!");
+
         }
         public void All()
         {
@@ -152,6 +155,7 @@ namespace MainApp.Model
                     WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Add(tmp);
                     GetScale(WorkPoints[index].Data);
                     GetIndex(WorkPoints[index].Data);
+                    GetAnalysis(WorkPoints[index].Data);
                 }
             }
             return flag;
@@ -163,10 +167,7 @@ namespace MainApp.Model
                 Next();
             }            
         }
-        public List<PointModel> GetListPoint (string tiker, string skale)
-        {
-            return WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
-        }
+        public List<PointModel> GetListPoint(string tiker, string skale) => WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
         #region Методы для работы с графиками
         private int GetIndexSeries(SeriesCollection series, string name)
         {
@@ -253,7 +254,7 @@ namespace MainApp.Model
                 };
             }
             
-            ParamDataService paramDataService = new ParamDataService();
+            //ParamDataService paramDataService = 
             List<PointModel> point = GetListPoint(tiker, skale);
             // Если To == 0 то выводим всю серию
             if (To == 0)

@@ -40,6 +40,7 @@ namespace MainApp.Model
         public PointModel()
         {
             IndexPoint = new List<Index>();
+            AnalysisResults = new List<AnalysisResult>();
         }
     }
     public class Index

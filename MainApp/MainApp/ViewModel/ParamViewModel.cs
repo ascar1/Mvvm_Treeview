@@ -14,8 +14,9 @@ namespace MainApp.ViewModel
 {
     public class ParamViewModel : ViewModelBase, IEditableObject
     {
-        private ParamModel _param;        
-        private IParamDataService _dataService = new ParamDataService();
+        private ParamModel _param;
+        private ParamDataService _dataService = new ParamDataService();
+        
         private ParamViewModel backupCopy;
         public ObservableCollection<ParamViewModel> Param;
         private bool isNew;

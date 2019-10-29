@@ -10,16 +10,27 @@ using static MainApp.Model.DataService;
 namespace MainApp.Model
 {
     // TODO: Изменить использование данного класса на Сиглтон Нужно что бы был только один энкземпляр класса 
-    class ParamDataService : IParamDataService
+    public class ParamDataService //: IParamDataService
     {
         private readonly string NameFile = "C:\\newparam_.xml";
         private List<LavelModel> LavelItem = new List<LavelModel>();
         private List<ParamModel> ParamItem = new List<ParamModel>();
         private List<string> TypeDataList = new List<string>();
-        public ParamDataService()
-        {
+
+        private static ParamDataService instance;
+
+        private ParamDataService()
+        {            
             LoadData();
         }
+
+        public static ParamDataService GetInstance()
+        {
+            if (instance == null)
+                instance = new ParamDataService();
+            return instance;
+        }
+
         private void Clear()
         {
             LavelItem.Clear();

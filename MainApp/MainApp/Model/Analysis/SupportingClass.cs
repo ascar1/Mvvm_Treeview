@@ -15,16 +15,14 @@ namespace MainApp.Model.Analysis
         // TODO: Реализовать нормализацию данных
 
         private static SupportingClass instance;
-
         private SupportingClass()
-        { }
+        {
 
+        }
         public List<double> GetNormData ()
         {
             return null;
         }
-
-
         public static SupportingClass getInstance()
         {
             if (instance == null)

@@ -13,7 +13,7 @@ namespace MainApp.ViewModel
     public class LavelViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private readonly LavelModel _lavelModel;
-        private IParamDataService _dataService = new ParamDataService();
+        private ParamDataService _dataService = _dataService.getin //= new ParamDataService();
         private LavelViewModel _parent;
         #region constructor
         public LavelViewModel(LavelModel model)

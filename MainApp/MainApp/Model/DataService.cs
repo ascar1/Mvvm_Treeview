@@ -24,17 +24,17 @@ namespace MainApp.Model
         {
             string dirName = @"C:\Tiker\";
             CPModel_ = new List<MasterPointModel>();
-           /* string FileName = "BANE_140303_150331.txt";
-            FileName = @"C:\Tiker\" + FileName;*/
+            /* string FileName = "BANE_140303_150331.txt";
+             FileName = @"C:\Tiker\" + FileName;*/
             if (Directory.Exists(dirName))
             {
-                string[] files = Directory.GetFiles(dirName,"*.txt");
+                string[] files = Directory.GetFiles(dirName, "*.txt");
                 foreach (string s in files)
-                {                   
-                    LoadFile(s, Path.GetFileName(s).Substring(0,4), "60");
+                {
+                    LoadFile(s, Path.GetFileName(s).Substring(0, 4), "60");
                 }
-            }           
-            callback(CPModel_, null);            
+            }
+            callback(CPModel_, null);
         }
 
         public List<FileArrModel> GetFileArrs()
@@ -47,7 +47,7 @@ namespace MainApp.Model
             return f;
         }
 
-        private void LoadFile (string FName,string Tiker,string Scale)
+        private void LoadFile(string FName, string Tiker, string Scale)
         {
             string[] _data;
             MasterPointModel CPModel = new MasterPointModel
@@ -59,13 +59,13 @@ namespace MainApp.Model
             CPModel.Data.Add(new DateModel());
             CPModel.Data[0].Scale = Scale;
             CPModel.Data[0].Points = new List<PointModel>();
-            
+
 
             if (!File.Exists(FName))
             {
                 throw new FileNotFoundException();
             }
-            
+
             StreamReader reader = new StreamReader(FName, Encoding.Default);
             while (!reader.EndOfStream)
             {
@@ -113,6 +113,11 @@ namespace MainApp.Model
         public List<MasterPointModel> GetMasterPoints()
         {
             return CPModel_;
+        }
+
+        public ParamDataService ParamDS ()
+        {
+            return ParamDataService.GetInstance();
         }
     }
 }

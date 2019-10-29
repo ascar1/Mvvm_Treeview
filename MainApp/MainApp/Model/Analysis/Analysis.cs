@@ -16,6 +16,7 @@ namespace MainApp.Model.Analysis
         public Analysis1(DateModel dateModel, string name )
         {
             this.Name = name;
+            this.DateModel = dateModel;
             AnalysisResults = new AnalysisResult(name);
         }
         
@@ -23,12 +24,17 @@ namespace MainApp.Model.Analysis
         private string name;
         public AnalysisResult AnalysisResults { get => analysisResults; set => analysisResults = value; }
         private AnalysisResult analysisResults;
+        private DateModel DateModel;
 
+        private void AnalysisEMA (string name)
+        {
+
+        }
 
         #region Публичные методы 
         public void GetAnalysis()
         {
-            throw new NotImplementedException();
+            AnalysisEMA("EMA");            
         }
 
         public string result()

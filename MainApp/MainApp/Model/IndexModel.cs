@@ -117,32 +117,32 @@ namespace MainApp.Model
             return (double)EMA;            
         }
         public void GetEMA(List<PointModel> points, List<ParamModel> @params)
-                {
-                    // Расчитать и записать EMA по параметрам из файла настроек 
-                    int N; string name;
-                    N = GetIntParam(@params, "Period");
-                    name = GetStringParam(@params, "Name");
+        {
+            //Расчитать и записать EMA по параметрам из файла настроек
+            int N; string name;
+            N = GetIntParam(@params, "Period");
+            name = GetStringParam(@params, "Name");
 
-                    /*int i = 0;*/ Decimal EMA0 = 0; Decimal EMA; Decimal k1; Decimal k2;
+            Decimal EMA0 = 0; Decimal EMA; Decimal k1; Decimal k2;
 
-                    k2 = N + 1;
-                    k1 = (Decimal)2 / (Decimal)k2;
-                    if (points.Count <= N)
-                    {
-                        N = points.Count;
-                        EMA0 = (Decimal)points[0].Close;
-                    }
-                    else
-                    {
-                        EMA0 = (Decimal)GetValIndex(points[points.Count - (N + 1)], @params);
-                    }
-                    for (int i = points.Count-N;i<points.Count;i++)
-                    {
-                        EMA = (Decimal)points[i].Close * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
-                        AddVal(points[i], name, "EMA", "EMA", (double)EMA);
-                        EMA0 = EMA;
-                    }
-                }
+            k2 = N + 1;
+            k1 = (Decimal)2 / (Decimal)k2;
+            if (points.Count <= N)
+            {
+                N = points.Count;
+                EMA0 = (Decimal)points[0].Close;
+            }
+            else
+            {
+                EMA0 = (Decimal)GetValIndex(points[points.Count - (N + 1)], @params);
+            }
+            for (int i = points.Count - N; i < points.Count; i++)
+            {
+                EMA = (Decimal)points[i].Close * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
+                AddVal(points[i], name, "EMA", "EMA", (double)EMA);
+                EMA0 = EMA;
+            }
+        }
         public void GetMACD(List<PointModel> points, List<ParamModel> @params)
         {
             string name = GetStringParam(@params, "Name");
