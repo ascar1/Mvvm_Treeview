@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:attachedBehaviors="clr-namespace:MainApp.AttachedBehaviors"
              xmlns:local="clr-namespace:MainApp.View.Analysis"
              mc:Ignorable="d" 
              d:DesignHeight="850" d:DesignWidth="300">
@@ -12,12 +13,16 @@
                 <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Value}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
                 <Button  Content="Show" Command="{Binding ShowCommand}"/>
                 <Separator />
+                <Button  Content="Test" Command="{Binding TestCommand}"/>
             </ToolBar>
 
             <ToolBarPanel DockPanel.Dock="Bottom" Orientation="Horizontal" >
                 <Button Content="123"/>
             </ToolBarPanel>
-            <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Path=myData}" IsSynchronizedWithCurrentItem ="True" Name="anyDataGrid" />
+            <DataGrid ItemsSource="{Binding Rows}"  
+                      attachedBehaviors:DataGridColumnsBehavior.BindableColumns="{Binding UserRoleColumns}"
+                      AutoGenerateColumns="False" 
+                      DockPanel.Dock="Top" />
         </DockPanel>
 
     </Grid>

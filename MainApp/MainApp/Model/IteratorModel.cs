@@ -15,13 +15,21 @@ namespace MainApp.Model
 {
     public class IteratorModel
     {
+        private static IteratorModel instance;
+        public static IteratorModel GetInstance(List<MasterPointModel> MasterChartPoint, List<FileArrModel> files)
+        {
+            if (instance == null)
+                instance = new IteratorModel(MasterChartPoint, files);
+            return instance;
+        }
+
         private readonly int Seed = 10;
         private List<MasterPointModel> MasterPoint;        
         public List<WorkPointModel> WorkPoints;
-        private List<FileArrModel> fileArrs;
-
+        private List<FileArrModel> fileArrs;       
         public bool isClear;
-        public IteratorModel(List<MasterPointModel> MasterChartPoint,List<FileArrModel> files)
+
+        protected IteratorModel(List<MasterPointModel> MasterChartPoint,List<FileArrModel> files)
         {
             isClear = true;
             MasterPoint = MasterChartPoint;
@@ -45,8 +53,7 @@ namespace MainApp.Model
                 });
             }
             GetSeed();
-        }
-        
+        }        
         private void GetSeed ()
         {
             for (int i = 0; i <= Seed; i++)

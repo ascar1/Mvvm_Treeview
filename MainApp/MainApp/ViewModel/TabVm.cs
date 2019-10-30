@@ -34,6 +34,7 @@ namespace MainApp.ViewModel
                 return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
                 {
                     MessageBox.Show("Команда TestCommand в abstract class TabVm" );
+                    //Event2?.Invoke("Команда TestCommand в abstract class TabVm");
                 }));
             }
         }
@@ -44,14 +45,26 @@ namespace MainApp.ViewModel
             {
                 return _CloseCommand ?? (_CloseCommand = new MyCommand(obj =>
                 {
-                    Event1.Invoke(this, new PropertyChangedEventArgs("propertyName"));
+                    Event1?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
+                    Event2?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
                 }));
             }
         }
-
+        public void Test()
+        {
+            MessageBox.Show("тест");
+            Event2?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
+        }
         #endregion
        // public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangedEventHandler Event1;
+        public event PropertyChangedEventHandler Event2;
+
+        /*    public event AccountHandler Event2;
+            protected bool EventIsNull()
+            {
+                return Event2 == null;
+            }*/
     }
 
     public class Tab1Vm : TabVm
@@ -397,7 +410,7 @@ namespace MainApp.ViewModel
             }
             listScaleItems.Add("60");
             listScaleItems.Add("D");
-            iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
+            iterator = IteratorModel.GetInstance(data.GetMasterPoints(), data.GetFileArrs());
         }
         private void LoadData(string tiker)
         {
@@ -538,7 +551,7 @@ namespace MainApp.ViewModel
     }
 
     public class ChartData : TabVm
-    {       
+    {
         public SeriesCollection SeriesCollection { get; set; }
         public List<string> NLabels { get; set; }
         public List<string> NLabels1 { get; set; }
@@ -586,7 +599,7 @@ namespace MainApp.ViewModel
              To = 3;
             ScaleSer = 1;
             _dataService = data;
-            iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
+            iterator = IteratorModel.GetInstance (data.GetMasterPoints(), data.GetFileArrs());
             NLabels = new List<string>();
             NLabels1 = new List<string>();
             Files = new ObservableCollection<FileViewModel>();
@@ -657,6 +670,11 @@ namespace MainApp.ViewModel
                 return showCommand ?? (showCommand = new MyCommand(obj =>
                 {                    
                     NewGETChart(Value, Scale);
+
+                    base.Test();
+                    //Event2?.Invoke("propertyName");
+
+
                     //LoadData1(Value, Scale);
                 }));
             }
@@ -913,7 +931,7 @@ namespace MainApp.ViewModel
         {
             ParamDataService paramDataService = new ParamDataService();
             _dataService = data;
-            iterator = new IteratorModel(data.GetMasterPoints(), data.GetFileArrs());
+            iterator = IteratorModel.GetInstance(data.GetMasterPoints(), data.GetFileArrs());
             iterator.NextN(50);
             int i = paramDataService.GetQuantity("Index", "ChartArea");            
             switch (i)

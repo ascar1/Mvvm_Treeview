@@ -75,18 +75,31 @@ namespace MainApp.ViewModel
                 });
             FileArr = _dataService.GetFileArrs();
 
+            //ChartData tmp = new ChartData(_dataService);
+            //tmp.Event1 += MainViewModel_event1;
+            //tmp.Event2 += Tmp_Event21; ;
+            //Tabs.Add(tmp);
+
             Tabs.Add(new ChartData(_dataService));
             Tabs.Last().Event1 += MainViewModel_event1;
-            Tabs.Last().PropertyChanged += MainViewModel_PropertyChanged;
+            Tabs.Last().Event2 += MainViewModel_Event2;
+
+            //Tabs.Last().PropertyChanged += MainViewModel_PropertyChanged;
             Tabs.Add(new Tab1Vm());
             Tabs.Last().Event1 += MainViewModel_event1;
-
-            Tabs2.Add(new TabAnalizResult());
+            
+            Tabs2.Add(new TabAnalizResult(_dataService));
             Tabs2.Last().Event1 += MainViewModel_event1;
             SelectedTab2 = Tabs2.FirstOrDefault();
 
             SelectedTab = Tabs.FirstOrDefault();
             Str = "Строка 2 Столбец 1";
+        }
+
+        private void MainViewModel_Event2(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            MessageBox.Show("!!!");
+            throw new NotImplementedException();
         }
 
         private string _Str;
@@ -242,7 +255,8 @@ namespace MainApp.ViewModel
                 return _OpenChartViewWorkDataCommand ?? (_OpenChartViewWorkDataCommand = new MyCommand(obj =>
                 {
                     Tabs.Add(new ChartData(_dataService));
-                    Tabs.Last().Event1 += MainViewModel_event1;                    
+                    Tabs.Last().Event1 += MainViewModel_event1;
+                    //Tabs.Last().Event2 += MainViewModel_event2;
                     SelectedTab = Tabs.Last();
                 }));
             }

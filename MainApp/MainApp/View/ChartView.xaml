@@ -34,6 +34,7 @@
                 <Button  Content="Next" Command="{Binding NextCommand}" Visibility="{Binding flag}"/>
                 <Button Content="Next100" Command="{Binding Next100Command}" Visibility="{Binding flag}"/>
                 <Button  Content="All" Command="{Binding AllCommand}" Visibility="{Binding flag}"/>
+                <Button  Content="Test" Command="{Binding TestCommand}" Visibility="{Binding flag}"/>
             </ToolBar>
             <Grid>
                 <ContentPresenter Content="{Binding CVM1}">

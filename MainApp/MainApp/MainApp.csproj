@@ -78,6 +78,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedBehaviors\DataGridColumnsBehavior.cs" />
     <Compile Include="Command\DelegateCommand.cs" />
     <Compile Include="Command\MyCommand.cs" />
     <Compile Include="Design\DesignDataService.cs" />
