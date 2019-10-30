@@ -75,15 +75,11 @@ namespace MainApp.ViewModel
                 });
             FileArr = _dataService.GetFileArrs();
 
-            //ChartData tmp = new ChartData(_dataService);
-            //tmp.Event1 += MainViewModel_event1;
-            //tmp.Event2 += Tmp_Event21; ;
-            //Tabs.Add(tmp);
-
             Tabs.Add(new ChartData(_dataService));
             Tabs.Last().Event1 += MainViewModel_event1;
             Tabs.Last().Event2 += MainViewModel_Event2;
 
+            
             //Tabs.Last().PropertyChanged += MainViewModel_PropertyChanged;
             Tabs.Add(new Tab1Vm());
             Tabs.Last().Event1 += MainViewModel_event1;

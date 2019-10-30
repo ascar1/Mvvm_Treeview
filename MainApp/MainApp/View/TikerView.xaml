@@ -11,12 +11,13 @@
 
             <Button DockPanel.Dock="Bottom" Background="BlanchedAlmond" Content="Нижняя кнопка" />
             <ToolBar DockPanel.Dock="Top">
-                <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Value}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
+                <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Tiker}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
                 <ComboBox ItemsSource="{Binding ListScaleItems}" SelectedItem="{Binding Scale}" Name="Scale"  Width="90"  VerticalAlignment="Top"  Visibility="{Binding flag}"/>
                 <Button  Content="Show" Command="{Binding ShowCommand}"/>
                 <Separator />
                 <Button  Content="Next" Command="{Binding NextCommand}" Visibility="{Binding flag}"/>
                 <Button  Content="All" Command="{Binding AllCommand}" Visibility="{Binding flag}"/>
+                <Button  Content="Test" Command="{Binding TestCommand}" Visibility="{Binding flag}"/>
             </ToolBar>
             <DataGrid ItemsSource="{Binding Path=Points}" AutoGenerateColumns="False">
                 <DataGrid.Columns>

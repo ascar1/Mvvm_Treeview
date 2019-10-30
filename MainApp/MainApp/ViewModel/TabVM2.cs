@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using MainApp.Command;
 using MainApp.Model;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,6 +52,7 @@ namespace MainApp.ViewModel
                 return _CloseCommand ?? (_CloseCommand = new MyCommand(obj =>
                 {
                     Event1.Invoke(this, new PropertyChangedEventArgs("propertyName"));
+                    //Event2.Invoke(this, new PropertyChangedEventArgs("propertyName"));
                 }));
             }
         }
@@ -64,17 +67,54 @@ namespace MainApp.ViewModel
 
     public class TabAnalizResult : TabVM2
     {
-        private IteratorModel iterator;
+        private string Tiker;
+        private string Scale;
+
+        
 
         public TabAnalizResult(IDataService data)
             : base("Результаты анализа")
         {
+            Messenger.Default.Register<NotificationMessage>(
+                this,
+                ChartData.Token,
+                HandleMessage);
+            Messenger.Default.Register<PropertyChangedMessage<string>>(
+                this,
+                message => {
+                    
+                    Debug.WriteLine(message.PropertyName.ToString());
+                    Debug.WriteLine(message.OldValue + " --> " + message.NewValue);
+
+                    string str = message.PropertyName;
+                    switch (str)
+                    {
+                        case "Tiker":
+                            Tiker = message.NewValue;
+                            break;
+                        case "Scale":
+                            Scale = message.NewValue;
+                            break;
+                    }
+                });
+                
             DataGridColumns = new ObservableCollection<DataGridColumn>();
-            iterator = IteratorModel.GetInstance(null, null);
+            
             //this.UserRoleColumns.Add(new DataGridTextColumn { Header = "First Name", Binding = new Binding("col") });
             //this.UserRoleColumns.Add(new DataGridTextColumn { Header = "Last Name", Binding = new Binding("col1") });
             LoadData();
         }
+        private void HandleMessage(NotificationMessage notificationMessage)
+        {
+            
+            if (notificationMessage.Notification == "Show")
+            {
+                MessageBox.Show("! " + notificationMessage.Notification.ToString());
+                
+                
+            }
+        }
+
         public ObservableCollection<DataGridColumn> DataGridColumns { get; private set; }
 
         private ObservableCollection<string> listComboBoxItems = new ObservableCollection<string>();

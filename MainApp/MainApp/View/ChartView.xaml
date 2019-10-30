@@ -27,7 +27,7 @@
             </ToolBarPanel>
       
             <ToolBar DockPanel.Dock="Top">
-                <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Value}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
+                <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Tiker}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
                 <ComboBox ItemsSource="{Binding ListScaleItems}" SelectedItem="{Binding Scale}" Name="Scale"  Width="90"  VerticalAlignment="Top"  Visibility="{Binding flag}"/>
                 <Button  Content="Show" Command="{Binding ShowCommand}"/>
                 <Separator />

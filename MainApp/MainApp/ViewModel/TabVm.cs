@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Messaging;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +21,7 @@ namespace MainApp.ViewModel
 {
     public abstract class TabVm : ViewModelBase, INotifyPropertyChanged
     {
+        public readonly Guid Token = Guid.NewGuid();
         public string Header { get; set; }
         delegate void GetName();
         public TabVm(string header)
@@ -33,8 +36,8 @@ namespace MainApp.ViewModel
             {
                 return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
                 {
-                    MessageBox.Show("Команда TestCommand в abstract class TabVm" );
-                    //Event2?.Invoke("Команда TestCommand в abstract class TabVm");
+                    MessageBox.Show("Команда TestCommand в abstract class TabVm " + Token.ToString() );
+                    Event2?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
                 }));
             }
         }
@@ -46,7 +49,7 @@ namespace MainApp.ViewModel
                 return _CloseCommand ?? (_CloseCommand = new MyCommand(obj =>
                 {
                     Event1?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
-                    Event2?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
+                    //Event2?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
                 }));
             }
         }
@@ -56,15 +59,19 @@ namespace MainApp.ViewModel
             Event2?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
         }
         #endregion
-       // public event PropertyChangedEventHandler PropertyChanged;
-        public event PropertyChangedEventHandler Event1;
-        public event PropertyChangedEventHandler Event2;
-
-        /*    public event AccountHandler Event2;
-            protected bool EventIsNull()
+        private MyCommand _GetEvent;
+        public MyCommand GetEvent
+        {
+            get
             {
-                return Event2 == null;
-            }*/
+                return _GetEvent ?? (_GetEvent = new MyCommand(obj =>
+                {
+                    Event2?.Invoke(this, new PropertyChangedEventArgs("propertyName"));
+                }));
+            }
+        }
+        public event PropertyChangedEventHandler Event1;
+        public virtual event PropertyChangedEventHandler Event2;
     }
 
     public class Tab1Vm : TabVm
@@ -552,6 +559,8 @@ namespace MainApp.ViewModel
 
     public class ChartData : TabVm
     {
+        public new static readonly Guid Token = Guid.NewGuid();
+        public override event PropertyChangedEventHandler Event2;
         public SeriesCollection SeriesCollection { get; set; }
         public List<string> NLabels { get; set; }
         public List<string> NLabels1 { get; set; }
@@ -570,20 +579,27 @@ namespace MainApp.ViewModel
             set { listComboBoxItems = value; /*OnPropertyChanged();*/ }
         }
 
-        string v;
-        public string Value
+        string _Tiker;
+        public string Tiker
         {
-            get => v;
+            get => _Tiker;
             set
             {
-                Set(ref v, value);
+                var OldValue = _Tiker;
+                Set(ref _Tiker, value);
+                RaisePropertyChanged("Tiker", OldValue, value, true);
             }
         }
         string scale;
         public string Scale
         {
             get => scale;
-            set => Set(ref scale, value);            
+            set
+            {                
+                var OldValue = scale;
+                Set(ref scale, value);
+                RaisePropertyChanged("Scale", OldValue, value, true);
+            }
         }
         private ObservableCollection<string> listScaleItems = new ObservableCollection<string>();
         public ObservableCollection<string> ListScaleItems
@@ -595,8 +611,8 @@ namespace MainApp.ViewModel
         public ChartData(IDataService data)
             : base("График")
         {            
-             From = 1;
-             To = 3;
+            From = 1;
+            To = 3;
             ScaleSer = 1;
             _dataService = data;
             iterator = IteratorModel.GetInstance (data.GetMasterPoints(), data.GetFileArrs());
@@ -669,12 +685,8 @@ namespace MainApp.ViewModel
             {
                 return showCommand ?? (showCommand = new MyCommand(obj =>
                 {                    
-                    NewGETChart(Value, Scale);
-
-                    base.Test();
-                    //Event2?.Invoke("propertyName");
-
-
+                    NewGETChart(Tiker, Scale);
+                    Messenger.Default.Send(new NotificationMessage("Show"),Token);
                     //LoadData1(Value, Scale);
                 }));
             }
@@ -898,7 +910,7 @@ namespace MainApp.ViewModel
         {
             if (e.PropertyName == "From")
             {
-                GetDataChart(Value, Scale);
+                GetDataChart(Tiker, Scale);
                 // MessageBox.Show("!");
             }
         }
