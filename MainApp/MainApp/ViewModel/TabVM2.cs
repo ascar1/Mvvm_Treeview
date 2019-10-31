@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.Messaging;
 using MainApp.Command;
 using MainApp.Model;
+using MainApp.Supporting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -70,7 +71,7 @@ namespace MainApp.ViewModel
         private string Tiker;
         private string Scale;
 
-        
+        //public event PropertyChangedEventHandler PropertyChanged;
 
         public TabAnalizResult(IDataService data)
             : base("Результаты анализа")
@@ -99,10 +100,24 @@ namespace MainApp.ViewModel
                 });
                 
             DataGridColumns = new ObservableCollection<DataGridColumn>();
-            
+            Rows = null;
             //this.UserRoleColumns.Add(new DataGridTextColumn { Header = "First Name", Binding = new Binding("col") });
             //this.UserRoleColumns.Add(new DataGridTextColumn { Header = "Last Name", Binding = new Binding("col1") });
-            LoadData();
+            //LoadData();
+            
+        }
+
+        private string _SelectAvalysis;
+        public string SelectAvalysis
+        {
+            set
+            {
+                _SelectAvalysis = value;
+            }
+            get
+            {
+                return _SelectAvalysis;
+            }
         }
         private void HandleMessage(NotificationMessage notificationMessage)
         {
@@ -110,12 +125,25 @@ namespace MainApp.ViewModel
             if (notificationMessage.Notification == "Show")
             {
                 MessageBox.Show("! " + notificationMessage.Notification.ToString());
+                GetListComboBoxItems();
+                LoadData("");
                 
-                
+                Rows = Store.Tables[0].DefaultView;
             }
         }
-
-        public ObservableCollection<DataGridColumn> DataGridColumns { get; private set; }
+        private ObservableCollection<DataGridColumn> _DataGridColumns;
+        public ObservableCollection<DataGridColumn> DataGridColumns
+        {
+            get
+            {
+                return _DataGridColumns;
+            }
+            set
+            {
+                Set(ref _DataGridColumns, value);
+                //_DataGridColumns = value;
+            }
+        }
 
         private ObservableCollection<string> listComboBoxItems = new ObservableCollection<string>();
         public ObservableCollection<string> ListComboBoxItems
@@ -125,16 +153,125 @@ namespace MainApp.ViewModel
         }
         private void GetListComboBoxItems()
         {
-            //iterator.WorkPoints[0].
+            IteratorModel iterator = IteratorModel.GetInstance(null, null);
+            List<PointModel> points = iterator.GetListPoint(Tiker, Scale);            
+            
+            foreach(var tmp in points.Last().AnalysisResults)
+            {
+                ListComboBoxItems.Add(tmp.Name);
+            }
             
         }
-        public DataSet Store { get; set; }
-        public DataTable Table { get; set; }
-        public void LoadData()
+        private DataSet _Store;
+        public DataSet Store
         {
-            GetTestArrData();
+            get
+            {
+                return _Store;
+            }
+            set
+            {
+                _Store = value;
+            }
+        }
+        private DataTable _Table;
+        public DataTable Table
+        {
+            get
+            {
+                return _Table;
+            }
+            set
+            {
+                _Table = value;
+            }
+        }
+        public void LoadData(string Name)
+        {
+            if (Name != "")
+            {
+                GetArrData(Name);
+            }
+            else
+            {
+                GetTestArrData();
+            }
             InitializeRolesColumns();
         }
+
+        private void GetTable(List<string> Names)
+        {
+            Store = new DataSet("BookStore");
+            Table = new DataTable("Books");
+
+            Store.Clear();
+            // добавляем таблицу в dataset
+            Store.Tables.Add(Table);
+
+            // создаем столбцы для таблицы
+            DataColumn idColumn = new DataColumn("Id", Type.GetType("System.Int32"));
+            idColumn.Unique = true; // столбец будет иметь уникальное значение
+            idColumn.AllowDBNull = false; // не может принимать null
+            idColumn.AutoIncrement = true; // будет автоинкрементироваться
+            idColumn.AutoIncrementSeed = 1; // начальное значение
+            idColumn.AutoIncrementStep = 1; // приращении при добавлении новой строки
+            
+            DataColumn DateTimeColumn = new DataColumn("Data", Type.GetType("System.DateTime"));
+            Table.Columns.Add(idColumn);
+            Table.Columns.Add(DateTimeColumn);
+            foreach (var tmp in Names)
+            {
+                DataColumn Column = new DataColumn(tmp, Type.GetType("System.String"));
+                Table.Columns.Add(Column);
+            }
+            // определяем первичный ключ таблицы books
+            Table.PrimaryKey = new DataColumn[] { Table.Columns["Id"] };
+        }
+
+        private void GetRows(DateTime date, List<ResultArr> result)
+        {
+            DataRow row = Table.NewRow();
+            // row.ItemArray = new object[] { null, "Война и мир", 200 };
+            List<object> list = new List<object>();
+            list.Add(null);
+            list.Add(date);
+            foreach (var tmp in result)
+            {
+                list.Add(tmp.ValStr);
+            }          
+            row.ItemArray = list.ToArray();
+            Table.Rows.Add(row); // добавляем первую строку            
+
+        }
+
+        private void GetArrData(string name)
+        {
+            IteratorModel iterator = IteratorModel.GetInstance(null, null);
+            List<PointModel> points = iterator.GetListPoint(Tiker, Scale);
+            List<string> items = new List<string>();
+            List<ResultArr> resultArrs = new List<ResultArr>();
+
+            foreach (var item in  points.Last().AnalysisResults.Find(i => i.Name == name).ResultArr)
+            {
+                items.Add(item.Name);                
+            }
+            GetTable(items);
+            foreach (var tmp in points)
+            {                
+                var tmpItem = tmp.AnalysisResults.Find(i => i.Name == name);
+                if (tmpItem != null)
+                {
+                    resultArrs.Clear();
+                    foreach(var item in tmpItem.ResultArr)
+                    {
+                        resultArrs.Add(item);
+                    }
+                    GetRows(tmp.Date, resultArrs);
+                }
+            }  
+            
+        }
+
         private void GetTestArrData()
         {
             Store = new DataSet("BookStore");
@@ -164,13 +301,29 @@ namespace MainApp.ViewModel
             // определяем первичный ключ таблицы books
             Table.PrimaryKey = new DataColumn[] { Table.Columns["Id"] };
 
+            // Заполняем данные 
             DataRow row = Table.NewRow();
-            row.ItemArray = new object[] { null, "Война и мир", 200 };
+           // row.ItemArray = new object[] { null, "Война и мир", 200 };
+            List<object> list = new List<object>();
+            list.Add(null);
+            list.Add("Война и мир");
+            list.Add(200);
+            row.ItemArray = list.ToArray();
+
             Table.Rows.Add(row); // добавляем первую строку
             Table.Rows.Add(new object[] { null, "Отцы и дети", 170 }); // добавляем вторую строку
+            
+            
         }
         private void InitializeRolesColumns()
-        {            
+        {
+            int i = DataGridColumns.Count - 1;
+            while (DataGridColumns.Count !=0)
+            {
+                DataGridColumns.RemoveAt(i);
+                i--;
+            }
+
             foreach (DataColumn role in Store.Tables[0].Columns)
             {
                 this.AddColumn(role);               
@@ -178,42 +331,31 @@ namespace MainApp.ViewModel
         }
         private void AddColumn(DataColumn role /*UserRoleDataSet.RoleRow role*/)
         {
-            //var resourceDictionary = ResourceDictionaryResolver.GetResourceDictionary("Styles.xaml");
-            //var userRoleValueConverter = resourceDictionary["UserRoleValueConverter"] as IValueConverter;
-            //var checkBoxColumnStyle = resourceDictionary["CheckBoxColumnStyle"] as Style;
             var binding = new Binding(role.ColumnName);
-            //{
-            //    //Converter = userRoleValueConverter,
-            //    RelativeSource = new RelativeSource(RelativeSourceMode.FindAncestor, typeof(DataGridCell), 1),
-            //    Path = new PropertyPath("."),
-            //    Mode = BindingMode.TwoWay
-            //};
-
             var dataGridCheckBoxColumn = new DataGridTextColumn
             {
                 Header = role.Caption,
                 Binding = binding,
-                //IsThreeState = false,
                 CanUserSort = false,
                 
             };
-
-            //ObjectTag.SetTag(dataGridCheckBoxColumn, role);
-            this.DataGridColumns.Add(dataGridCheckBoxColumn);
+            DataGridColumns.Add(dataGridCheckBoxColumn);           
         }
-        private void GetListAnalysis()
-        {
 
-        }
+        private DataView _Rows;
         public DataView Rows
         {
-            get
+            set
             {
-                return Store.Tables[0].DefaultView;
+                Set(ref _Rows, value);
+            }
+            get
+            {                
+
+                return _Rows;
             }
         }
-        #region Обработка команд
-        private MyCommand _TestCommand;
+        #region Обработка команд        
         public MyCommand TestCommand
         {
             get
@@ -224,17 +366,33 @@ namespace MainApp.ViewModel
                 }));
             }
         }
-        private MyCommand _ShowCommand;
+        private MyCommand _TestCommand;
         public MyCommand ShowCommand
         {
             get
             {
                 return _ShowCommand ?? (_ShowCommand = new MyCommand(obj =>
-                {
-                    MessageBox.Show("Команда ShowCommand в TabAnalizResult");
+                {                                        
+                    LoadData(SelectAvalysis);
+                    Rows = Store.Tables[0].DefaultView;
                 }));
             }
         }
+        private MyCommand _ShowCommand;
+        public MyCommand ToExcelCommand
+        {
+            get
+            {
+                return toExcelCommand ?? (toExcelCommand = new MyCommand(obj =>
+                {
+                    MessageBox.Show("To Execel Command " + Rows.ToString());
+                    
+                    ToExcel excel = new ToExcel(Rows);
+                    excel.UploadToExcel();
+                }));
+            }            
+        }
+        private MyCommand toExcelCommand;
         #endregion
 
 

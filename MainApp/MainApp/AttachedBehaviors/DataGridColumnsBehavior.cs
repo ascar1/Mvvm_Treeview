@@ -7,7 +7,8 @@
 
     /// <summary>
     /// http://stackoverflow.com/questions/320089/how-do-i-bind-a-wpf-datagrid-to-a-variable-number-of-columns
-    /// </summary>
+    /// DataGridColumnsBehavior.BindableColumns
+    /// </summary>    
     public class DataGridColumnsBehavior
     {
         public static readonly DependencyProperty BindableColumnsProperty =

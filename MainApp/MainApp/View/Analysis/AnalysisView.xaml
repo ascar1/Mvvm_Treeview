@@ -7,22 +7,28 @@
              xmlns:local="clr-namespace:MainApp.View.Analysis"
              mc:Ignorable="d" 
              d:DesignHeight="850" d:DesignWidth="300">
+
     <Grid>
         <DockPanel LastChildFill="True">
             <ToolBar DockPanel.Dock="Top">
-                <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Value}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
+                <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding SelectAvalysis}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
                 <Button  Content="Show" Command="{Binding ShowCommand}"/>
                 <Separator />
+                
                 <Button  Content="Test" Command="{Binding TestCommand}"/>
+                <Button  Content="ToExcel" Command="{Binding ToExcelCommand}"/>
             </ToolBar>
 
             <ToolBarPanel DockPanel.Dock="Bottom" Orientation="Horizontal" >
                 <Button Content="123"/>
             </ToolBarPanel>
             <DataGrid ItemsSource="{Binding Rows}"  
-                      attachedBehaviors:DataGridColumnsBehavior.BindableColumns="{Binding UserRoleColumns}"
+                      attachedBehaviors:DataGridColumnsBehavior.BindableColumns="{Binding DataGridColumns}"                      
                       AutoGenerateColumns="False" 
                       DockPanel.Dock="Top" />
+            <!--
+            
+            -->
         </DockPanel>
 
     </Grid>
