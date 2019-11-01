@@ -20,7 +20,11 @@
     </Window.Resources>
 
     <Grid x:Name="LayoutRoot">
-        <Grid ShowGridLines="False">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="298*"/>
+            <ColumnDefinition Width="855*"/>
+        </Grid.ColumnDefinitions>
+        <Grid ShowGridLines="False" Grid.ColumnSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="135*"></RowDefinition>
@@ -34,7 +38,7 @@
 
             <Menu Height="25" VerticalAlignment="Top" Grid.Column="0" Grid.ColumnSpan="2">
                 <MenuItem Header="Work">
-                    <MenuItem Header="Analysis 1" ></MenuItem>
+                    <MenuItem Header="Analysis 1" Command="{Binding AnalysisCommand}" ></MenuItem>
                     <MenuItem Header="Analysis 2" ></MenuItem>
                     <MenuItem Header="Analysis 3" ></MenuItem>
                     <Separator />
@@ -42,7 +46,7 @@
                         <MenuItem Header="WinForms"></MenuItem>
                         <MenuItem Header="WPF" ></MenuItem>
                     </MenuItem>
-                    
+
                     <MenuItem Header="Exit" ></MenuItem>
                 </MenuItem>
                 <MenuItem Header="Edit" ></MenuItem>
@@ -60,7 +64,7 @@
 
             <local:UserControl1 Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"/>
             <local:UserControl2  Grid.Column="1" Grid.Row="1"  Grid.RowSpan="3"/>
-<!--
+            <!--
             <Button Grid.Column="1" Grid.Row="1" Content="Строка 0 Столбец 1" Grid.RowSpan="3" />
             -->
             <TextBlock Grid.Column="0" Grid.Row="3" Text="{Binding Str}" />

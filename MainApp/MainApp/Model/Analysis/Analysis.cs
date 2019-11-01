@@ -14,50 +14,41 @@ namespace MainApp.Model.Analysis
     /// </summary>
     class Analysis1 :  IAnalysis
     {
+        //double [][] Signature = new double[5][];
+        
         public Analysis1(DateModel dateModel, string name )
         {
             this.Name = name;
             this.DateModel = dateModel;
             PerAnalysis = 4;
             AnalysisResults = new AnalysisResult(name);
-            
         }
-        
+
         public string Name { get => name; set => name = value; }
         private string name;
         
         private AnalysisResult AnalysisResults;
         private DateModel DateModel;
-
         private readonly int PerAnalysis;
-
         private ParamDataService _ParamDS = new ParamDataService();
         private SupportingClass  supporting = SupportingClass.GetInstance();
         
-
         private List<double> GetListIndexValue(string nameIndex, string nameVal, int n)
         {
             List<double> Result = new List<double>();                       
             for (int i = DateModel.Points.Count-1; i >= DateModel.Points.Count() - n; i--)
             {
-                //MessageBox.Show(i.ToString());
-                //var tmp = DateModel.Points[i].IndexPoint.Find(i1 => i1.Name == nameIndex);
                 Result.Add(DateModel.Points[i].IndexPoint.Find(i1 => i1.Name == nameIndex).Value.Find(j => j.Name == nameVal).Value);
             }
             Result.Reverse();
             return Result;
         }
-
         private void AnalysisEMA (string name)
-        {
-            //MessageBox.Show(name);
-            //DateModel.Points.Last().AnalysisResults.Add(new AnalysisResult(Name) { Result = "test" });
-            
+        {          
             List<double> EMAPoint = GetListIndexValue(name, "EMA", PerAnalysis);
             List<double> tmp = supporting.GetNormData(EMAPoint);
             ResultArr ResultArr = new ResultArr() { Name = name, ValStr = String.Join(";", tmp) };
-            AnalysisResults.ResultArr.Add(ResultArr);
-            //MessageBox.Show(String.Join(";",tmp));
+            AnalysisResults.ResultArr.Add(ResultArr);            
         }
 
         #region Публичные методы 
@@ -69,7 +60,7 @@ namespace MainApp.Model.Analysis
             {
                 return;
             }
-
+            #region  Расчитать данные по индексам
             foreach (var items in lavels)
             {
                 if (_ParamDS.GetParamValue(items.Id,"Type") == "EMA")
@@ -83,7 +74,30 @@ namespace MainApp.Model.Analysis
                     }
                 }                
             }
-
+            #endregion
+            #region Проанализировать данные 
+            List<string> resultArr = new List<string>();
+            string result = "";
+            foreach(var tmp in AnalysisResults.ResultArr)
+            {
+                resultArr.Add(supporting.ChekSignature(tmp.ValStr));
+            }
+            foreach(string tmp in resultArr)
+            {
+                switch(tmp)
+                {
+                    case "Up":
+                        AnalysisResults.Result = tmp;
+                        result = tmp;
+                        break;
+                    case "Down":
+                        AnalysisResults.Result = tmp;
+                        result = tmp;
+                        break;
+                }
+            }
+            #endregion
+            #region Записать данные в коллекцию 
             int ind = DateModel.Points.Last().AnalysisResults.FindIndex(i => i.Name == Name);
             if (ind == -1)
             {
@@ -93,9 +107,7 @@ namespace MainApp.Model.Analysis
             {
                 DateModel.Points.Last().AnalysisResults[ind] = AnalysisResults;
             }
-
-            
-            //AnalysisEMA("EMA");            
+            #endregion                  
         }
 
         public string result()
@@ -108,5 +120,22 @@ namespace MainApp.Model.Analysis
             return AnalysisResults.ResultArr;            
         }
         #endregion
+    }
+
+    class Analysis2 : IAnalysis
+    {
+        public Analysis2(DateModel dateModel, string name)
+        {
+        }
+
+        public void GetAnalysis()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string result()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

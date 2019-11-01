@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MainApp.Model;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -19,16 +20,50 @@ namespace MainApp.Supporting
         private Excel.Worksheet worksheet = null;
 
         private DataView Data;
-        public ToExcel(DataView data)
+        private List<WorkPointModel> workPoints;
+        public ToExcel(DataView data) 
         {
             Data = data;
+        }
+        public ToExcel(List<WorkPointModel> WorkPoints)
+        {
+            workPoints = WorkPoints;
+        }
+
+        public void UploadToExcel1()
+        {
+            CreateExcel();
+            foreach (var tmp in workPoints)
+            {
+                
+                foreach(var item in tmp.Data.Find(i=>i.Scale=="D").Points)
+                {
+                    int j = 1;
+                    if (item.AnalysisResults.Count() != 0)
+                    {
+                        
+                        worksheet.Cells[row, j] = tmp.Tiker.ToString();
+                        j++;
+                        worksheet.Cells[row, j] = item.Date.ToString();
+                        j++;
+                        
+                        foreach (var item1 in item.AnalysisResults[0].ResultArr)
+                        {
+                            worksheet.Cells[row, j] = item1.ValStr.ToString();
+                            j++;
+                        }
+                        row++;
+                    }
+                }
+            }
+            app.Visible = true;
         }
 
         public void UploadToExcel()
         {
             CreateExcel();
             AddHead();
-
+            AddBody();
             app.Visible = true;
         }
         private void CreateExcel()
@@ -38,7 +73,6 @@ namespace MainApp.Supporting
             workbook = app.Workbooks.Add(1);
             worksheet = (Excel.Worksheet)workbook.Sheets[1];
         }
-
         private void RangeCell(string Cell1, string Cell2)
         {
             Excel.Range _excelCells1 = (Excel.Range)worksheet.get_Range(Cell1, Cell2).Cells;
@@ -48,19 +82,17 @@ namespace MainApp.Supporting
         private void AddHead()
         {
             Excel._Worksheet worksheet = app.ActiveSheet;
-            RangeCell("A1", "A3");
+            //RangeCell("A1", "A3");
             int j = 1;
             //Data.Table.ToString();
             foreach(var tmp in Data.Table.Columns)
-            {
-                MessageBox.Show(tmp.ToString());
-                
+            {                
+                worksheet.Cells[row, j] = tmp.ToString();
+                 j++;
             }
+            row++;
 
 
-
-
-            worksheet.Cells[1, 1] = "Номер счета второго порядка";
             #region Шапка отчета
             /*
             worksheet.Cells[1, 1] = "Номер счета второго порядка";
@@ -104,6 +136,20 @@ namespace MainApp.Supporting
             */
             #endregion
 
+        }
+        private void AddBody()
+        {
+            int j;
+            for (int i = 0; i < Data.Table.Rows.Count; i++)
+            {
+                j = 1;
+                foreach (var item in Data.Table.Rows[i].ItemArray)
+                {                    
+                    worksheet.Cells[row, j] = item.ToString();
+                    j++;                    
+                }
+                row++;
+            }
         }
 
     }

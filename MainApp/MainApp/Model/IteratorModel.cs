@@ -137,6 +137,9 @@ namespace MainApp.Model
         {
             IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"),"Analysis1");
             analysis1.GetAnalysis();
+            IAnalysis analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "60"), "Analysis1");
+            analysis2.GetAnalysis();
+
             //MessageBox.Show("!");
 
         }

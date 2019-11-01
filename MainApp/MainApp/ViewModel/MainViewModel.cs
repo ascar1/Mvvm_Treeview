@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
 using MainApp.Command;
 using MainApp.Model;
-
+using MainApp.Supporting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -93,8 +93,7 @@ namespace MainApp.ViewModel
         }
 
         private void MainViewModel_Event2(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            MessageBox.Show("!!!");
+        {            
             throw new NotImplementedException();
         }
 
@@ -114,10 +113,8 @@ namespace MainApp.ViewModel
         }
 
         private void MainViewModel_event1(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-           // MessageBox.Show("!!!");
-            Tabs.Remove(_selectedTab);
-            
+        {           
+            Tabs.Remove(_selectedTab);            
         }
 
         private ObservableCollection<TabVm> _tabs;
@@ -160,11 +157,6 @@ namespace MainApp.ViewModel
             {
                 return _TestCommand ?? (_TestCommand = new MyCommand(obj =>
                 {
-                    //Tabs.Add(new Tab2Vm());
-                    //Tabs.Last().event1 += MainViewModel_event1;
-                    //SelectedTab = Tabs.Last();
-                    //Str = "!!!";
-                    //nPropertyChanged("Str");
                     Tabs.Add(new TestViewModel(_dataService));
                     Tabs.Last().Event1 += MainViewModel_event1;
 
@@ -254,6 +246,21 @@ namespace MainApp.ViewModel
                     Tabs.Last().Event1 += MainViewModel_event1;
                     //Tabs.Last().Event2 += MainViewModel_event2;
                     SelectedTab = Tabs.Last();
+                }));
+            }
+        }
+
+        private MyCommand _AnalysisCommand;
+        public MyCommand AnalysisCommand
+        {
+            get
+            {
+                return _AnalysisCommand ?? (_AnalysisCommand = new MyCommand(obj =>
+                {                   
+                    IteratorModel iterator = IteratorModel.GetInstance(_dataService.GetMasterPoints(), _dataService.GetFileArrs());
+                    iterator.All();
+                    ToExcel Excel1 = new ToExcel(iterator.WorkPoints);
+                    Excel1.UploadToExcel1();
                 }));
             }
         }
