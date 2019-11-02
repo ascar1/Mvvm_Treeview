@@ -12,8 +12,7 @@ namespace MainApp.Model.Analysis
     /// </summary>
     
     public class SupportingClass
-    {
-        // TODO: Реализовать нормализацию данных
+    {       
         #region Реализация патерна Singletone
         private static SupportingClass instance;
         private SupportingClass()
@@ -28,6 +27,7 @@ namespace MainApp.Model.Analysis
         }
         #endregion
 
+        #region Нормализация данных от 0 до 1
         public List<double> GetNormData (List<double> InputArr)
         {
             List<double> Result = new List<double>();
@@ -41,6 +41,8 @@ namespace MainApp.Model.Analysis
             }
             return Result;
         }
+        #endregion
+
         #region Результат по методу сигнатур 
         private List<List<double>> Signature = new List<List<double>>();
         private void LoadSign()
@@ -66,10 +68,6 @@ namespace MainApp.Model.Analysis
 
             return "";
         }
-
-
         #endregion
-
-
     }
 }

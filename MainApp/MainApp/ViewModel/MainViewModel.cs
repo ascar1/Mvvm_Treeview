@@ -88,6 +88,15 @@ namespace MainApp.ViewModel
             Tabs2.Last().Event1 += MainViewModel_event1;
             SelectedTab2 = Tabs2.FirstOrDefault();
 
+            Tabs2.Add(new TabDeal(_dataService));
+            Tabs2.Last().Event1 += MainViewModel_event1;
+            SelectedTab2 = Tabs2.FirstOrDefault();
+
+            Tabs2.Add(new TabOrder(_dataService));
+            Tabs2.Last().Event1 += MainViewModel_event1;
+            SelectedTab2 = Tabs2.FirstOrDefault();
+
+
             SelectedTab = Tabs.FirstOrDefault();
             Str = "Строка 2 Столбец 1";
         }

@@ -32,7 +32,7 @@ namespace MainApp.Model.Analysis
         private readonly int PerAnalysis;
         private ParamDataService _ParamDS = new ParamDataService();
         private SupportingClass  supporting = SupportingClass.GetInstance();
-        
+        private string Result = "";
         private List<double> GetListIndexValue(string nameIndex, string nameVal, int n)
         {
             List<double> Result = new List<double>();                       
@@ -88,11 +88,11 @@ namespace MainApp.Model.Analysis
                 {
                     case "Up":
                         AnalysisResults.Result = tmp;
-                        result = tmp;
+                        Result = tmp;
                         break;
                     case "Down":
                         AnalysisResults.Result = tmp;
-                        result = tmp;
+                        Result = tmp;
                         break;
                 }
             }
@@ -110,9 +110,9 @@ namespace MainApp.Model.Analysis
             #endregion                  
         }
 
-        public string result()
+        public string GetResult()
         {
-            throw new NotImplementedException();
+            return Result;
         }
 
         public List<ResultArr> ResultArr()
@@ -121,21 +121,113 @@ namespace MainApp.Model.Analysis
         }
         #endregion
     }
-
-    class Analysis2 : IAnalysis
+    /// <summary>
+    /// Анализ 2 Принимаем решение об открытии позиции 
+    /// </summary>
+    class Analysis2 
     {
-        public Analysis2(DateModel dateModel, string name)
+        private readonly int PerAnalysis;
+        private DateModel DateModel;
+        private ParamDataService _ParamDS = new ParamDataService();
+        private AnalysisResult AnalysisResults;
+        private string A1Result;
+
+        public bool HaveOrder
         {
+            get
+            {
+                if (OrderModels == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }            
+        }
+        public OrderModel OrderModels { get; set; }
+        public string Name { get => name; set => name = value; }
+        private string name;
+        public string Tiker { get; set; }
+        public Analysis2(DateModel dateModel, string name, string tiker, string A1Result)
+        {
+            this.Tiker = tiker;
+            this.Name = name;
+            this.DateModel = dateModel;
+            this.A1Result = A1Result;
+            PerAnalysis = 4;
+            AnalysisResults = new AnalysisResult(name);
+        }
+
+        private void GetOrder()
+        {
+            
+            OrderModels = new OrderModel() {
+                Tiker = Tiker,
+                Type = A1Result,
+                Vol = 1,
+                Price = DateModel.Points.Last().Close,
+                BeginDate = DateModel.Points.Last().Date,
+                EndDate = DateModel.Points.Last().Date.AddDays(1),
+                IsActive = true
+            };
+
         }
 
         public void GetAnalysis()
         {
-            throw new NotImplementedException();
+            switch (A1Result)
+            {
+                case "Up":
+                    GetOrder();
+                    break;
+                case "Down":
+                    break;
+            }
+
+
         }
 
-        public string result()
+        public string GetResult()
         {
             throw new NotImplementedException();
+        }
+    }
+    class Analysis3
+    {
+        private string A1Result;
+        public string Name { get; set; }        
+        public string Tiker { get; set; }
+        public double StopOrder { get; set; }
+        private DateModel DateModel;
+        public Analysis3(DateModel dateModel, string name,string tiker, string A1Result )
+        {
+            this.Tiker = tiker;
+            this.Name = name;
+            this.A1Result = A1Result;
+            this.StopOrder = 0;
+            this.DateModel = dateModel;
+        }
+
+        private void GetStopOrder ()
+        {
+            if (DateModel.Points.Last().Date.Hour == 18)
+            {
+                StopOrder = DateModel.Points.Last().Close;
+            }
+        }
+
+        public void GetAnalysis()
+        {
+            switch (A1Result)
+            {
+                case "Up":
+                    GetStopOrder();
+                    break;
+                case "Down":
+                    break;
+            }
         }
     }
 }

@@ -108,6 +108,12 @@
     <Compile Include="View\Analysis\AnalysisView.xaml.cs">
       <DependentUpon>AnalysisView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\Analysis\DealView.xaml.cs">
+      <DependentUpon>DealView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Analysis\OrderView.xaml.cs">
+      <DependentUpon>OrderView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ChartUserControl.xaml.cs">
       <DependentUpon>ChartUserControl.xaml</DependentUpon>
     </Compile>
@@ -166,6 +172,14 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\Analysis\AnalysisView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Analysis\DealView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Analysis\OrderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

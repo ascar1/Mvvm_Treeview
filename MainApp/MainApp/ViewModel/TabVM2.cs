@@ -71,7 +71,6 @@ namespace MainApp.ViewModel
         private string Tiker;
         private string Scale;
 
-        //public event PropertyChangedEventHandler PropertyChanged;
 
         public TabAnalizResult(IDataService data)
             : base("Результаты анализа")
@@ -198,7 +197,6 @@ namespace MainApp.ViewModel
             }
             InitializeRolesColumns();
         }
-
         private void GetTable(List<string> Names)
         {
             Store = new DataSet("BookStore");
@@ -227,7 +225,6 @@ namespace MainApp.ViewModel
             // определяем первичный ключ таблицы books
             Table.PrimaryKey = new DataColumn[] { Table.Columns["Id"] };
         }
-
         private void GetRows(DateTime date, List<ResultArr> result)
         {
             DataRow row = Table.NewRow();
@@ -243,7 +240,6 @@ namespace MainApp.ViewModel
             Table.Rows.Add(row); // добавляем первую строку            
 
         }
-
         private void GetArrData(string name)
         {
             IteratorModel iterator = IteratorModel.GetInstance(null, null);
@@ -271,7 +267,6 @@ namespace MainApp.ViewModel
             }  
             
         }
-
         private void GetTestArrData()
         {
             Store = new DataSet("BookStore");
@@ -341,7 +336,6 @@ namespace MainApp.ViewModel
             };
             DataGridColumns.Add(dataGridCheckBoxColumn);           
         }
-
         private DataView _Rows;
         public DataView Rows
         {
@@ -394,13 +388,11 @@ namespace MainApp.ViewModel
         }
         private MyCommand toExcelCommand;
         #endregion
-
-
     }
 
     public class TabOrder : TabVM2
     {
-        public TabOrder()
+        public TabOrder(IDataService data)
             : base("Список выставленных ордеров")
         {
         }
@@ -408,7 +400,7 @@ namespace MainApp.ViewModel
 
     public class TabDeal : TabVM2
     {
-        public TabDeal()
+        public TabDeal(IDataService data)
             : base("Список сделок ")
         {
         }

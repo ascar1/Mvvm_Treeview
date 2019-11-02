@@ -12,6 +12,13 @@
             <DataTemplate DataType="{x:Type vm:TabAnalizResult}">
                 <local:AnalysisView></local:AnalysisView>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:TabOrder}">
+                <local:DealView></local:DealView>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:TabDeal}">
+                <local:OrderView></local:OrderView>
+            </DataTemplate>
+
         </ResourceDictionary>
     </UserControl.Resources>
     

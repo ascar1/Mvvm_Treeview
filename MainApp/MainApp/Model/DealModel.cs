@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace MainApp.Model
 {
-    class DealModel
+    public class DealModel
     {
+        public string Tiker { get; set; }
+        public string Type { get; set; }
+        public int Vol { get; set; }
+        public double OpenPrice { get; set; }
+        public double StopPrice { get; set; }
+        public DateTime OpenDate { get; set; }
+        public double ClosePrice { get; set; }
+        public DateTime CloseDate { get; set; }
+        public bool InMarket { get; set; }
     }
 }

@@ -9,7 +9,7 @@ namespace MainApp.Model.Analysis
     public interface IAnalysis
     {
         
-        string result();
+        string GetResult();
         void GetAnalysis();
     }
 
