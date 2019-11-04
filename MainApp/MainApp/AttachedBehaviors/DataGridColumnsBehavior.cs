@@ -44,7 +44,7 @@
                 {
                     dataGrid.Columns.Add(column);
                 }
-
+                /*
                 columns.CollectionChanged += (sender, e2) =>
                 {
                     NotifyCollectionChangedEventArgs ne = e2;
@@ -79,6 +79,7 @@
                         dataGrid.Columns[ne.NewStartingIndex] = ne.NewItems[0] as DataGridColumn;
                     }
                 };
+                */
             }
         }
     }

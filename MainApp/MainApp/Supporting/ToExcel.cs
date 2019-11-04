@@ -56,19 +56,22 @@ namespace MainApp.Supporting
                     }
                 }
             }
-            app.Visible = true;
+            //app.Visible = true;
+            //app.Interactive = true;
         }
 
         public void UploadToExcel()
         {
             CreateExcel();
             AddHead();
-            AddBody();
+            //AddBody();
             app.Visible = true;
+            //app.Interactive = true;
         }
         private void CreateExcel()
         {
             app = new Excel.Application();
+            app.Interactive = false;
             app.Visible = false;
             workbook = app.Workbooks.Add(1);
             worksheet = (Excel.Worksheet)workbook.Sheets[1];

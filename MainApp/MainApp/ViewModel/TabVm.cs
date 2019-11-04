@@ -422,7 +422,7 @@ namespace MainApp.ViewModel
         private void LoadData(string tiker)
         {
             Points.Clear();
-            foreach (PointModel i in _dataService.GetMasterPoint("60", Value))
+            foreach (PointModel i in _dataService.GetMasterPoint("60", Tiker))
             {
                 Points.Add(i);
             };
@@ -444,13 +444,13 @@ namespace MainApp.ViewModel
             set { listComboBoxItems = value; /*OnPropertyChanged();*/ }
         }
 
-        string v;
-        public string Value
+        string _Tiker;
+        public string Tiker
         {
-            get => v;
+            get => _Tiker;
             set
             {
-                Set(ref v, value);
+                Set(ref _Tiker, value);
                 if (FlagMaster)
                 {
                     LoadData(value);
@@ -461,7 +461,7 @@ namespace MainApp.ViewModel
         public ObservableCollection<string> ListScaleItems
         {
             get { return listScaleItems; }
-            set { listScaleItems = value; /*OnPropertyChanged();*/ }
+            set { listScaleItems = value; }
         }
         string scale;
         public string Scale
@@ -481,13 +481,13 @@ namespace MainApp.ViewModel
                    // MessageBox.Show("TabData NextCommand");
                     if (FlagMaster)
                     {
-                        LoadData(Value);
+                        LoadData(Tiker);
                     }    
                     else
                     {
 
                         iterator.NextN(100);
-                        LoadData1(v,scale);
+                        LoadData1(_Tiker,scale);
                     }
                 }));
             }
@@ -498,15 +498,13 @@ namespace MainApp.ViewModel
             get
             {
                 return _AllCommand ?? (_AllCommand = new MyCommand(obj =>
-                {
-                    //MessageBox.Show("TabData AllCommand");
+                {                    
                     if (FlagMaster)
                     {
-                        LoadData(Value);
+                        LoadData(Tiker);
                     }
                     else
-                    {
-                        //iterator.GetSeed();
+                    {                        
                         iterator.All();
                     }
                 }));
@@ -518,9 +516,8 @@ namespace MainApp.ViewModel
             get
             {
                 return showCommand ?? (showCommand = new MyCommand(obj =>
-                {
-                    //MessageBox.Show("ShowCommand");
-                    LoadData1(Value, Scale);
+                {                    
+                    LoadData1(Tiker, Scale);
                 }));
             }
         }

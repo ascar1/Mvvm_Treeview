@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -122,11 +123,9 @@ namespace MainApp.ViewModel
         {
             
             if (notificationMessage.Notification == "Show")
-            {
-                MessageBox.Show("! " + notificationMessage.Notification.ToString());
+            {                
                 GetListComboBoxItems();
-                LoadData("");
-                
+                LoadData("");                
                 Rows = Store.Tables[0].DefaultView;
             }
         }
@@ -155,7 +154,7 @@ namespace MainApp.ViewModel
             IteratorModel iterator = IteratorModel.GetInstance(null, null);
             List<PointModel> points = iterator.GetListPoint(Tiker, Scale);            
             
-            foreach(var tmp in points.Last().AnalysisResults)
+            foreach(var tmp in points[points.Count()-2].AnalysisResults)
             {
                 ListComboBoxItems.Add(tmp.Name);
             }
@@ -237,7 +236,7 @@ namespace MainApp.ViewModel
                 list.Add(tmp.ValStr);
             }          
             row.ItemArray = list.ToArray();
-            Table.Rows.Add(row); // добавляем первую строку            
+            Table.Rows.Add(row);       
 
         }
         private void GetArrData(string name)
@@ -247,7 +246,7 @@ namespace MainApp.ViewModel
             List<string> items = new List<string>();
             List<ResultArr> resultArrs = new List<ResultArr>();
 
-            foreach (var item in  points.Last().AnalysisResults.Find(i => i.Name == name).ResultArr)
+            foreach (var item in  points[points.Count()-2].AnalysisResults.Find(i => i.Name == name).ResultArr)
             {
                 items.Add(item.Name);                
             }
@@ -324,7 +323,7 @@ namespace MainApp.ViewModel
                 this.AddColumn(role);               
             }
         }
-        private void AddColumn(DataColumn role /*UserRoleDataSet.RoleRow role*/)
+        private void AddColumn(DataColumn role)
         {
             var binding = new Binding(role.ColumnName);
             var dataGridCheckBoxColumn = new DataGridTextColumn
@@ -392,10 +391,219 @@ namespace MainApp.ViewModel
 
     public class TabOrder : TabVM2
     {
-        public TabOrder(IDataService data)
-            : base("Список выставленных ордеров")
+        private string Tiker;
+        private string Scale;
+        private string NameType;
+        private DataView _Rows;
+        public DataView Rows
         {
+            set
+            {
+                Set(ref _Rows, value);
+            }
+            get
+            {
+
+                return _Rows;
+            }
         }
+        private DataSet _Store;
+        public DataSet Store
+        {
+            get
+            {
+                return _Store;
+            }
+            set
+            {
+                _Store = value;
+            }
+        }
+        private DataTable _Table;
+        public DataTable Table
+        {
+            get
+            {
+                return _Table;
+            }
+            set
+            {
+                _Table = value;
+            }
+        }
+        private ObservableCollection<DataGridColumn> _DataGridColumns;
+        public ObservableCollection<DataGridColumn> DataGridColumns
+        {
+            get
+            {
+                return _DataGridColumns;
+            }
+            set
+            {
+                Set(ref _DataGridColumns, value);
+                //_DataGridColumns = value;
+            }
+        }
+
+        public TabOrder(IDataService data, string nametype)
+            : base(nametype)
+        {
+            this.NameType = nametype;
+            Messenger.Default.Register<NotificationMessage>(this,ChartData.Token, HandleMessage);
+            Messenger.Default.Register<PropertyChangedMessage<string>>(
+            this,
+            message =>
+            {
+
+                Debug.WriteLine(message.PropertyName.ToString());
+                Debug.WriteLine(message.OldValue + " --> " + message.NewValue);
+
+                string str = message.PropertyName;
+                switch (str)
+                {
+                    case "Tiker":
+                        Tiker = message.NewValue;
+                        break;
+                    case "Scale":
+                        Scale = message.NewValue;
+                        break;
+                }
+            });
+            DataGridColumns = new ObservableCollection<DataGridColumn>();
+            Rows = null;
+        }
+        private void HandleMessage(NotificationMessage notificationMessage)
+        {
+            if (notificationMessage.Notification == "Show")
+            {               
+                LoadData();
+                Rows = Store.Tables[0].DefaultView;
+            }
+        }
+
+
+        private void InitializeRolesColumns()
+        {
+            int i = DataGridColumns.Count - 1;
+            while (DataGridColumns.Count != 0)
+            {
+                DataGridColumns.RemoveAt(i);
+                i--;
+            }
+
+            foreach (DataColumn role in Store.Tables[0].Columns)
+            {
+                this.AddColumn(role);
+            }
+        }
+        private void AddColumn(DataColumn role)
+        {
+            var binding = new Binding(role.ColumnName);
+            var dataGridCheckBoxColumn = new DataGridTextColumn
+            {
+                Header = role.Caption,
+                Binding = binding,
+                CanUserSort = false,
+
+            };
+            DataGridColumns.Add(dataGridCheckBoxColumn);
+        }
+        private void GetTable(List<string> Names)
+        {
+            Store = new DataSet("BookStore");
+            Table = new DataTable("Books");
+
+            Store.Clear();
+            // добавляем таблицу в dataset
+            Store.Tables.Add(Table);
+
+            // создаем столбцы для таблицы
+            DataColumn idColumn = new DataColumn("Id", Type.GetType("System.Int32"));
+            idColumn.Unique = true; // столбец будет иметь уникальное значение
+            idColumn.AllowDBNull = false; // не может принимать null
+            idColumn.AutoIncrement = true; // будет автоинкрементироваться
+            idColumn.AutoIncrementSeed = 1; // начальное значение
+            idColumn.AutoIncrementStep = 1; // приращении при добавлении новой строки         
+            Table.Columns.Add(idColumn);
+           
+            foreach (var tmp in Names)
+            {
+                DataColumn Column = new DataColumn(tmp, Type.GetType("System.String"));
+                Table.Columns.Add(Column);
+            }
+            // определяем первичный ключ таблицы books
+            Table.PrimaryKey = new DataColumn[] { Table.Columns["Id"] };
+        }
+        private void LoadData()
+        {
+            IteratorModel iterator = IteratorModel.GetInstance(null, null);
+            //List<PointModel> points = iterator.GetListPoint(Tiker, Scale);
+            
+            List<ResultArr> resultArrs = new List<ResultArr>();
+            List<string> items = new List<string>();
+            Type type;
+            IEnumerable<object> _list;
+            if (NameType == "Ордера")
+            {
+                type = Type.GetType("MainApp.Model.OrderModel");
+                _list = iterator.orderModels.FindAll(i => i.Tiker == Tiker);
+            }
+            else //if (NameType == "Сделки")
+            {
+                type = Type.GetType("MainApp.Model.DealModel");
+                _list = iterator.dealModels.FindAll(i => i.Tiker == Tiker);
+            }
+            
+            foreach (var tmp in type.GetProperties())
+            {
+
+                items.Add(tmp.Name);               
+            }            
+            GetTable(items);
+
+            foreach (var tmp in _list)
+            {
+                DataRow row = Table.NewRow();
+                List<object> list = new List<object>();
+                list.Add(null);
+                
+                foreach (var tmp1 in type.GetProperties())
+                {
+                    PropertyInfo fi ;
+                    if (NameType == "Ордера")
+                    {
+                        fi = typeof(OrderModel).GetProperty(tmp1.Name.ToString());
+                    }
+                    else //if (NameType == "Сделки")
+                    {
+                        fi = typeof(DealModel).GetProperty(tmp1.Name.ToString());
+                    }
+                                     
+                    list.Add(fi.GetValue(tmp).ToString());
+                }
+                row.ItemArray = list.ToArray();
+                Table.Rows.Add(row);
+            }
+            InitializeRolesColumns();
+        }
+
+        #region Обработка команд 
+        public MyCommand ToExcelCommand
+        {
+            get
+            {
+                return toExcelCommand ?? (toExcelCommand = new MyCommand(obj =>
+                {
+                    MessageBox.Show("To Execel Command " + Rows.ToString());
+
+                    ToExcel excel = new ToExcel(Rows);
+                    excel.UploadToExcel();
+                }));
+            }
+        }
+        private MyCommand toExcelCommand;
+        
+        #endregion
     }
 
     public class TabDeal : TabVM2

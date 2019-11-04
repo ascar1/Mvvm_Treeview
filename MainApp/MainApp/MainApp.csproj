@@ -101,6 +101,7 @@
     <Compile Include="Model\ParamDataService.cs" />
     <Compile Include="Model\ParamModel.cs" />
     <Compile Include="Supporting\ToExcel.cs" />
+    <Compile Include="Supporting\ToTXT.cs" />
     <Compile Include="ViewModel\ChartViewModel.cs" />
     <Compile Include="ViewModel\FileViewModel.cs" />
     <Compile Include="ViewModel\TabVM1.cs" />

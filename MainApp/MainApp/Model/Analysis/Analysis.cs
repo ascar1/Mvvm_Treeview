@@ -35,22 +35,37 @@ namespace MainApp.Model.Analysis
         private string Result = "";
         private List<double> GetListIndexValue(string nameIndex, string nameVal, int n)
         {
-            List<double> Result = new List<double>();                       
+            List<double> Result = new List<double>();            
             for (int i = DateModel.Points.Count-1; i >= DateModel.Points.Count() - n; i--)
             {
-                Result.Add(DateModel.Points[i].IndexPoint.Find(i1 => i1.Name == nameIndex).Value.Find(j => j.Name == nameVal).Value);
+                Result.Add(DateModel.Points[i].IndexPoint.Find(i1 => i1.Name == nameIndex).Value.Find(j => j.Name == nameVal).Value);                
             }
-            Result.Reverse();
+            Result.Reverse();            
             return Result;
         }
         private void AnalysisEMA (string name)
         {          
             List<double> EMAPoint = GetListIndexValue(name, "EMA", PerAnalysis);
+            for (int i = 0; i < EMAPoint.Count;i++)
+            {
+                EMAPoint[i] = Math.Round(EMAPoint[i], 2);
+            }
+            
+            ResultArr ResultArr = new ResultArr() { Name = name + "Val", ValStr = String.Join(";", EMAPoint) };
+            AnalysisResults.ResultArr.Add(ResultArr);
+            
             List<double> tmp = supporting.GetNormData(EMAPoint);
-            ResultArr ResultArr = new ResultArr() { Name = name, ValStr = String.Join(";", tmp) };
-            AnalysisResults.ResultArr.Add(ResultArr);            
+            ResultArr = new ResultArr() { Name = name, ValStr = String.Join(";", tmp) };
+            AnalysisResults.ResultArr.Add(ResultArr);
         }
 
+        private void AnalysisMACD(string name)
+        {
+            List<double> EMAPoint = GetListIndexValue(name, "Bar_Graph", PerAnalysis);
+            List<double> tmp = supporting.GetNormData(EMAPoint);
+            ResultArr ResultArr = new ResultArr() { Name = name, ValStr = String.Join(";", tmp) };
+            AnalysisResults.ResultArr.Add(ResultArr);
+        }
         #region Публичные методы 
         public void GetAnalysis()
         {
@@ -63,32 +78,43 @@ namespace MainApp.Model.Analysis
             #region  Расчитать данные по индексам
             foreach (var items in lavels)
             {
-                if (_ParamDS.GetParamValue(items.Id,"Type") == "EMA")
-                {
+                //if (_ParamDS.GetParamValue(items.Id,"Type") == "EMA")
+                //{
                     string type = _ParamDS.GetParamValue(items.Id, "Type");
                     switch (type)
                     {
                         case "EMA":
                             AnalysisEMA(_ParamDS.GetParamValue(items.Id, "Name"));
                         break;
+                        case "MACD":
+                            AnalysisMACD("MACD");
+                            break;
                     }
-                }                
+                //}                
             }
             #endregion
             #region Проанализировать данные 
             List<string> resultArr = new List<string>();
-            string result = "";
+            //string result = "";
             foreach(var tmp in AnalysisResults.ResultArr)
             {
-                resultArr.Add(supporting.ChekSignature(tmp.ValStr));
+                resultArr.Add(supporting.ChekSignature(tmp.ValStr,tmp.Name));
             }
+            int ResultCount = 0; Result = "";
             foreach(string tmp in resultArr)
             {
                 switch(tmp)
                 {
                     case "Up":
-                        AnalysisResults.Result = tmp;
-                        Result = tmp;
+                        //AnalysisResults.Result = tmp;
+                        //Result = tmp;
+                        if ( resultArr.FindAll(i => i == "Up").Count() == 3)
+                        {
+                            AnalysisResults.Result = "Up";
+                            Result = "Up";
+                        }
+
+                        ResultCount++;
                         break;
                     case "Down":
                         AnalysisResults.Result = tmp;
@@ -96,6 +122,15 @@ namespace MainApp.Model.Analysis
                         break;
                 }
             }
+            //if (ResultCount == resultArr.Count)
+            //{
+            //    AnalysisResults.Result = "Up";
+            //    Result = "Up";
+            //}
+            //else if (ResultCount == 1)
+            //{
+            //    MessageBox.Show("!");
+            //}
             #endregion
             #region Записать данные в коллекцию 
             int ind = DateModel.Points.Last().AnalysisResults.FindIndex(i => i.Name == Name);

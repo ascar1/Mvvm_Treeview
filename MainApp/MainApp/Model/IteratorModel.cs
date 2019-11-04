@@ -186,19 +186,22 @@ namespace MainApp.Model
                     var TmpPoint = dateModels.Find(i => i.Scale == "60").Points.Last();                
                     if ((orderModels[item].Price < TmpPoint.High ) && (orderModels[item].Price > TmpPoint.Low  ))
                     {
-                        orderModels[item].IsExecute = true;
-                        orderModels[item].IsActive = false;
-                        orderModels[item].ExecuteDate = CurrDate;
-                        dealModels.Add(new DealModel()
+                        if (CurrDate.Hour == 10)
                         {
-                            Tiker = orderModels[item].Tiker,
-                            Type = orderModels[item].Type,
-                            Vol = orderModels[item].Vol,
-                            InMarket = true,
-                            OpenDate = CurrDate,
-                            OpenPrice = orderModels[item].Price,
-                            StopPrice = 0,                       
-                        });
+                            orderModels[item].IsExecute = true;
+                            orderModels[item].IsActive = false;
+                            orderModels[item].ExecuteDate = CurrDate;
+                            dealModels.Add(new DealModel()
+                            {
+                                Tiker = orderModels[item].Tiker,
+                                Type = orderModels[item].Type,
+                                Vol = orderModels[item].Vol,
+                                InMarket = true,
+                                OpenDate = CurrDate,
+                                OpenPrice = orderModels[item].Price,
+                                StopPrice = 0,                       
+                            });
+                        }
                     }
                 }
                 else if (CurrDate > orderModels[item].EndDate)
@@ -234,8 +237,7 @@ namespace MainApp.Model
             while(Next())
             {
 
-            }
-            MessageBox.Show("All");
+            }            
         }
         public bool Next()
         {

@@ -87,12 +87,13 @@ namespace MainApp.ViewModel
             Tabs2.Add(new TabAnalizResult(_dataService));
             Tabs2.Last().Event1 += MainViewModel_event1;
             SelectedTab2 = Tabs2.FirstOrDefault();
+            
 
-            Tabs2.Add(new TabDeal(_dataService));
+            Tabs2.Add(new TabOrder(_dataService,"Ордера"));
             Tabs2.Last().Event1 += MainViewModel_event1;
             SelectedTab2 = Tabs2.FirstOrDefault();
 
-            Tabs2.Add(new TabOrder(_dataService));
+            Tabs2.Add(new TabOrder(_dataService, "Сделки"));
             Tabs2.Last().Event1 += MainViewModel_event1;
             SelectedTab2 = Tabs2.FirstOrDefault();
 
@@ -267,9 +268,14 @@ namespace MainApp.ViewModel
                 return _AnalysisCommand ?? (_AnalysisCommand = new MyCommand(obj =>
                 {                   
                     IteratorModel iterator = IteratorModel.GetInstance(_dataService.GetMasterPoints(), _dataService.GetFileArrs());
+                    //iterator.NextN(200);
                     iterator.All();
-                    ToExcel Excel1 = new ToExcel(iterator.WorkPoints);
-                    Excel1.UploadToExcel1();
+                    //ToExcel Excel1 = new ToExcel(iterator.WorkPoints);
+                    //Excel1.UploadToExcel1();
+                    ToTXT toTXT = new ToTXT();
+                    toTXT.UpLoadOrder();
+                    toTXT.UpLoadDeal();
+                    toTXT.UpLoadAnalysis();
                 }));
             }
         }
