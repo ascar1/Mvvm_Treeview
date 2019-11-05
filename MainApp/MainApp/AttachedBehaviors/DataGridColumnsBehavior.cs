@@ -1,9 +1,15 @@
 ﻿namespace MainApp.AttachedBehaviors
 {
+    using MainApp.Model;
+    using System;
     using System.Collections.ObjectModel;
     using System.Collections.Specialized;
+  
+    using System.Globalization;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Data;
+    using System.Windows.Media;
 
     /// <summary>
     /// http://stackoverflow.com/questions/320089/how-do-i-bind-a-wpf-datagrid-to-a-variable-number-of-columns
@@ -81,6 +87,45 @@
                 };
                 */
             }
+        }
+    }
+
+    public class ValueToBrushConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            int input = 1;
+            try
+            {
+                DataGridRow dgc = (DataGridRow)value;
+                //MessageBox.Show(dgc.DataContext.ToString());
+                PointModel rowView = (PointModel)dgc.DataContext;
+                if (rowView.Open < rowView.Close)
+                {
+                    input = 1;
+                }
+                else
+                {
+                    input = 2;
+                }
+                //input = (int)rowView.Row.ItemArray[dgc. Column.DisplayIndex];
+            }
+            catch (InvalidCastException e)
+            {
+                return DependencyProperty.UnsetValue;
+            }
+            switch (input)
+            {
+                case 1: return Brushes.GreenYellow;
+                case 2: return Brushes.OrangeRed;
+                case 3: return Brushes.Blue;
+                default: return DependencyProperty.UnsetValue;
+            }
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }

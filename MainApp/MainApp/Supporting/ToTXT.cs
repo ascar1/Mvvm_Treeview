@@ -11,7 +11,7 @@ namespace MainApp.Supporting
 {
     class ToTXT
     {
-        private string FileDir = "C:\\TXT";
+        //private readonly string FileDir = "C:\\TXT";
         public ToTXT()
         {
 
@@ -26,7 +26,7 @@ namespace MainApp.Supporting
             string path = @"C:\TXT\Order.txt";
             IteratorModel iterator = IteratorModel.GetInstance(null, null);
             Type type = Type.GetType("MainApp.Model.OrderModel");
-            using (FileStream fstream = new FileStream(path, FileMode.OpenOrCreate))
+            using (FileStream fstream = new FileStream(path, FileMode.Create))
             {
                 string str = "";
                 foreach (var tmp in type.GetProperties())
@@ -69,7 +69,7 @@ namespace MainApp.Supporting
             string path = @"C:\TXT\Deal.txt";
             IteratorModel iterator = IteratorModel.GetInstance(null, null);
             Type type = Type.GetType("MainApp.Model.DealModel");
-            using (FileStream fstream = new FileStream(path, FileMode.OpenOrCreate))
+            using (FileStream fstream = new FileStream(path, FileMode.Create))
             {
                 string str = "";
                 foreach (var tmp in type.GetProperties())
