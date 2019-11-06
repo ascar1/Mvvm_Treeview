@@ -156,15 +156,14 @@ namespace MainApp.Model
             double EMA26 = GetEMA(points, NEMA26, name ,"_EMA26");
             AddVal(points.Last(), "MACD", "MACD", "_EMA26", EMA26);
 
-            double Fast = EMA26 - EMA12;
-            AddVal(points.Last(), "MACD", "MACD", "_Fast", Fast);
+            //double Fast = EMA12 - EMA26;
+            //AddVal(points.Last(), "MACD", "MACD", "_Fast", Fast);
+            //double Slow = GetEMA(points, nEMAa, "MACD", "MACD", "_Fast");
+            //AddVal(points.Last(), "MACD", "MACD", "_Slow", Slow);
 
-            double Slow = GetEMA(points, nEMAa, "MACD", "MACD", "_Fast");
-            AddVal(points.Last(), "MACD", "MACD", "_Slow", Slow);
-
-            double Bar_Graph = Fast - Slow;
+            //double Bar_Graph = Fast - Slow;
+            double Bar_Graph = EMA12 - EMA26;
             AddVal(points.Last(), "MACD", "MACD", "Bar_Graph", Bar_Graph);
-
         }
         public void GetForceIndex (List<PointModel> points, List<ParamModel> @params)
         {

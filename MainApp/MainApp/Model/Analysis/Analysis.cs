@@ -62,8 +62,18 @@ namespace MainApp.Model.Analysis
         private void AnalysisMACD(string name)
         {
             List<double> EMAPoint = GetListIndexValue(name, "Bar_Graph", PerAnalysis);
-            List<double> tmp = supporting.GetNormData(EMAPoint);
-            ResultArr ResultArr = new ResultArr() { Name = name, ValStr = String.Join(";", tmp) };
+            List<double> tmp = new List<double>();
+            foreach (double item in EMAPoint)
+            {
+                if (item > 0) { tmp.Add(1); }
+                else if (item < 0) { tmp.Add(-1);}
+                else { tmp.Add(0); }
+            }
+            ResultArr ResultArr = new ResultArr() { Name = name+"Val", ValStr = String.Join(";", tmp) };
+            AnalysisResults.ResultArr.Add(ResultArr);
+
+            tmp = supporting.GetNormData(EMAPoint);
+            ResultArr = new ResultArr() { Name = name, ValStr = String.Join(";", tmp) };
             AnalysisResults.ResultArr.Add(ResultArr);
         }
         #region Публичные методы 

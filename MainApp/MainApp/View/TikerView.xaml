@@ -18,9 +18,7 @@
         
     </UserControl.Resources>
     <Grid>
-        
         <DockPanel LastChildFill="True">
-
             <Button DockPanel.Dock="Bottom" Background="LightGray" Content="Нижняя кнопка" />
             <ToolBar DockPanel.Dock="Top">
                 <ComboBox ItemsSource="{Binding ListComboBoxItems}" SelectedItem="{Binding Tiker}" Name="Tiker"  Width="90"  VerticalAlignment="Top"/>
