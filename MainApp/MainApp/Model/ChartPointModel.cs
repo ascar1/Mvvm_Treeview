@@ -83,6 +83,7 @@ namespace MainApp.Model
         public AnalysisResult(string name)
         {
             this.Name = name;
+            this.Result = "";
             ResultArr = new List<ResultArr>();
         }
         public string Name { get; set; }

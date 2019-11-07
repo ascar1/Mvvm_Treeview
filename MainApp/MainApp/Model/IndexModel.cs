@@ -191,5 +191,42 @@ namespace MainApp.Model
 
         }
         // TODO: Добавить ATR или  другой показатель волатитильности 
+        public void GetATR (List<PointModel> points, List<ParamModel> @params)
+        {
+            string name = GetStringParam(@params, "Name");
+            int n = GetIntParam(@params, "Period");
+            double TR;
+            if (points.Count != 1)
+            {
+                List<double> items = new List<double>();
+                items.Add( points.Last().High - points.Last().Low);
+                items.Add(points.Last().High - points[points.Count() - 2].Close);
+                items.Add(points.Last().Low - points[points.Count() - 2].Close);
+                TR = items.Max();
+            }
+            else
+            {
+                TR = Math.Abs( points.Last().High - points.Last().Low);
+            }
+            AddVal(points.Last(), name, "ATR", "TR", TR);
+            double ATR = GetEMA(points, n, name, "ATR", "TR");
+            AddVal(points.Last(), name, "ATR", "ATR", ATR);
+        }
+        public double GetMax(List<PointModel> points, int n)
+        {
+            int N = points.Count();
+            if (N >= n) { N = points.Count() - n; }
+            else { N = 0; }
+            double Val = points[N].High;
+
+            for (int i = N; i < points.Count(); i++)
+            {
+                if (Val < points[i].High)
+                {
+                    Val = points[i].High;
+                }
+            }
+            return Val;            
+        }
     }
 }

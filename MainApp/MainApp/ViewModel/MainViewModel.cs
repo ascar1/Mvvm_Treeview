@@ -79,7 +79,7 @@ namespace MainApp.ViewModel
             Tabs.Last().Event1 += MainViewModel_event1;
             Tabs.Last().Event2 += MainViewModel_Event2;
 
-            
+
             //Tabs.Last().PropertyChanged += MainViewModel_PropertyChanged;
             Tabs.Add(new Tab1Vm());
             Tabs.Last().Event1 += MainViewModel_event1;

@@ -209,8 +209,13 @@ namespace MainApp.Model
             List<LavelModel> ListTMP = GetLavelModels(lavel);
             foreach(var tmp in ListTMP)
             {
+                
                 List<ParamModel> paramModels = GetParam(tmp.Id);
-                arr.Add(paramModels.Find(i => i.Name == nameParam).Val);                
+                int i = paramModels.FindIndex(i1 => i1.Name == nameParam);
+                if (i!=-1)
+                {
+                    arr.Add(paramModels[i].Val);
+                }                
             }            
             return arr.Count-1;
         }

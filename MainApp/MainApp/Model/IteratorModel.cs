@@ -133,18 +133,29 @@ namespace MainApp.Model
                         indexModel.GetForceIndex(dateModels.Find(i => i.Scale == "60").Points, tmp2);
                         indexModel.GetForceIndex(dateModels.Find(i => i.Scale == "D").Points, tmp2);
                         break;
+                    case "ATR":
+                        indexModel.GetATR(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                        indexModel.GetATR(dateModels.Find(i => i.Scale == "D").Points, tmp2);
+                        break;
                 }
             }             
         }
         private void GetAnalysis(List<DateModel> dateModels, string tiker)
         {
+            IndexModel indexModel = new IndexModel();
             if (dateModels.Find(i=> i.Scale == "60").Points.Last().Date.Hour == 18)
             {
                 IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"), "Analysis1");
                 analysis1.GetAnalysis();
             }
             int item = dateModels.FindIndex(i => i.Scale == "D");
+            int itemAnalysis1 = dateModels[item].Points.Last().AnalysisResults.FindIndex(i => i.Name == "Analysis1");
             string A1Result = "";
+            if (itemAnalysis1 != -1)
+            {
+                A1Result = dateModels[item].Points.Last().AnalysisResults[itemAnalysis1].Result;
+            }
+            
             if (item >= 0)
             {
                 item = dateModels[item].Points.Last().AnalysisResults.FindIndex(i => i.Name == "Analysis1");
@@ -153,17 +164,53 @@ namespace MainApp.Model
                     A1Result = dateModels.Find(i => i.Scale == "D").Points.Last().AnalysisResults[item].Result;
                     Analysis2 analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "60"), "Analysis2", tiker, A1Result);
                     analysis2.GetAnalysis();
+                    // Удаляем ордер если сигнала нет 
+                    int itemDeal = 0;
+                    if (analysis2.GetResult() == "")
+                    {
+                        itemDeal = orderModels.FindIndex(i => i.Tiker == tiker & i.IsActive == true);
+                        if (itemDeal != -1)
+                        {
+                            orderModels[itemDeal].IsActive = false;
+                            orderModels[itemDeal].EndDate = dateModels[0].Points.Last().Date;
+                        }                        
+                    }
+                    // проверяем на наличие копий ордера И открытых позиций                      
                     if (analysis2.HaveOrder)
                     {
-                        orderModels.Add(analysis2.OrderModels);
+                        itemDeal = dealModels.FindIndex(i => i.Tiker == tiker & i.InMarket == true);
+                        if (itemDeal == -1)
+                        {
+                            itemDeal = orderModels.FindIndex(i => i.Tiker == tiker & i.IsActive == true);
+                            if (itemDeal == -1)
+                            {
+                                orderModels.Add(analysis2.OrderModels);
+                            }
+                        }
                     }
-                    int itemDeal = dealModels.FindIndex(i => i.Tiker == tiker & i.InMarket == true);
+
+                    itemDeal = dealModels.FindIndex(i => i.Tiker == tiker & i.InMarket == true);
                     if (itemDeal != -1)
                     {
-                        if( dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 18)
+                        if (A1Result != "")
                         {
-                            dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "60").Points.Last().Close;
+                            if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 18)
+                            {
+                                //dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value;
+                                double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
+                                dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 3)); 
+                            }
                         }
+                        else
+                        {
+                            if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 18)
+                            {
+
+                                dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "60").Points.Last().Close; //IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value;
+                            }
+                        }
+
+
                         //Analysis3 analysis3 = new Analysis3(dateModels.Find(i => i.Scale == "60"), "Analysis3", tiker, A1Result);
                         //analysis3.GetAnalysis();
                         //if (analysis3.StopOrder != 0)
@@ -177,17 +224,30 @@ namespace MainApp.Model
         private void ChekDeal(List<DateModel> dateModels, string tiker)
         {
             DateTime CurrDate = dateModels.Find(i => i.Scale == "60").Points.Last().Date;
-            #region Проверить и удалить просроченные ордера 
             int item = orderModels.FindIndex(i => i.Tiker == tiker & i.IsActive == true & i.IsExecute == false);
+
+            #region Закрыть по Стоп ордеру 
+            item = dealModels.FindIndex(i => i.Tiker == tiker & i.InMarket == true);
+            if (item >= 0)
+            {
+                var TmpPoint = dateModels.Find(i => i.Scale == "60").Points.Last();
+                if ((dealModels[item].StopPrice < TmpPoint.High) && (dealModels[item].StopPrice > TmpPoint.Low))
+                {
+                    dealModels[item].ClosePrice = dealModels[item].StopPrice;
+                    dealModels[item].CloseDate = TmpPoint.Date;
+                    dealModels[item].InMarket = false;
+                }
+            }
+            #endregion
+            #region Проверить и удалить просроченные ордера 
+            
             if (item >= 0)
             { 
-                if ((orderModels[item].BeginDate < CurrDate) && (CurrDate <= orderModels[item].EndDate))
+                if ((orderModels[item].BeginDate < CurrDate) )
                 {
                     var TmpPoint = dateModels.Find(i => i.Scale == "60").Points.Last();                
                     if ((orderModels[item].Price < TmpPoint.High ) && (orderModels[item].Price > TmpPoint.Low  ))
                     {
-                        if (CurrDate.Hour == 10)
-                        {
                             orderModels[item].IsExecute = true;
                             orderModels[item].IsActive = false;
                             orderModels[item].ExecuteDate = CurrDate;
@@ -199,38 +259,18 @@ namespace MainApp.Model
                                 InMarket = true,
                                 OpenDate = CurrDate,
                                 OpenPrice = orderModels[item].Price,
-                                StopPrice = 0,                       
-                            });
-                        }
+                                StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value,                       
+                            });                       
                     }
                 }
                 else if (CurrDate > orderModels[item].EndDate)
                 {
-                    orderModels[item].IsActive = false;
+                    //orderModels[item].IsActive = false;
                 }
 
             }
             #endregion
-            #region Закрыть по Стоп ордеру 
-            item = dealModels.FindIndex(i => i.Tiker == tiker & i.InMarket == true);
-            if (item >= 0)
-            {
-                var TmpPoint = dateModels.Find(i => i.Scale == "60").Points.Last();
-                if (dealModels[item].StopPrice != 0)
-                {
-                    dealModels[item].ClosePrice = TmpPoint.Close;
-                    dealModels[item].CloseDate = TmpPoint.Date;
-                    dealModels[item].InMarket = false;
 
-                }
-                //if ((dealModels[item].StopPrice < TmpPoint.High) && (dealModels[item].StopPrice > TmpPoint.Low))
-                //{
-                //    dealModels[item].ClosePrice = dealModels[item].StopPrice;
-                //    dealModels[item].CloseDate = TmpPoint.Date;
-                //    dealModels[item].InMarket = false;
-                //}
-            }
-            #endregion
         }
         public void All()
         {

@@ -43,6 +43,39 @@ namespace MainApp.Model.Analysis
             Result.Reverse();            
             return Result;
         }
+        private string GetDirection ()
+        {
+            bool FlagUp = false; bool FlagDown = false;
+            List<double> EMAPoint8 = GetListIndexValue("EMA8", "EMA", PerAnalysis);
+            List<double> EMAPoint16 = GetListIndexValue("EMA16", "EMA", PerAnalysis);
+            for (int i=0;EMAPoint8.Count() > i; i++)
+            {
+                if (EMAPoint8[i] > EMAPoint16[i])
+                {
+                    FlagUp = true;
+                }
+                else
+                {
+                    FlagDown = true;
+                }
+            }
+            if ((!FlagUp) && (!FlagDown))
+            {
+                return "";
+            }
+            else if ((FlagUp) && (!FlagDown))
+            {
+                return "Up";
+            }
+            else if ((!FlagUp) && (FlagDown))
+            {
+                return "Down";
+            }
+            else
+            {
+                return "";
+            }
+        }
         private void AnalysisEMA (string name)
         {          
             List<double> EMAPoint = GetListIndexValue(name, "EMA", PerAnalysis);
@@ -76,6 +109,37 @@ namespace MainApp.Model.Analysis
             ResultArr = new ResultArr() { Name = name, ValStr = String.Join(";", tmp) };
             AnalysisResults.ResultArr.Add(ResultArr);
         }
+        private bool GetAnalysisMACD(string Direction)
+        {
+            switch (Direction)
+            {
+                case "Up":
+                    bool flag = false;
+                    List<double> EMAPoint = GetListIndexValue("MACD", "Bar_Graph", PerAnalysis);
+                    List<double> tmp = new List<double>();
+                    for (int i=0;EMAPoint.Count() > i;i++)
+                    {
+                        if (EMAPoint[i] < 0)
+                        {
+                            flag = true;
+                        }
+                    }
+                    if (flag) return false;
+                    tmp = supporting.GetNormData(EMAPoint);
+                    if ((tmp.First() == 0) && (tmp.Last() == 1))
+                    {
+                        return true;
+                    }                    
+                    break;
+                case "Down":
+                    break;
+                default:
+                    return false;                    
+            }
+            
+
+            return false;
+        }
         #region Публичные методы 
         public void GetAnalysis()
         {
@@ -105,33 +169,55 @@ namespace MainApp.Model.Analysis
             #endregion
             #region Проанализировать данные 
             List<string> resultArr = new List<string>();
-            //string result = "";
-            foreach(var tmp in AnalysisResults.ResultArr)
+            string Direction = GetDirection();
+            switch (Direction)
             {
-                resultArr.Add(supporting.ChekSignature(tmp.ValStr,tmp.Name));
+                case "Up":
+                    if (GetAnalysisMACD(Direction))
+                    {
+                        Result = Direction;
+                        AnalysisResults.Result = "Up";
+                    }
+                    break;
+                case "Down":
+                    break;
+                default:
+                    Result = "";
+                    break;
             }
-            int ResultCount = 0; Result = "";
-            foreach(string tmp in resultArr)
-            {
-                switch(tmp)
-                {
-                    case "Up":
-                        //AnalysisResults.Result = tmp;
-                        //Result = tmp;
-                        if ( resultArr.FindAll(i => i == "Up").Count() == 3)
-                        {
-                            AnalysisResults.Result = "Up";
-                            Result = "Up";
-                        }
 
-                        ResultCount++;
-                        break;
-                    case "Down":
-                        AnalysisResults.Result = tmp;
-                        Result = tmp;
-                        break;
-                }
-            }
+
+
+            #region не Нужный код 
+            //string result = "";
+            //foreach (var tmp in AnalysisResults.ResultArr)
+            //{
+            //    resultArr.Add(supporting.ChekSignature(tmp.ValStr, tmp.Name));
+            //}
+
+            //int ResultCount = 0; Result = "";
+            //foreach (string tmp in resultArr)
+            //{
+            //    switch (tmp)
+            //    {
+            //        case "Up":
+            //            //AnalysisResults.Result = tmp;
+            //            //Result = tmp;
+            //            if (resultArr.FindAll(i => i == "Up").Count() == 3)
+            //            {
+            //                AnalysisResults.Result = "Up";
+            //                Result = "Up";
+            //            }
+
+            //            ResultCount++;
+            //            break;
+            //        case "Down":
+            //            AnalysisResults.Result = tmp;
+            //            Result = tmp;
+            //            break;
+            //    }
+            //}
+
             //if (ResultCount == resultArr.Count)
             //{
             //    AnalysisResults.Result = "Up";
@@ -141,6 +227,7 @@ namespace MainApp.Model.Analysis
             //{
             //    MessageBox.Show("!");
             //}
+            #endregion 
             #endregion
             #region Записать данные в коллекцию 
             int ind = DateModel.Points.Last().AnalysisResults.FindIndex(i => i.Name == Name);
@@ -204,17 +291,35 @@ namespace MainApp.Model.Analysis
             PerAnalysis = 4;
             AnalysisResults = new AnalysisResult(name);
         }
+        private double GetMax (int n)
+        {
+            int N = DateModel.Points.Count();
+            if (N >= n) { N = DateModel.Points.Count() - n; }
+            else { N = 0; }
+            double Val = DateModel.Points[N].High;
 
+            for (int i = N; i < DateModel.Points.Count(); i++ )
+            {
+                if (Val < DateModel.Points[i].High)
+                {
+                    Val = DateModel.Points[i].High;
+                }
+            }
+            return Val;
+        }
+        private double GetStopOrder()
+        {
+            return 0;
+        }
         private void GetOrder()
         {
-            
+
             OrderModels = new OrderModel() {
                 Tiker = Tiker,
                 Type = A1Result,
                 Vol = 1,
-                Price = DateModel.Points.Last().Close,
-                BeginDate = DateModel.Points.Last().Date,
-                EndDate = DateModel.Points.Last().Date.AddDays(1),
+                Price = DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value, //GetMax(10),
+                BeginDate = DateModel.Points.Last().Date,                
                 IsActive = true
             };
 
@@ -236,7 +341,7 @@ namespace MainApp.Model.Analysis
 
         public string GetResult()
         {
-            throw new NotImplementedException();
+            return A1Result;            
         }
     }
     class Analysis3
