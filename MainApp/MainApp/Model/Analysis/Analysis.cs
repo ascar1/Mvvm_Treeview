@@ -76,6 +76,41 @@ namespace MainApp.Model.Analysis
                 return "";
             }
         }
+        private string GetDirectionMACD()
+        {
+            bool FlagUp = false; bool FlagDown = false;
+            List<double> EMAPoint = GetListIndexValue("MACD", "Bar_Graph", PerAnalysis); 
+            List<double> tmp = new List<double>();
+
+            for (int i = 0; EMAPoint.Count() > i; i++)
+            {
+                if (EMAPoint[i] >= 0)
+                {
+                    FlagUp = true;
+                }
+                else
+                {
+                    FlagDown = true;
+                }
+            }
+            if ((!FlagUp) && (!FlagDown))
+            {
+                return "";
+            }
+            else if ((FlagUp) && (!FlagDown))
+            {
+                return "Up";
+            }
+            else if ((!FlagUp) && (FlagDown))
+            {
+                return "Down";
+            }
+            else
+            {
+                return "";
+            }
+        }
+
         private void AnalysisEMA (string name)
         {          
             List<double> EMAPoint = GetListIndexValue(name, "EMA", PerAnalysis);
@@ -169,7 +204,8 @@ namespace MainApp.Model.Analysis
             #endregion
             #region Проанализировать данные 
             List<string> resultArr = new List<string>();
-            string Direction = GetDirection();
+            //string Direction = GetDirection();
+            string Direction = GetDirectionMACD();
             switch (Direction)
             {
                 case "Up":
@@ -318,7 +354,7 @@ namespace MainApp.Model.Analysis
                 Tiker = Tiker,
                 Type = A1Result,
                 Vol = 1,
-                Price = DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value, //GetMax(10),
+                Price = GetMax(50), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value,
                 BeginDate = DateModel.Points.Last().Date,                
                 IsActive = true
             };

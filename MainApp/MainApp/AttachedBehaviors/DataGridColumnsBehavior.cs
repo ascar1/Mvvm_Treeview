@@ -94,12 +94,20 @@
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int input = 1;
+            int input;
             try
             {
+                
                 DataGridRow dgc = (DataGridRow)value;
                 //MessageBox.Show(dgc.DataContext.ToString());
                 PointModel rowView = (PointModel)dgc.DataContext;
+                DateTime tmp = new DateTime(2015,5,21,10,0,0);
+                
+                if (rowView.Open == 420)
+                {
+                    //MessageBox.Show("!");
+                    input = 0;
+                }
                 if (rowView.Open < rowView.Close)
                 {
                     input = 1;

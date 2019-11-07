@@ -22,7 +22,7 @@ namespace MainApp.Model
             return instance;
         }
 
-        private readonly int Seed = 10;
+        private readonly int Seed = 200;
         private List<MasterPointModel> MasterPoint;        
         public List<WorkPointModel> WorkPoints;
         private List<FileArrModel> fileArrs;
@@ -59,9 +59,20 @@ namespace MainApp.Model
         }        
         private void GetSeed ()
         {
-            for (int i = 0; i <= Seed; i++)
+            for (int item = 0; item <= Seed; item++)
             {
-                Next();
+                foreach (MasterPointModel i in MasterPoint)
+                {
+                    int index = WorkPoints.FindIndex(ii => ii.Tiker == i.Tiker);
+                    int tmp1 = WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Count;
+                    if (tmp1 < i.Data[0].Points.Count)
+                    {
+                        var tmp = i.Data[0].Points[WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Count];
+                        WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Add(tmp);
+                        GetScale(WorkPoints[index].Data);
+                        GetIndex(WorkPoints[index].Data);
+                    }
+                }
             }
         }
         private void GetScale(List<DateModel> dateModels)
@@ -162,7 +173,9 @@ namespace MainApp.Model
                 if (item >= 0)
                 {
                     A1Result = dateModels.Find(i => i.Scale == "D").Points.Last().AnalysisResults[item].Result;
+                    //if (tiker == "GAZP") { }
                     Analysis2 analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "60"), "Analysis2", tiker, A1Result);
+
                     analysis2.GetAnalysis();
                     // Удаляем ордер если сигнала нет 
                     int itemDeal = 0;
@@ -197,15 +210,24 @@ namespace MainApp.Model
                             if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 18)
                             {
                                 //dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value;
-                                double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
-                                dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 3)); 
+                                double tmp = dateModels.Find(i => i.Scale == "60").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
+                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "60").Points, 22) - (tmp*3) );
+                                if (stop > 0)
+                                {
+                                    dealModels[itemDeal].StopPrice = stop;
+                                }
+                                else
+                                {
+                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 1));
+                                }
                             }
                         }
                         else
                         {
+                            double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
                             if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 18)
                             {
-
+                                //dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "60").Points, 22) - (tmp * 3));
                                 dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "60").Points.Last().Close; //IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value;
                             }
                         }
@@ -224,8 +246,41 @@ namespace MainApp.Model
         private void ChekDeal(List<DateModel> dateModels, string tiker)
         {
             DateTime CurrDate = dateModels.Find(i => i.Scale == "60").Points.Last().Date;
-            int item = orderModels.FindIndex(i => i.Tiker == tiker & i.IsActive == true & i.IsExecute == false);
+            
 
+
+            #region Проверить и удалить просроченные ордера 
+            int item = orderModels.FindIndex(i => i.Tiker == tiker & i.IsActive == true & i.IsExecute == false);
+            if (item >= 0)
+            { 
+                if ((orderModels[item].BeginDate < CurrDate) )
+                {
+                    var TmpPoint = dateModels.Find(i => i.Scale == "60").Points.Last();                
+                    if ((orderModels[item].Price < TmpPoint.High ) && (orderModels[item].Price > TmpPoint.Low  ) /*&& (CurrDate.DayOfWeek != DayOfWeek.Friday)*/)
+                    {
+                            orderModels[item].IsExecute = true;
+                            orderModels[item].IsActive = false;
+                            orderModels[item].ExecuteDate = CurrDate;
+                            dealModels.Add(new DealModel()
+                            {
+                                Tiker = orderModels[item].Tiker,
+                                Type = orderModels[item].Type,
+                                Vol = orderModels[item].Vol,
+                                InMarket = true,
+                                OpenDate = CurrDate,
+                                
+                                StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value,
+                                OpenPrice = orderModels[item].Price,
+                            });                       
+                    }
+                }
+                else if (CurrDate > orderModels[item].EndDate)
+                {
+                    //orderModels[item].IsActive = false;
+                }
+
+            }
+            #endregion
             #region Закрыть по Стоп ордеру 
             item = dealModels.FindIndex(i => i.Tiker == tiker & i.InMarket == true);
             if (item >= 0)
@@ -239,38 +294,6 @@ namespace MainApp.Model
                 }
             }
             #endregion
-            #region Проверить и удалить просроченные ордера 
-            
-            if (item >= 0)
-            { 
-                if ((orderModels[item].BeginDate < CurrDate) )
-                {
-                    var TmpPoint = dateModels.Find(i => i.Scale == "60").Points.Last();                
-                    if ((orderModels[item].Price < TmpPoint.High ) && (orderModels[item].Price > TmpPoint.Low  ))
-                    {
-                            orderModels[item].IsExecute = true;
-                            orderModels[item].IsActive = false;
-                            orderModels[item].ExecuteDate = CurrDate;
-                            dealModels.Add(new DealModel()
-                            {
-                                Tiker = orderModels[item].Tiker,
-                                Type = orderModels[item].Type,
-                                Vol = orderModels[item].Vol,
-                                InMarket = true,
-                                OpenDate = CurrDate,
-                                OpenPrice = orderModels[item].Price,
-                                StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value,                       
-                            });                       
-                    }
-                }
-                else if (CurrDate > orderModels[item].EndDate)
-                {
-                    //orderModels[item].IsActive = false;
-                }
-
-            }
-            #endregion
-
         }
         public void All()
         {

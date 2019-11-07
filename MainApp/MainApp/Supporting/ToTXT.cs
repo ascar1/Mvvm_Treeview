@@ -153,6 +153,7 @@ namespace MainApp.Supporting
                                 AtrStr.ForEach(i => { tmplist.Add(i); });
                                 
                             }
+                            tmplist.Add(results.Result);
                         }
                         int index = Points.Points.FindIndex(i => i.Date == tmp1.Date);
                         if ((index != -1) && (index+1 < Points.Points.Count()))
