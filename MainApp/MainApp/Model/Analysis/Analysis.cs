@@ -160,12 +160,13 @@ namespace MainApp.Model.Analysis
                         }
                     }
                     if (flag) return false;
-                    tmp = supporting.GetNormData(EMAPoint);
-                    if ((tmp.First() == 0) && (tmp.Last() == 1))
-                    {
-                        return true;
-                    }                    
-                    break;
+                    return true;
+                    //tmp = supporting.GetNormData(EMAPoint);
+                    //if ((tmp.First() == 0) && (tmp.Last() == 1))
+                    //{
+                    //    return true;
+                    //}                    
+                    //break;
                 case "Down":
                     break;
                 default:
@@ -354,7 +355,7 @@ namespace MainApp.Model.Analysis
                 Tiker = Tiker,
                 Type = A1Result,
                 Vol = 1,
-                Price = GetMax(50), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value,
+                Price = DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value, //GetMax(20), 
                 BeginDate = DateModel.Points.Last().Date,                
                 IsActive = true
             };
