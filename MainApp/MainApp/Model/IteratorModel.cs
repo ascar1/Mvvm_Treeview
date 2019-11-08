@@ -218,7 +218,7 @@ namespace MainApp.Model
                                 }
                                 else
                                 {
-                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 1));
+                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 3));
                                 }
                             }
                         }
