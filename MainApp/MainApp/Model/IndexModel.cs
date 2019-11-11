@@ -228,5 +228,21 @@ namespace MainApp.Model
             }
             return Val;            
         }
+        public double GetMin(List<PointModel> points, int n)
+        {
+            int N = points.Count();
+            if (N >= n) { N = points.Count() - n; }
+            else { N = 0; }
+            double Val = points[N].High;
+
+            for (int i = N; i < points.Count(); i++)
+            {
+                if (Val > points[i].High)
+                {
+                    Val = points[i].High;
+                }
+            }
+            return Val;
+        }
     }
 }
