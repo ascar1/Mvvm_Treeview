@@ -145,6 +145,25 @@ namespace MainApp.Model
             EMA = EMA / N;
             return (double)EMA;
         }
+        private double GetSumIndex (List<PointModel> points, int N, string name, string type, string namePoint)
+        {
+            Decimal EMA = 0; 
+            if (points.Count <= N)
+            {
+                N = points.Count;
+                EMA = (Decimal)GetValIndex(points[0], name, namePoint);
+            }
+            else
+            {
+                EMA = (Decimal)GetValIndex(points[points.Count - (N + 1)], name, namePoint);
+            }
+
+            for (int I = points.Count - N; I < points.Count; I++)
+            {                
+                EMA = EMA + Convert.ToDecimal(GetValIndex(points[I], name, namePoint));
+            }            
+            return (double)EMA;
+        }
         public void GetEMA(List<PointModel> points, List<ParamModel> @params)
         {
             //Расчитать и записать EMA по параметрам из файла настроек
@@ -340,19 +359,15 @@ namespace MainApp.Model
 
             double TPSMA = GetSMA(points, n, name, "CCI", "TP");
             AddVal(points.Last(), name, "CCI", "TPSMA", TPSMA);
-            double MeanDeviation = 0;
-            int tmp = points.Count;
-            if (tmp - n > 0)
-            {
-                tmp = 0;
-            }
-            for (int i = 0; tmp > i; i++ )
-            {
-                MeanDeviation = MeanDeviation + (GetSMA(points, n, name, "CCI", "TP") - GetSMA(points, n, name, "CCI", "TPSMA"));
-            }
-            MeanDeviation = MeanDeviation / n;
 
-            double CCI = (TP - GetSMA(points, n, name, "CCI", "TP")) / (0.015 * MeanDeviation);
+            double D = TPSMA - TP;
+            AddVal(points.Last(), name, "CCI", "D", D);
+
+            double MD = GetSumIndex(points, n, name, "CCI", "D");
+            MD = MD / n;
+            AddVal(points.Last(), name, "CCI", "D", MD);
+
+            double CCI = (TP - TPSMA)/(0.015*MD);
             AddVal(points.Last(), name, "CCI", "CCI", CCI);
         }
     }
