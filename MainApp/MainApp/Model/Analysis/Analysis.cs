@@ -43,6 +43,10 @@ namespace MainApp.Model.Analysis
             Result.Reverse();            
             return Result;
         }
+        private double GetIndexValue (string nameIndex, string nameVal)
+        {
+            return DateModel.Points.Last().IndexPoint.Find(i1 => i1.Name == nameIndex).Value.Find(j => j.Name == nameVal).Value;
+        }
         private string GetDirection ()
         {
             bool FlagUp = false; bool FlagDown = false;
@@ -126,7 +130,6 @@ namespace MainApp.Model.Analysis
             ResultArr = new ResultArr() { Name = name, ValStr = String.Join(";", tmp) };
             AnalysisResults.ResultArr.Add(ResultArr);
         }
-
         private void AnalysisMACD(string name)
         {
             List<double> EMAPoint = GetListIndexValue(name, "Bar_Graph", PerAnalysis);
@@ -144,6 +147,22 @@ namespace MainApp.Model.Analysis
             ResultArr = new ResultArr() { Name = name, ValStr = String.Join(";", tmp) };
             AnalysisResults.ResultArr.Add(ResultArr);
         }
+        private void GetIndex(string name)
+        {
+            ResultArr ResultArr;
+            switch (name)
+            {
+                case "ADX":
+                    ResultArr = new ResultArr() { Name = name + "Val", ValStr = GetIndexValue("ADX", "ADX").ToString() };
+                    AnalysisResults.ResultArr.Add(ResultArr);
+                    break;
+                case "CCI":
+                    ResultArr = new ResultArr() { Name = name + "Val", ValStr = GetIndexValue("CCI", "CCI").ToString() };
+                    AnalysisResults.ResultArr.Add(ResultArr);
+                    break;
+            }
+        }
+
         private bool GetAnalysisMACD(string Direction)
         {
             switch (Direction)
@@ -190,16 +209,23 @@ namespace MainApp.Model.Analysis
             {
                 //if (_ParamDS.GetParamValue(items.Id,"Type") == "EMA")
                 //{
-                    string type = _ParamDS.GetParamValue(items.Id, "Type");
-                    switch (type)
-                    {
-                        case "EMA":
-                            AnalysisEMA(_ParamDS.GetParamValue(items.Id, "Name"));
+                string type = _ParamDS.GetParamValue(items.Id, "Type");
+                switch (type)
+                {
+                    case "EMA":
+                        AnalysisEMA(_ParamDS.GetParamValue(items.Id, "Name"));
                         break;
-                        case "MACD":
-                            AnalysisMACD("MACD");
-                            break;
-                    }
+                    case "MACD":
+                        AnalysisMACD("MACD");
+                        break;
+                    case "CCI":
+                        GetIndex("CCI");
+                        break;
+                    case "ADX":
+                        GetIndex("ADX");
+                        break;
+
+                }
                 //}                
             }
             #endregion

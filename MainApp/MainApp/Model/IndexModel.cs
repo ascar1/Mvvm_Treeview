@@ -58,7 +58,12 @@ namespace MainApp.Model
             }
         }
         private double GetValIndex(PointModel point, List<ParamModel> @params) => point.IndexPoint.Find(i => i.Name == GetStringParam(@params, "Name")).Value[0].Value;
-        private double GetValIndex(PointModel point, string name, string namePoint) => point.IndexPoint.Find(i => i.Name == name).Value.Find(i1 => i1.Name == namePoint).Value;
+        private double GetValIndex(PointModel point, string name, string namePoint)
+        {
+            var tmp = point.IndexPoint.Find(i => i.Name == name).Value;
+            var tmp1 = tmp.Find(i1 => i1.Name == namePoint).Value;
+            return point.IndexPoint.Find(i => i.Name == name).Value.Find(i1 => i1.Name == namePoint).Value;
+        }
         private double GetEMA(List<PointModel> points, int N, string name , string namePoint)
         {
             // Расчитать и вернуть значение EMA 
@@ -100,7 +105,7 @@ namespace MainApp.Model
             if (points.Count <= N)
             {
                 N = points.Count;
-                EMA0 = (Decimal)points[0].Close;
+                EMA0 = (Decimal)GetValIndex(points[0], name, namePoint);
             }
             else
             {
@@ -109,12 +114,36 @@ namespace MainApp.Model
 
             for (int I = points.Count - N; I < points.Count; I++)
             {
-                decimal tmpVal = Convert.ToDecimal(points[I].IndexPoint.Find(i1 => i1.Name == name).Value.Find(i2 => i2.Name == namePoint).Value);
+                decimal tmpVal = Convert.ToDecimal(GetValIndex(points[I], name, namePoint));
                 EMA = tmpVal * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
                 EMA0 = EMA;                
             }
-
             return (double)EMA;            
+        }
+        private double GetSMA (List<PointModel> points, int N, string name, string type, string namePoint)
+        {
+            Decimal EMA = 0; Decimal k1; Decimal k2;
+
+            k2 = N + 1;
+            k1 = (Decimal)2 / (Decimal)k2;
+
+            if (points.Count <= N)
+            {
+                N = points.Count;
+                EMA = (Decimal)GetValIndex(points[0], name, namePoint);
+            }
+            else
+            {
+                EMA = (Decimal)GetValIndex(points[points.Count - (N + 1)], name, namePoint);
+            }
+
+            for (int I = points.Count - N; I < points.Count; I++)
+            {
+                decimal tmpVal = Convert.ToDecimal(GetValIndex(points[I], name, namePoint));
+                EMA = EMA + tmpVal;
+            }
+            EMA = EMA / N;
+            return (double)EMA;
         }
         public void GetEMA(List<PointModel> points, List<ParamModel> @params)
         {
@@ -190,7 +219,7 @@ namespace MainApp.Model
         {
 
         }
-        // TODO: Добавить ATR или  другой показатель волатитильности 
+        
         public void GetATR (List<PointModel> points, List<ParamModel> @params)
         {
             string name = GetStringParam(@params, "Name");
@@ -243,6 +272,88 @@ namespace MainApp.Model
                 }
             }
             return Val;
+        }
+        // TODO: Добавить ATX 
+        public void GetADX(List<PointModel> points, List<ParamModel> @params)
+        {
+            string name = GetStringParam(@params, "Name");
+            int n = GetIntParam(@params, "Period");
+            string type = "ADX";
+            if (points.Count < 2)
+            {
+                AddVal(points.Last(), name, type, "+DM", 0);
+                AddVal(points.Last(), name, type, "-DM", 0);
+                AddVal(points.Last(), name, type, "TR", 0);
+                AddVal(points.Last(), name, type, "+DI", 0);
+                AddVal(points.Last(), name, type, "-DI", 0);
+                AddVal(points.Last(), name, type, "_ADX", 0);
+                AddVal(points.Last(), name, type, "ADX", 0);
+                return;
+            }
+            double Plus_M = points.Last().High - points[points.Count - 2].High;
+            double Minus_M = points.Last().Low - points[points.Count - 2].Low;
+
+            double Plus_DM = 0;            
+            if ((Plus_M > Minus_M) && (Plus_M > 0))
+            {
+                Plus_DM = Plus_M;
+            }
+            else if ((Plus_M < Minus_M) || (Plus_M < 0))
+            {
+                Plus_DM = 0;
+            }
+            double Minus_DM = 0;
+            if (( Minus_M < Plus_M) || (Minus_M < 0))
+            {
+                Minus_DM = 0;
+            }
+            else if ((Minus_M > Plus_M ) && (Minus_M > 0))
+            {
+                Minus_DM = Minus_M;                
+            }
+            double TR = Math.Max(points.Last().High, points[points.Count - 2].Close) - Math.Min(points.Last().Low, points[points.Count - 2].Close);
+            if (TR == 0) TR = 1;
+            AddVal(points.Last(), name, type, "+DM", Plus_DM);
+            AddVal(points.Last(), name, type, "-DM", Minus_DM);
+            AddVal(points.Last(), name, type, "TR", TR);
+
+            AddVal(points.Last(), name, type, "+DI", Plus_DM/TR);
+            AddVal(points.Last(), name, type, "-DI", Minus_DM/TR);
+            double PlusDI = GetEMA(points, n, name, type, "+DI");
+            double MinusDI = GetEMA(points, n, name, type, "-DI");
+            
+            double ATX = Convert.ToDouble(Math.Abs((PlusDI - MinusDI) / (PlusDI + MinusDI)));
+            if ((PlusDI - MinusDI) == 0) { ATX = 0; }
+            
+            AddVal(points.Last(), name, type, "_ADX", ATX);
+            AddVal(points.Last(), name, type, "ADX", GetEMA(points, n, name, type, "_ADX")*100);
+
+        }
+        // TODO: Добавить CCI 
+        public void GetCCI(List<PointModel> points, List<ParamModel> @params)
+        {
+            string name = GetStringParam(@params, "Name");
+            int n = GetIntParam(@params, "Period");
+
+            double TP = (points.Last().High + points.Last().Low + points.Last().Close) / 3;
+            AddVal(points.Last(), name, "CCI", "TP", TP);
+
+            double TPSMA = GetSMA(points, n, name, "CCI", "TP");
+            AddVal(points.Last(), name, "CCI", "TPSMA", TPSMA);
+            double MeanDeviation = 0;
+            int tmp = points.Count;
+            if (tmp - n > 0)
+            {
+                tmp = 0;
+            }
+            for (int i = 0; tmp > i; i++ )
+            {
+                MeanDeviation = MeanDeviation + (GetSMA(points, n, name, "CCI", "TP") - GetSMA(points, n, name, "CCI", "TPSMA"));
+            }
+            MeanDeviation = MeanDeviation / n;
+
+            double CCI = (TP - GetSMA(points, n, name, "CCI", "TP")) / (0.015 * MeanDeviation);
+            AddVal(points.Last(), name, "CCI", "CCI", CCI);
         }
     }
 }

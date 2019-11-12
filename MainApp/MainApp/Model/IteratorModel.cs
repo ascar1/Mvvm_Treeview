@@ -126,28 +126,39 @@ namespace MainApp.Model
             foreach(var tmp in lavelModels.FindAll(i=> i.ParemtId == lavelModels.Find(i1 => i1.Name == "Index").Id))
             {                
                 List<ParamModel> tmp2 = paramDataService.GetParam(tmp.Id);
-                string type = tmp2.Find(i => i.Name.Trim() == "Type").Val;                
-                switch (type)
+                if (tmp2.Count != 0)
                 {
-                    case "EMA":
-                        //MessageBox.Show("EMA");
-                        indexModel.GetEMA(dateModels.Find(i => i.Scale == "60").Points, tmp2);
-                        indexModel.GetEMA(dateModels.Find(i => i.Scale == "D").Points, tmp2);
-                        break;
-                    case "MACD":
-                        //MessageBox.Show("MACD");
-                        indexModel.GetMACD(dateModels.Find(i => i.Scale == "60").Points, tmp2);
-                        indexModel.GetMACD(dateModels.Find(i => i.Scale == "D").Points, tmp2);
-                        break;
-                    case "FI":
-                        //MessageBox.Show("FI");
-                        indexModel.GetForceIndex(dateModels.Find(i => i.Scale == "60").Points, tmp2);
-                        indexModel.GetForceIndex(dateModels.Find(i => i.Scale == "D").Points, tmp2);
-                        break;
-                    case "ATR":
-                        indexModel.GetATR(dateModels.Find(i => i.Scale == "60").Points, tmp2);
-                        indexModel.GetATR(dateModels.Find(i => i.Scale == "D").Points, tmp2);
-                        break;
+                    string type = tmp2.Find(i => i.Name.Trim() == "Type").Val;
+                    switch (type)
+                    {
+                        case "EMA":
+                            //MessageBox.Show("EMA");
+                            indexModel.GetEMA(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                            indexModel.GetEMA(dateModels.Find(i => i.Scale == "D").Points, tmp2);
+                            break;
+                        case "MACD":
+                            //MessageBox.Show("MACD");
+                            indexModel.GetMACD(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                            indexModel.GetMACD(dateModels.Find(i => i.Scale == "D").Points, tmp2);
+                            break;
+                        case "FI":
+                            //MessageBox.Show("FI");
+                            indexModel.GetForceIndex(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                            indexModel.GetForceIndex(dateModels.Find(i => i.Scale == "D").Points, tmp2);
+                            break;
+                        case "ATR":
+                            indexModel.GetATR(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                            indexModel.GetATR(dateModels.Find(i => i.Scale == "D").Points, tmp2);
+                            break;
+                        case "ADX":
+                            indexModel.GetADX(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                            indexModel.GetADX(dateModels.Find(i => i.Scale == "D").Points, tmp2);
+                            break;
+                        case "CCI":
+                            indexModel.GetCCI(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                            indexModel.GetCCI(dateModels.Find(i => i.Scale == "D").Points, tmp2);
+                            break;
+                    }
                 }
             }             
         }
