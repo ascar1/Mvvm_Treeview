@@ -111,12 +111,13 @@ namespace MainApp.Model
             {
                 EMA0 = (Decimal)GetValIndex(points[points.Count - (N + 1)], name, namePoint);
             }
-
+            int II = 1;
             for (int I = points.Count - N; I < points.Count; I++)
             {
                 decimal tmpVal = Convert.ToDecimal(GetValIndex(points[I], name, namePoint));
                 EMA = tmpVal * (Decimal)k1 + (Decimal)EMA0 * (1 - (Decimal)k1);
-                EMA0 = EMA;                
+                EMA0 = EMA;
+                II++;
             }
             return (double)EMA;            
         }
@@ -309,6 +310,7 @@ namespace MainApp.Model
                 AddVal(points.Last(), name, type, "ADX", 0);
                 return;
             }
+
             double Plus_M = points.Last().High - points[points.Count - 2].High;
             double Minus_M = points.Last().Low - points[points.Count - 2].Low;
 
@@ -338,14 +340,15 @@ namespace MainApp.Model
 
             AddVal(points.Last(), name, type, "+DI", Plus_DM/TR);
             AddVal(points.Last(), name, type, "-DI", Minus_DM/TR);
-            double PlusDI = GetEMA(points, n, name, type, "+DI");
-            double MinusDI = GetEMA(points, n, name, type, "-DI");
+            double PlusDI = GetSMA(points, n, name, type, "+DI");
+            double MinusDI = GetSMA(points, n, name, type, "-DI");
             
-            double ATX = Convert.ToDouble(Math.Abs((PlusDI - MinusDI) / (PlusDI + MinusDI)));
-            if ((PlusDI - MinusDI) == 0) { ATX = 0; }
-            
-            AddVal(points.Last(), name, type, "_ADX", ATX);
-            AddVal(points.Last(), name, type, "ADX", GetEMA(points, n, name, type, "_ADX")*100);
+            double ADX = Convert.ToDouble(Math.Abs((PlusDI - MinusDI)) / (PlusDI + MinusDI));
+            //if ((PlusDI - MinusDI) == 0) { ATX = 0; }
+            if (Double.IsNaN(ADX)) { ADX = 0; }
+
+            AddVal(points.Last(), name, type, "_ADX", ADX);
+            AddVal(points.Last(), name, type, "ADX", GetSMA(points, n, name, type, "_ADX")*100);
 
         }
         // TODO: Добавить CCI 

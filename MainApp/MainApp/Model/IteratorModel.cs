@@ -185,7 +185,7 @@ namespace MainApp.Model
                 {
                     A1Result = dateModels.Find(i => i.Scale == "D").Points.Last().AnalysisResults[item].Result;
                     //if (tiker == "GAZP") { }
-                    Analysis2 analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "60"), "Analysis2", tiker, A1Result);
+                    Analysis2 analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "D"), "Analysis2", tiker, A1Result);
 
                     analysis2.GetAnalysis();
                     // Удаляем ордер если сигнала нет 
@@ -222,7 +222,7 @@ namespace MainApp.Model
                             {
                                 //dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value;
                                 double tmp = dateModels.Find(i => i.Scale == "60").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
-                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "60").Points, 22) - (tmp*3) );
+                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp*3) );
                                 if (stop > 0)
                                 {
                                     dealModels[itemDeal].StopPrice = stop;
