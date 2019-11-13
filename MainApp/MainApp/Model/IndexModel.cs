@@ -135,13 +135,15 @@ namespace MainApp.Model
             }
             else
             {
-                EMA = (Decimal)GetValIndex(points[points.Count - (N + 1)], name, namePoint);
+                //EMA = (Decimal)GetValIndex(points[points.Count - (N + 1)], name, namePoint);
+                EMA = 0;
             }
-
+            int ii = 0;
             for (int I = points.Count - N; I < points.Count; I++)
             {
                 decimal tmpVal = Convert.ToDecimal(GetValIndex(points[I], name, namePoint));
                 EMA = EMA + tmpVal;
+                ii++;
             }
             EMA = EMA / N;
             return (double)EMA;
@@ -363,22 +365,24 @@ namespace MainApp.Model
             double TPSMA = GetSMA(points, n, name, "CCI", "TP");
             AddVal(points.Last(), name, "CCI", "TPSMA", TPSMA);
                         
-            Decimal Sum;
+            Decimal Sum = 0;
             int N = n;
             if (points.Count <= N)
             {
                 N = points.Count;
-                Sum = (Decimal)GetValIndex(points[0], name, "TP");
+                Sum = (Decimal)Math.Abs(TPSMA - GetValIndex(points[0], name, "TP"));
             }
             else
             {
-                Sum = (Decimal)Math.Abs(GetValIndex(points[points.Count - (N + 1)], name, "TP") - TPSMA);
+                //Sum = (Decimal)Math.Abs(TPSMA - GetValIndex(points[points.Count - (N + 1)], name, "TP"));
             }
-
+            int ii = 0;
             for (int i = points.Count - N; i < points.Count; i++)
             {
-                Sum = Sum + (Decimal)Math.Abs(GetValIndex(points[points.Count - (N + 1)], name, "TP") - TPSMA) ;                
+                Sum = Sum + (Decimal)Math.Abs(TPSMA - GetValIndex(points[i], name, "TP")) ;
+                ii++;
             }
+            Sum = Sum / N;
             AddVal(points.Last(), name, "CCI", "MD", (double)Sum);
 
             double CCI = (TP - TPSMA)/(0.015*(double)Sum);
