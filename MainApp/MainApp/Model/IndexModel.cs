@@ -359,15 +359,26 @@ namespace MainApp.Model
 
             double TPSMA = GetSMA(points, n, name, "CCI", "TP");
             AddVal(points.Last(), name, "CCI", "TPSMA", TPSMA);
+                        
+            Decimal Sum;
+            int N = n;
+            if (points.Count <= N)
+            {
+                N = points.Count;
+                Sum = (Decimal)GetValIndex(points[0], name, "TP");
+            }
+            else
+            {
+                Sum = (Decimal)Math.Abs(GetValIndex(points[points.Count - (N + 1)], name, "TP") - TPSMA);
+            }
 
-            double D = TPSMA - TP;
-            AddVal(points.Last(), name, "CCI", "D", D);
+            for (int i = points.Count - N; i < points.Count; i++)
+            {
+                Sum = Sum + (Decimal)Math.Abs(GetValIndex(points[points.Count - (N + 1)], name, "TP") - TPSMA) ;                
+            }
+            AddVal(points.Last(), name, "CCI", "MD", (double)Sum);
 
-            double MD = GetSumIndex(points, n, name, "CCI", "D");
-            MD = MD / n;
-            AddVal(points.Last(), name, "CCI", "D", MD);
-
-            double CCI = (TP - TPSMA)/(0.015*MD);
+            double CCI = (TP - TPSMA)/(0.015*(double)Sum);
             AddVal(points.Last(), name, "CCI", "CCI", CCI);
         }
     }
