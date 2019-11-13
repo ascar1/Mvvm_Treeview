@@ -238,8 +238,11 @@ namespace MainApp.Model.Analysis
                 case "Up":
                     if (GetAnalysisMACD(Direction))
                     {
-                        Result = Direction;
-                        AnalysisResults.Result = "Up";
+                        if (GetIndexValue("ADX", "ADX") > 30)
+                        {
+                            Result = Direction;
+                            AnalysisResults.Result = "Up";
+                        }
                     }
                     break;
                 case "Down":
@@ -381,7 +384,7 @@ namespace MainApp.Model.Analysis
                 Tiker = Tiker,
                 Type = A1Result,
                 Vol = 1,
-                Price = DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value, //GetMax(20), 
+                Price = GetMax(50), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value, //GetMax(20), //
                 BeginDate = DateModel.Points.Last().Date,                
                 IsActive = true
             };
