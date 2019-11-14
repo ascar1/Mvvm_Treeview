@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MainApp.Supporting
 {
@@ -143,7 +144,14 @@ namespace MainApp.Supporting
                     {
                         tmplist.Add(tmp.Tiker.ToString());
                         tmplist.Add(tmp1.Date.ToString());
-                        foreach(var results in tmp1.AnalysisResults)
+
+                        tmplist.Add(tmp1.Open.ToString());
+                        tmplist.Add(tmp1.High.ToString());
+                        tmplist.Add(tmp1.Low.ToString());
+                        tmplist.Add(tmp1.Close.ToString());
+                        //DateTime date = new DateTime(2019, 11, 12, 11, 00, 00);
+                        //if (tmp1.Date == date) { MessageBox.Show("!"); }
+                        foreach (var results in tmp1.AnalysisResults)
                         {
                             tmplist.Add(results.Name);
                             foreach(var result in results.ResultArr)

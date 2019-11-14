@@ -156,6 +156,8 @@ namespace MainApp.Model
                             break;
                         case "CCI":
                             indexModel.GetCCI(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                            DateTime date = new DateTime(2019, 11, 12, 19, 00, 00);
+                            if (dateModels.Find(i => i.Scale == "60").Points.Last().Date == date) { MessageBox.Show("!"); }
                             indexModel.GetCCI(dateModels.Find(i => i.Scale == "D").Points, tmp2);
                             break;
                     }
@@ -168,6 +170,8 @@ namespace MainApp.Model
             if (dateModels.Find(i=> i.Scale == "60").Points.Last().Date.Hour == 18)
             {
                 IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"), "Analysis1");
+                //DateTime date = new DateTime(2019, 11, 12, 11, 00, 00);
+                //if (dateModels.Find(i => i.Scale == "D").Points.Last().Date == date) { MessageBox.Show("!"); }
                 analysis1.GetAnalysis();
             }
             int item = dateModels.FindIndex(i => i.Scale == "D");
