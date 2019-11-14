@@ -109,7 +109,7 @@ namespace MainApp.Model
             }
             else
             {
-                EMA0 = (Decimal)GetValIndex(points[points.Count - (N + 1)], name, namePoint);
+                EMA0 = 0;// (Decimal)GetValIndex(points[points.Count - (N + 1)], name, namePoint);
             }
             int II = 1;
             for (int I = points.Count - N; I < points.Count; I++)
@@ -336,19 +336,19 @@ namespace MainApp.Model
             AddVal(points.Last(), name, type, "TR", TR); // ATR = SMA (TR)
             double ATR = GetEMA(points, n, name, type, "TR");
 
-            //AddVal(points.Last(), name, type, "+DI",   Plus_DM/ATR);
-            //AddVal(points.Last(), name, type, "-DI", Minus_DM/ATR);
+            //AddVal(points.Last(), name, type, "+DI", Plus_DM / TR);
+            //AddVal(points.Last(), name, type, "-DI", Minus_DM / TR);
             //double PlusDI = GetSMA(points, n, name, type, "+DI"); // DX +
             //double MinusDI = GetSMA(points, n, name, type, "-DI"); // DX -
-            double PlusDI = (GetSMA(points, n, name, type, "+DM") / ATR); // ATR; // + DMI = +DX/ATR  
-            double MinusDI = (GetSMA(points, n, name, type, "-DM") / ATR);  // ATR;
+            double PlusDI = (GetEMA(points, n, name, type, "+DM") / ATR); // ATR; // + DMI = +DX/ATR  
+            double MinusDI = (GetEMA(points, n, name, type, "-DM") / ATR);  // ATR;
 
             double ADX = Convert.ToDouble(Math.Abs((PlusDI - MinusDI)) / (PlusDI + MinusDI));
             //if ((PlusDI - MinusDI) == 0) { ATX = 0; }
             if (Double.IsNaN(ADX)) { ADX = 0; }
 
             AddVal(points.Last(), name, type, "_ADX", ADX*100);
-            AddVal(points.Last(), name, type, "ADX", GetSMA(points, n, name, type, "_ADX"));
+            AddVal(points.Last(), name, type, "ADX", GetEMA(points, n, name, type, "_ADX"));
 
         }
         // TODO: Добавить CCI 

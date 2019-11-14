@@ -167,7 +167,7 @@ namespace MainApp.Model
         private void GetAnalysis(List<DateModel> dateModels, string tiker)
         {
             IndexModel indexModel = new IndexModel();
-            if (dateModels.Find(i=> i.Scale == "60").Points.Last().Date.Hour == 18)
+            if (dateModels.Find(i=> i.Scale == "60").Points.Last().Date.Hour == 19)
             {
                 IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"), "Analysis1");
                 //DateTime date = new DateTime(2019, 11, 12, 11, 00, 00);
@@ -222,7 +222,7 @@ namespace MainApp.Model
                     {
                         if (A1Result != "")
                         {
-                            if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 18)
+                            if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
                             {
                                 //dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value;
                                 double tmp = dateModels.Find(i => i.Scale == "60").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
