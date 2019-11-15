@@ -140,6 +140,43 @@ namespace MainApp.Model
             EMA = EMA / N;
             return EMA;
         }
+        private double GetSMMA (List<PointModel> points, int N, string name, string type, string namePoint)
+        {
+            //double SMMA = 0;
+            //double SMMA0 = 0;
+
+            if (points.Count <= N)
+            {
+                N = points.Count;
+                return GetSMA(points, N, name, type, namePoint);
+            }
+            else
+            {
+               return ((GetValIndex(points[points.Count - 2], name, namePoint) * (N - 1)) + GetValIndex(points.Last(), name, namePoint)) / N;
+            }
+
+            //int ii = 0;
+            //for (int I = points.Count - N; I < points.Count; I++)
+            //{
+            //    if ((points.Count - N) == I)
+            //    {
+            //        SMMA0 = GetValIndex(points[I-1], name, namePoint);
+            //        SMMA = 
+            //        SMMA0 = SMMA;
+            //    }
+            //    else
+            //    {
+            //        //GetValIndex(points[I], name, namePoint)
+            //        double tmpVal = (SMMA0*(N-1) + GetValIndex(points[I], name, namePoint))/N;
+            //        SMMA = SMMA + tmpVal;
+            //        SMMA0 = tmpVal;
+            //        ii++;
+            //    }
+            //}
+            ////SMMA = SMMA / N;
+            //return SMMA;
+            
+        }
         private double GetSumIndex (List<PointModel> points, int N, string name, string type, string namePoint)
         {
             Decimal EMA = 0; 
@@ -340,8 +377,8 @@ namespace MainApp.Model
             //AddVal(points.Last(), name, type, "-DI", Minus_DM / TR);
             //double PlusDI = GetSMA(points, n, name, type, "+DI"); // DX +
             //double MinusDI = GetSMA(points, n, name, type, "-DI"); // DX -
-            double PlusDI = (GetEMA(points, n, name, type, "+DM") / ATR); // ATR; // + DMI = +DX/ATR  
-            double MinusDI = (GetEMA(points, n, name, type, "-DM") / ATR);  // ATR;
+            double PlusDI = (GetSMA(points, n, name, type, "+DM") / ATR); // ATR; // + DMI = +DX/ATR  
+            double MinusDI = (GetSMA(points, n, name, type, "-DM") / ATR);  // ATR;
 
             double ADX = Convert.ToDouble(Math.Abs((PlusDI - MinusDI)) / (PlusDI + MinusDI));
             //if ((PlusDI - MinusDI) == 0) { ATX = 0; }
@@ -350,6 +387,63 @@ namespace MainApp.Model
             AddVal(points.Last(), name, type, "_ADX", ADX*100);
             AddVal(points.Last(), name, type, "ADX", GetEMA(points, n, name, type, "_ADX"));
 
+        }
+        public void GetFinamADX(List<PointModel> points, List<ParamModel> @params)
+        {
+            string name = GetStringParam(@params, "Name");
+            int n = GetIntParam(@params, "Period");
+            string type = "ADX";
+            if (points.Count < 2)
+            {
+                AddVal(points.Last(), name, type, "+DM", 0);
+                AddVal(points.Last(), name, type, "-DM", 0);
+                AddVal(points.Last(), name, type, "TR", 0);
+                AddVal(points.Last(), name, type, "+DI", 0);
+                AddVal(points.Last(), name, type, "-DI", 0);
+                AddVal(points.Last(), name, type, "_ADX", 0);
+                AddVal(points.Last(), name, type, "ADX", 0);
+                return;
+            }
+
+            double Plus_M = points.Last().High - points[points.Count - 2].High;// DX + 
+            double Minus_M = points[points.Count - 2].Low - points.Last().Low; // DX - 
+
+            double Plus_DM = 0;
+            if ((Plus_M > Minus_M) && (Plus_M > 0))
+            {
+                Plus_DM = Plus_M*100;
+            }
+            else
+            {
+                Plus_DM = 0;
+            }
+            double Minus_DM = 0;
+            if ((Minus_M > Plus_M) && (Minus_M > 0))
+            {
+                Minus_DM = Minus_M*100;
+            }
+            else
+            {
+                Minus_DM = 0;
+            }
+            AddVal(points.Last(), name, type, "+DM", Plus_DM);
+            AddVal(points.Last(), name, type, "-DM", Minus_DM);
+
+            List<double> tmp = new List<double>() { points.Last().High - points.Last().Low,
+                                                    points.Last().High - points[points.Count - 2].Close,
+                                                    points.Last().Low - points[points.Count - 2].Close
+                                                   };
+            double TR = tmp.Max();
+            AddVal(points.Last(), name, type, "TR", TR);
+            double ATR = GetSMMA(points, n, name, type, "TR");
+
+            double PlusDI = (GetSMMA(points, n, name, type, "+DM") / ATR); // ATR; // + DMI = +DX/ATR  
+            double MinusDI = (GetSMMA(points, n, name, type, "-DM") / ATR);  // ATR;
+
+            double ADX = Convert.ToDouble(Math.Abs((PlusDI - MinusDI)*100)/ (PlusDI + MinusDI));
+
+            AddVal(points.Last(), name, type, "_ADX", ADX );
+            AddVal(points.Last(), name, type, "ADX", GetSMMA(points, n, name, type, "_ADX"));
         }
         // TODO: Добавить CCI 
         public void GetCCI(List<PointModel> points, List<ParamModel> @params)

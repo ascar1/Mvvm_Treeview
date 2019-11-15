@@ -151,8 +151,8 @@ namespace MainApp.Model
                             indexModel.GetATR(dateModels.Find(i => i.Scale == "D").Points, tmp2);
                             break;
                         case "ADX":
-                            indexModel.GetADX(dateModels.Find(i => i.Scale == "60").Points, tmp2);
-                            indexModel.GetADX(dateModels.Find(i => i.Scale == "D").Points, tmp2);
+                            indexModel.GetFinamADX(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                            indexModel.GetFinamADX(dateModels.Find(i => i.Scale == "D").Points, tmp2);
                             break;
                         case "CCI":
                             indexModel.GetCCI(dateModels.Find(i => i.Scale == "60").Points, tmp2);
