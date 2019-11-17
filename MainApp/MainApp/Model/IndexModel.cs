@@ -140,42 +140,22 @@ namespace MainApp.Model
             EMA = EMA / N;
             return EMA;
         }
-        private double GetSMMA (List<PointModel> points, int N, string name, string type, string namePoint)
+        private double GetSMMA (List<PointModel> points, int N, string name, string type, string TargetPoint,string namePoint)
         {
-            //double SMMA = 0;
-            //double SMMA0 = 0;
-
+            double SMMA = 0;
             if (points.Count <= N)
             {
                 N = points.Count;
-                return GetSMA(points, N, name, type, namePoint);
+                SMMA = GetSMA(points, N, name, type, TargetPoint);
+                AddVal(points.Last(), name, type, namePoint, SMMA);
+                return SMMA;
             }
             else
             {
-               return ((GetValIndex(points[points.Count - 2], name, namePoint) * (N - 1)) + GetValIndex(points.Last(), name, namePoint)) / N;
+                SMMA = ((GetValIndex(points[points.Count - 2], name, namePoint) * (N - 1)) + GetValIndex(points.Last(), name, TargetPoint)) / N;
+                AddVal(points.Last(), name, type, namePoint, SMMA);
+                return SMMA;
             }
-
-            //int ii = 0;
-            //for (int I = points.Count - N; I < points.Count; I++)
-            //{
-            //    if ((points.Count - N) == I)
-            //    {
-            //        SMMA0 = GetValIndex(points[I-1], name, namePoint);
-            //        SMMA = 
-            //        SMMA0 = SMMA;
-            //    }
-            //    else
-            //    {
-            //        //GetValIndex(points[I], name, namePoint)
-            //        double tmpVal = (SMMA0*(N-1) + GetValIndex(points[I], name, namePoint))/N;
-            //        SMMA = SMMA + tmpVal;
-            //        SMMA0 = tmpVal;
-            //        ii++;
-            //    }
-            //}
-            ////SMMA = SMMA / N;
-            //return SMMA;
-            
         }
         private double GetSumIndex (List<PointModel> points, int N, string name, string type, string namePoint)
         {
@@ -397,7 +377,10 @@ namespace MainApp.Model
             {
                 AddVal(points.Last(), name, type, "+DM", 0);
                 AddVal(points.Last(), name, type, "-DM", 0);
+                AddVal(points.Last(), name, type, "_+DM", 0);
+                AddVal(points.Last(), name, type, "_-DM", 0);
                 AddVal(points.Last(), name, type, "TR", 0);
+                AddVal(points.Last(), name, type, "_TR", 0);
                 AddVal(points.Last(), name, type, "+DI", 0);
                 AddVal(points.Last(), name, type, "-DI", 0);
                 AddVal(points.Last(), name, type, "_ADX", 0);
@@ -435,15 +418,15 @@ namespace MainApp.Model
                                                    };
             double TR = tmp.Max();
             AddVal(points.Last(), name, type, "TR", TR);
-            double ATR = GetSMMA(points, n, name, type, "TR");
+            double ATR = GetSMMA(points, n, name, type, "TR", "_TR");
 
-            double PlusDI = (GetSMMA(points, n, name, type, "+DM") / ATR); // ATR; // + DMI = +DX/ATR  
-            double MinusDI = (GetSMMA(points, n, name, type, "-DM") / ATR);  // ATR;
+            double PlusDI = (GetSMMA(points, n, name, type, "+DM","_+DM") / ATR); // ATR; // + DMI = +DX/ATR  
+            double MinusDI = (GetSMMA(points, n, name, type, "-DM","_-DR") / ATR);  // ATR;
 
-            double ADX = Convert.ToDouble(Math.Abs((PlusDI - MinusDI)*100)/ (PlusDI + MinusDI));
+            double ADX = Math.Abs((PlusDI - MinusDI)*100)/(PlusDI + MinusDI);
 
             AddVal(points.Last(), name, type, "_ADX", ADX );
-            AddVal(points.Last(), name, type, "ADX", GetSMMA(points, n, name, type, "_ADX"));
+            GetSMMA(points, n, name, type, "_ADX","ADX");
         }
         // TODO: Добавить CCI 
         public void GetCCI(List<PointModel> points, List<ParamModel> @params)

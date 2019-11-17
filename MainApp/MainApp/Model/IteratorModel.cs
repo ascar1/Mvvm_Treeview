@@ -225,7 +225,7 @@ namespace MainApp.Model
                             if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
                             {
                                 //dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value;
-                                double tmp = dateModels.Find(i => i.Scale == "60").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
+                                double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
                                 double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp*3) );
                                 if (stop > 0)
                                 {

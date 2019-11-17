@@ -231,14 +231,14 @@ namespace MainApp.Model.Analysis
             #endregion
             #region Проанализировать данные 
             List<string> resultArr = new List<string>();
-            //string Direction = GetDirection();
-            string Direction = GetDirectionMACD();
+            string Direction = GetDirection();
+            //string Direction = GetDirectionMACD();
             switch (Direction)
             {
                 case "Up":
                     if (GetAnalysisMACD(Direction))
                     {
-                        if (GetIndexValue("ADX", "ADX") > 30)
+                        if ((GetIndexValue("ADX", "ADX") > 25) && (GetIndexValue("ADX", "ADX") < 45))
                         {
                             Result = Direction;
                             AnalysisResults.Result = "Up";
