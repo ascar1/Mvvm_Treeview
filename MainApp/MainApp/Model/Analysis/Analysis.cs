@@ -236,14 +236,14 @@ namespace MainApp.Model.Analysis
             switch (Direction)
             {
                 case "Up":
-                    if (GetAnalysisMACD(Direction))
-                    {
-                        if ((GetIndexValue("ADX", "ADX") > 25) && (GetIndexValue("ADX", "ADX") < 45))
-                        {
+                    //if (GetAnalysisMACD(Direction))
+                    //{
+                        //if ((GetIndexValue("ADX", "ADX") > 25) && (GetIndexValue("ADX", "ADX") < 45))
+                        //{
                             Result = Direction;
                             AnalysisResults.Result = "Up";
-                        }
-                    }
+                        //}
+                    //}
                     break;
                 case "Down":
                     break;
@@ -329,7 +329,10 @@ namespace MainApp.Model.Analysis
         private ParamDataService _ParamDS = new ParamDataService();
         private AnalysisResult AnalysisResults;
         private string A1Result;
-
+        private double GetIndexValue(string nameIndex, string nameVal)
+        {
+            return DateModel.Points.Last().IndexPoint.Find(i1 => i1.Name == nameIndex).Value.Find(j => j.Name == nameVal).Value;
+        }
         public bool HaveOrder
         {
             get
@@ -384,7 +387,7 @@ namespace MainApp.Model.Analysis
                 Tiker = Tiker,
                 Type = A1Result,
                 Vol = 1,
-                Price = GetMax(50), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value, //GetMax(20), //
+                Price = GetMax(50), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
                 BeginDate = DateModel.Points.Last().Date,                
                 IsActive = true
             };
@@ -393,10 +396,15 @@ namespace MainApp.Model.Analysis
 
         public void GetAnalysis()
         {
+            double CCIVal = GetIndexValue("CCI", "CCI");
             switch (A1Result)
             {
                 case "Up":
-                    GetOrder();
+                    if ((CCIVal > 0) && (CCIVal < 100))
+                    {
+                        GetOrder();
+                    }
+                    
                     break;
                 case "Down":
                     break;

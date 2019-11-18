@@ -450,7 +450,7 @@ namespace MainApp.Model
             int ii = 0;
             for (int i = points.Count - N; i < points.Count; i++)
             {
-                Sum = Sum + Math.Abs(GetValIndex(points[i], name, "TP") - TPSMA);
+                Sum = Sum + Math.Abs(TPSMA - GetValIndex(points[i], name, "TP"));
                 ii++;
                 //Console.WriteLine(ii + " " + GetValIndex(points[i], name, "TP"));
             }
