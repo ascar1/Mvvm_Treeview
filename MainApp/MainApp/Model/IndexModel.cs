@@ -79,7 +79,7 @@ namespace MainApp.Model
             }
             else
             {
-                //EMA0 = (Decimal)GetValIndex(points[points.Count - (N + 1)], name, namePoint);
+                EMA0 = (Decimal)GetValIndex(points[points.Count - (N + 1)], name, namePoint);
             }
 
 
@@ -221,9 +221,17 @@ namespace MainApp.Model
             //double Slow = GetEMA(points, nEMAa, "MACD", "MACD", "_Fast");
             //AddVal(points.Last(), "MACD", "MACD", "_Slow", Slow);
 
-            //double Bar_Graph = Fast - Slow;
-            double Bar_Graph = EMA12 - EMA26;
+            
+            double Signal = EMA12 - EMA26;
+            AddVal(points.Last(), "MACD", "MACD", "_Signal", Signal);
+
+            Signal = GetEMA(points, nEMAa, "MACD", "MACD", "_Signal");
+            AddVal(points.Last(), "MACD", "MACD", "Signal", Signal);
+
+            double Bar_Graph = (EMA12 - EMA26) - Signal;
             AddVal(points.Last(), "MACD", "MACD", "Bar_Graph", Bar_Graph);
+
+
         }
         public void GetForceIndex (List<PointModel> points, List<ParamModel> @params)
         {
