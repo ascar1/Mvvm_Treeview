@@ -227,14 +227,14 @@ namespace MainApp.Model
                             {
                                 //dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value;
                                 double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
-                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp*3) );
+                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp*4) );
                                 if (stop > 0)
                                 {
                                     dealModels[itemDeal].StopPrice = stop;
                                 }
                                 else
                                 {
-                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 3));
+                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 4));
                                 }
                             }
                         }

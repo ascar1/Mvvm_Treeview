@@ -238,11 +238,11 @@ namespace MainApp.Model.Analysis
                 case "Up":
                     if (GetAnalysisMACD(Direction))
                     {
-                        if ((GetIndexValue("ADX", "ADX") > 20) && (GetIndexValue("ADX", "ADX") < 40))
-                        {
+                        //if ((GetIndexValue("ADX", "ADX") > 20) && (GetIndexValue("ADX", "ADX") < 40))
+
                             Result = Direction;
                             AnalysisResults.Result = "Up";
-                        }
+                        
                     }
                     break;
                 case "Down":
