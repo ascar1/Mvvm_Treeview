@@ -172,7 +172,7 @@ namespace MainApp.Model
             {
                 IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"), "Analysis1");
                 DateTime date = new DateTime(2019, 1, 15, 11, 00, 00);
-                if ((dateModels.Find(i => i.Scale == "D").Points.Last().Date == date)&& (tiker == "SBER")) { MessageBox.Show("!"); }
+                //if ((dateModels.Find(i => i.Scale == "D").Points.Last().Date == date)&& (tiker == "SBER")) { MessageBox.Show("!"); }
                 analysis1.GetAnalysis();
             }
             int item = dateModels.FindIndex(i => i.Scale == "D");
@@ -227,14 +227,14 @@ namespace MainApp.Model
                             {
                                 //dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value;
                                 double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
-                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp*4) );
+                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp*2) );
                                 if (stop > 0)
                                 {
                                     dealModels[itemDeal].StopPrice = stop;
                                 }
                                 else
                                 {
-                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 4));
+                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 2));
                                 }
                             }
                         }
