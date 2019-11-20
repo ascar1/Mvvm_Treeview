@@ -173,7 +173,7 @@ namespace MainApp.Model.Analysis
                     List<double> tmp = new List<double>();
                     for (int i=0;EMAPoint.Count() > i;i++)
                     {
-                        if (EMAPoint[i] < 0)
+                        if (EMAPoint[i] < 0.1)
                         {
                             flag = true;
                         }
@@ -387,7 +387,7 @@ namespace MainApp.Model.Analysis
                 Tiker = Tiker,
                 Type = A1Result,
                 Vol = 1,
-                Price = GetMax(50), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
+                Price = GetMax(20), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
                 BeginDate = DateModel.Points.Last().Date,                
                 IsActive = true
             };

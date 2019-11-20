@@ -158,7 +158,6 @@ namespace MainApp.Model
                             break;
                         case "CCI":
                             indexModel.GetCCI(dateModels.Find(i => i.Scale == "60").Points, tmp2);
-
                             indexModel.GetCCI(dateModels.Find(i => i.Scale == "D").Points, tmp2);
                             break;
                     }
@@ -227,14 +226,14 @@ namespace MainApp.Model
                             {
                                 //dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value;
                                 double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
-                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp*2) );
+                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp*3) );
                                 if (stop > 0)
                                 {
                                     dealModels[itemDeal].StopPrice = stop;
                                 }
                                 else
                                 {
-                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 2));
+                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 3));
                                 }
                             }
                         }
