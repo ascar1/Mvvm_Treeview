@@ -139,6 +139,8 @@ namespace MainApp.Model
                         case "MACD":
                             //MessageBox.Show("MACD");
                             indexModel.GetMACD(dateModels.Find(i => i.Scale == "60").Points, tmp2);
+                            //DateTime date = new DateTime(2019, 11, 12, 19, 00, 00);
+                            //if (dateModels.Find(i => i.Scale == "60").Points.Last().Date == date) { MessageBox.Show("!"); }
                             indexModel.GetMACD(dateModels.Find(i => i.Scale == "D").Points, tmp2);
                             break;
                         case "FI":
@@ -156,8 +158,7 @@ namespace MainApp.Model
                             break;
                         case "CCI":
                             indexModel.GetCCI(dateModels.Find(i => i.Scale == "60").Points, tmp2);
-                            //DateTime date = new DateTime(2019, 11, 12, 19, 00, 00);
-                            //if (dateModels.Find(i => i.Scale == "60").Points.Last().Date == date) { MessageBox.Show("!"); }
+
                             indexModel.GetCCI(dateModels.Find(i => i.Scale == "D").Points, tmp2);
                             break;
                     }
@@ -170,8 +171,8 @@ namespace MainApp.Model
             if (dateModels.Find(i=> i.Scale == "60").Points.Last().Date.Hour == 19)
             {
                 IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"), "Analysis1");
-                //DateTime date = new DateTime(2019, 11, 12, 11, 00, 00);
-                //if (dateModels.Find(i => i.Scale == "D").Points.Last().Date == date) { MessageBox.Show("!"); }
+                DateTime date = new DateTime(2019, 1, 15, 11, 00, 00);
+                if ((dateModels.Find(i => i.Scale == "D").Points.Last().Date == date)&& (tiker == "SBER")) { MessageBox.Show("!"); }
                 analysis1.GetAnalysis();
             }
             int item = dateModels.FindIndex(i => i.Scale == "D");
@@ -239,21 +240,19 @@ namespace MainApp.Model
                         }
                         else
                         {
-                            //double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
-                            //if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
-                            //{
-                            //    //dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "60").Points, 22) - (tmp * 3));
-                            //    dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "60").Points.Last().Close; //IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value;
-                            //}
+                            double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
+                            if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
+                            {
+                                //dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "60").Points, 22) - (tmp * 3));
+                                dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "60").Points.Last().Close; //IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value;
+                            }
                         }
-
-
-                        Analysis3 analysis3 = new Analysis3(dateModels.Find(i => i.Scale == "60"), "Analysis3", tiker, A1Result);
-                        analysis3.GetAnalysis();
-                        if (analysis3.StopOrder != 0)
-                        {
-                            dealModels.Find(i => i.Tiker == tiker & i.InMarket == true).StopPrice = analysis3.StopOrder;
-                        }
+                        //Analysis3 analysis3 = new Analysis3(dateModels.Find(i => i.Scale == "60"), "Analysis3", tiker, A1Result);
+                        //analysis3.GetAnalysis();
+                        //if (analysis3.StopOrder != 0)
+                        //{
+                        //    dealModels.Find(i => i.Tiker == tiker & i.InMarket == true).StopPrice = analysis3.StopOrder;
+                        //}
                     }
                 }
             }
@@ -261,9 +260,6 @@ namespace MainApp.Model
         private void ChekDeal(List<DateModel> dateModels, string tiker)
         {
             DateTime CurrDate = dateModels.Find(i => i.Scale == "60").Points.Last().Date;
-            
-
-
             #region Проверить и удалить просроченные ордера 
             int item = orderModels.FindIndex(i => i.Tiker == tiker & i.IsActive == true & i.IsExecute == false);
             if (item >= 0)
