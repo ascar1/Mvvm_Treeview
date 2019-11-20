@@ -236,14 +236,14 @@ namespace MainApp.Model.Analysis
             switch (Direction)
             {
                 case "Up":
-                    //if (GetAnalysisMACD(Direction))
-                    //{
-                        //if ((GetIndexValue("ADX", "ADX") > 25) && (GetIndexValue("ADX", "ADX") < 45))
-                        //{
+                    if (GetAnalysisMACD(Direction))
+                    {
+                        if ((GetIndexValue("ADX", "ADX") > 20) && (GetIndexValue("ADX", "ADX") < 40))
+                        {
                             Result = Direction;
                             AnalysisResults.Result = "Up";
-                        //}
-                    //}
+                        }
+                    }
                     break;
                 case "Down":
                     break;
@@ -400,10 +400,10 @@ namespace MainApp.Model.Analysis
             switch (A1Result)
             {
                 case "Up":
-                    if ((CCIVal > 0) && (CCIVal < 100))
-                    {
+                    //if ((CCIVal > 0) && (CCIVal < 100))
+                    //{
                         GetOrder();
-                    }
+                    //}
                     
                     break;
                 case "Down":

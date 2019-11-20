@@ -424,7 +424,7 @@ namespace MainApp.Model
             double MinusDI = (GetSMMA(points, n, name, type, "-DM","_-DR") / ATR);  // ATR;
 
             double ADX = Math.Abs((PlusDI - MinusDI)*100)/(PlusDI + MinusDI);
-
+            if (Double.IsNaN(ADX)) { ADX = 0; }
             AddVal(points.Last(), name, type, "_ADX", ADX );
             GetSMMA(points, n, name, type, "_ADX","ADX");
         }

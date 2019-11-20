@@ -167,7 +167,7 @@ namespace MainApp.Model
         private void GetAnalysis(List<DateModel> dateModels, string tiker)
         {
             IndexModel indexModel = new IndexModel();
-            if (dateModels.Find(i=> i.Scale == "60").Points.Last().Date.Hour == 18)
+            if (dateModels.Find(i=> i.Scale == "60").Points.Last().Date.Hour == 19)
             {
                 IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"), "Analysis1");
                 //DateTime date = new DateTime(2019, 11, 12, 11, 00, 00);
@@ -222,7 +222,7 @@ namespace MainApp.Model
                     {
                         if (A1Result != "")
                         {
-                            if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 18)
+                            if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
                             {
                                 //dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value;
                                 double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
@@ -239,21 +239,21 @@ namespace MainApp.Model
                         }
                         else
                         {
-                            double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
-                            if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 18)
-                            {
-                                //dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "60").Points, 22) - (tmp * 3));
-                                dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "60").Points.Last().Close; //IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value;
-                            }
+                            //double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
+                            //if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
+                            //{
+                            //    //dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "60").Points, 22) - (tmp * 3));
+                            //    dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "60").Points.Last().Close; //IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value;
+                            //}
                         }
 
 
-                        //Analysis3 analysis3 = new Analysis3(dateModels.Find(i => i.Scale == "60"), "Analysis3", tiker, A1Result);
-                        //analysis3.GetAnalysis();
-                        //if (analysis3.StopOrder != 0)
-                        //{
-                        //    dealModels.Find(i => i.Tiker == tiker & i.InMarket == true).StopPrice = analysis3.StopOrder;
-                        //}
+                        Analysis3 analysis3 = new Analysis3(dateModels.Find(i => i.Scale == "60"), "Analysis3", tiker, A1Result);
+                        analysis3.GetAnalysis();
+                        if (analysis3.StopOrder != 0)
+                        {
+                            dealModels.Find(i => i.Tiker == tiker & i.InMarket == true).StopPrice = analysis3.StopOrder;
+                        }
                     }
                 }
             }
