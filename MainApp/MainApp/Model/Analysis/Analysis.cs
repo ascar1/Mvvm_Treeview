@@ -387,7 +387,7 @@ namespace MainApp.Model.Analysis
                 Tiker = Tiker,
                 Type = A1Result,
                 Vol = 1,
-                Price = GetMax(50), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
+                Price = GetMax(20), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
                 BeginDate = DateModel.Points.Last().Date,                
                 IsActive = true
             };
