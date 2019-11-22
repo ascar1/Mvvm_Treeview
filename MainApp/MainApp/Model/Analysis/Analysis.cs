@@ -173,7 +173,7 @@ namespace MainApp.Model.Analysis
                     List<double> tmp = new List<double>();
                     for (int i=0;EMAPoint.Count() > i;i++)
                     {
-                        if (EMAPoint[i] < 0)
+                        if (EMAPoint[i] < 0.1)
                         {
                             flag = true;
                         }
