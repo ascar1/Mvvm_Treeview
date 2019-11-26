@@ -258,6 +258,19 @@ namespace MainApp.Model
         {
 
         }
+
+        public void GetPraceChanel (List<PointModel> points, List<ParamModel> @params)
+        {
+            string name = GetStringParam(@params, "Name");
+            int n = GetIntParam(@params, "Period");
+
+            double Max = GetMax(points, n);
+            double Min = GetMin(points, n);
+
+            AddVal(points.Last(), name, "PC", "Hiht", Max);
+            AddVal(points.Last(), name, "PC", "Low", Min);
+            AddVal(points.Last(), name, "PC", "Medium", (Max+Min)/2 );
+        }
         
         public void GetATR (List<PointModel> points, List<ParamModel> @params)
         {

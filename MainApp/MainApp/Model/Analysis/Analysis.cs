@@ -114,7 +114,6 @@ namespace MainApp.Model.Analysis
                 return "";
             }
         }
-
         private void AnalysisEMA (string name)
         {          
             List<double> EMAPoint = GetListIndexValue(name, "EMA", PerAnalysis);
@@ -231,20 +230,20 @@ namespace MainApp.Model.Analysis
             #endregion
             #region Проанализировать данные 
             List<string> resultArr = new List<string>();
-            //string Direction = GetDirection();
+            // string Direction = GetDirection();
             string Direction = GetDirectionMACD();
             switch (Direction)
             {
                 case "Up":
-                    //if (GetAnalysisMACD(Direction))
-                    //{
-                        //if ((GetIndexValue("ADX", "ADX") > 20) && (GetIndexValue("ADX", "ADX") < 40))
-
+                    if (GetIndexValue("PC50", "Medium") < DateModel.Points.Last().Close )
+                    {
+                        if (GetIndexValue("PC50", "Low") < GetIndexValue("PC20", "Low"))
+                        {
                             Result = Direction;
                             AnalysisResults.Result = "Up";
-                        
-                    //}
-                    break;
+                        }
+            }
+            break;
                 case "Down":
                     break;
                 default:
@@ -367,7 +366,7 @@ namespace MainApp.Model.Analysis
             else { N = 0; }
             double Val = DateModel.Points[N].High;
 
-            for (int i = N; i < DateModel.Points.Count(); i++ )
+            for (int i = N; i < DateModel.Points.Count()-1; i++ )
             {
                 if (Val < DateModel.Points[i].High)
                 {
