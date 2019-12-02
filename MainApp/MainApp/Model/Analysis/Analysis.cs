@@ -230,19 +230,19 @@ namespace MainApp.Model.Analysis
             #endregion
             #region Проанализировать данные 
             List<string> resultArr = new List<string>();
-            // string Direction = GetDirection();
-            string Direction = GetDirectionMACD();
+            string Direction = GetDirection();
+            //string Direction = GetDirectionMACD();
             switch (Direction)
             {
                 case "Up":
                     if (GetIndexValue("PC50", "Medium") < DateModel.Points.Last().Close )
                     {
-                        if (GetIndexValue("PC50", "Low") < GetIndexValue("PC20", "Low"))
-                        {
+                        //if (GetIndexValue("PC50", "Low") < GetIndexValue("PC20", "Low"))
+                        //{
                             Result = Direction;
                             AnalysisResults.Result = "Up";
-                        }
-            }
+                        //}
+                    }
             break;
                 case "Down":
                     break;
@@ -332,6 +332,50 @@ namespace MainApp.Model.Analysis
         {
             return DateModel.Points.Last().IndexPoint.Find(i1 => i1.Name == nameIndex).Value.Find(j => j.Name == nameVal).Value;
         }
+        private List<double> GetListIndexValue(string nameIndex, string nameVal, int n)
+        {
+            List<double> Result = new List<double>();
+            for (int i = DateModel.Points.Count - 1; i >= DateModel.Points.Count() - n; i--)
+            {
+                Result.Add(DateModel.Points[i].IndexPoint.Find(i1 => i1.Name == nameIndex).Value.Find(j => j.Name == nameVal).Value);
+            }
+            Result.Reverse();
+            return Result;
+        }
+        private string GetDirectionMACD()
+        {
+            bool FlagUp = false; bool FlagDown = false;
+            List<double> EMAPoint = GetListIndexValue("MACD", "Bar_Graph", PerAnalysis);
+            List<double> tmp = new List<double>();
+
+            for (int i = 0; EMAPoint.Count() > i; i++)
+            {
+                if (EMAPoint[i] >= 0)
+                {
+                    FlagUp = true;
+                }
+                else
+                {
+                    FlagDown = true;
+                }
+            }
+            if ((!FlagUp) && (!FlagDown))
+            {
+                return "";
+            }
+            else if ((FlagUp) && (!FlagDown))
+            {
+                return "Up";
+            }
+            else if ((!FlagUp) && (FlagDown))
+            {
+                return "Down";
+            }
+            else
+            {
+                return "";
+            }
+        }
         public bool HaveOrder
         {
             get
@@ -386,7 +430,7 @@ namespace MainApp.Model.Analysis
                 Tiker = Tiker,
                 Type = A1Result,
                 Vol = 1,
-                Price = GetMax(20), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
+                Price = GetMax(50) + (GetIndexValue("ATR", "ATR")/3) , //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
                 BeginDate = DateModel.Points.Last().Date,                
                 IsActive = true
             };
@@ -396,14 +440,15 @@ namespace MainApp.Model.Analysis
         public void GetAnalysis()
         {
             double CCIVal = GetIndexValue("CCI", "CCI");
+            
             switch (A1Result)
             {
                 case "Up":
-                    //if ((CCIVal > 0) && (CCIVal < 100))
+                    //string str = GetDirectionMACD();
+                    //if (str == "Up")
                     //{
                         GetOrder();
-                    //}
-                    
+                    //}                    
                     break;
                 case "Down":
                     break;

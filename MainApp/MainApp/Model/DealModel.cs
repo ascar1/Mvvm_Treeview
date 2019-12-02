@@ -17,7 +17,7 @@ namespace MainApp.Model
         public double ClosePrice { get; set; }
         public DateTime CloseDate { get; set; }
         public bool InMarket { get; set; }
-        public List<HistoryDeal> History { get; set; }
+        //public List<HistoryDeal> History { get; set; }
     }
 
     public class HistoryDeal

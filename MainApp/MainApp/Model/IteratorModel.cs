@@ -174,10 +174,12 @@ namespace MainApp.Model
             if (dateModels.Find(i=> i.Scale == "60").Points.Last().Date.Hour == 19)
             {
                 IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"), "Analysis1");
-                DateTime date = new DateTime(2019, 1, 15, 11, 00, 00);
-                //if ((dateModels.Find(i => i.Scale == "D").Points.Last().Date == date)&& (tiker == "SBER")) { MessageBox.Show("!"); }
                 analysis1.GetAnalysis();
             }
+
+            DateTime date = new DateTime(2018, 10, 17, 12, 00, 00);
+            if ((dateModels.Find(i => i.Scale == "60").Points.Last().Date == date) && (tiker == "SBER")) { MessageBox.Show("!"); }
+
             int item = dateModels.FindIndex(i => i.Scale == "D");
             int itemAnalysis1 = dateModels[item].Points.Last().AnalysisResults.FindIndex(i => i.Name == "Analysis1");
             string A1Result = "";
@@ -193,7 +195,7 @@ namespace MainApp.Model
                 {
                     A1Result = dateModels.Find(i => i.Scale == "D").Points.Last().AnalysisResults[item].Result;
                     //if (tiker == "GAZP") { }
-                    Analysis2 analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "D"), "Analysis2", tiker, A1Result);
+                    Analysis2 analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "60"), "Analysis2", tiker, A1Result);
 
                     analysis2.GetAnalysis();
                     // Удаляем ордер если сигнала нет 
@@ -229,21 +231,21 @@ namespace MainApp.Model
                             if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
                             {
                                 //dealModels[itemDeal].StopPrice = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "EMA16").Value[0].Value;
-                                double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
-                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp*2.5) );
+                                double tmp = dateModels.Find(i => i.Scale == "60").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
+                                double stop = (indexModel.GetMax(dateModels.Find(i => i.Scale == "60").Points, 22) - (tmp*2.5) );
                                 if (stop > 0)
                                 {
                                     dealModels[itemDeal].StopPrice = stop;
                                 }
                                 else
                                 {
-                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "D").Points, 22) - (tmp * 2.5));
+                                    dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "60").Points, 22) - (tmp * 2.5));
                                 }
                             }
                         }
                         else
                         {
-                            double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
+                            //double tmp = dateModels.Find(i => i.Scale == "D").Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
                             if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
                             {
                                 //dealModels[itemDeal].StopPrice = (indexModel.GetMax(dateModels.Find(i => i.Scale == "60").Points, 22) - (tmp * 3));
@@ -270,7 +272,7 @@ namespace MainApp.Model
                 if ((orderModels[item].BeginDate < CurrDate) )
                 {
                     var TmpPoint = dateModels.Find(i => i.Scale == "60").Points.Last();                
-                    if ((orderModels[item].Price < TmpPoint.High ) && (orderModels[item].Price > TmpPoint.Low  ) /*&& (CurrDate.DayOfWeek != DayOfWeek.Friday)*/)
+                    if ((orderModels[item].Price < TmpPoint.High ) && (orderModels[item].Price > TmpPoint.Low  ) && (CurrDate.DayOfWeek != DayOfWeek.Friday))
                     {
                             orderModels[item].IsExecute = true;
                             orderModels[item].IsActive = false;
