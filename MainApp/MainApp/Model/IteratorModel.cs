@@ -177,8 +177,7 @@ namespace MainApp.Model
                 analysis1.GetAnalysis();
             }
 
-            DateTime date = new DateTime(2018, 10, 17, 12, 00, 00);
-            if ((dateModels.Find(i => i.Scale == "60").Points.Last().Date == date) && (tiker == "SBER")) { MessageBox.Show("!"); }
+
 
             int item = dateModels.FindIndex(i => i.Scale == "D");
             int itemAnalysis1 = dateModels[item].Points.Last().AnalysisResults.FindIndex(i => i.Name == "Analysis1");
@@ -187,16 +186,29 @@ namespace MainApp.Model
             {
                 A1Result = dateModels[item].Points.Last().AnalysisResults[itemAnalysis1].Result;
             }
-            
-            if (item >= 0)
+            else
             {
-                item = dateModels[item].Points.Last().AnalysisResults.FindIndex(i => i.Name == "Analysis1");
-                if (item >= 0)
+                int count = dateModels[item].Points.Count();
+                itemAnalysis1 = dateModels[item].Points[count - 2].AnalysisResults.FindIndex(i => i.Name == "Analysis1");
+                if (itemAnalysis1 != -1)
                 {
-                    A1Result = dateModels.Find(i => i.Scale == "D").Points.Last().AnalysisResults[item].Result;
+                    A1Result = dateModels[item].Points[count - 2].AnalysisResults[itemAnalysis1].Result;
+                }
+                else
+                {
+                    A1Result = "";
+                }
+                
+            }
+            
+            //if (item >= 0)
+            //{
+            //    item = dateModels[item].Points.Last().AnalysisResults.FindIndex(i => i.Name == "Analysis1");
+            //    if (item >= 0)
+            //    {
+                    //A1Result = dateModels.Find(i => i.Scale == "D").Points.Last().AnalysisResults[item].Result;
                     //if (tiker == "GAZP") { }
                     Analysis2 analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "60"), "Analysis2", tiker, A1Result);
-
                     analysis2.GetAnalysis();
                     // Удаляем ордер если сигнала нет 
                     int itemDeal = 0;
@@ -219,6 +231,11 @@ namespace MainApp.Model
                             if (itemDeal == -1)
                             {
                                 orderModels.Add(analysis2.OrderModels);
+                            }
+                            else
+                            {
+                                orderModels[itemDeal].Price = analysis2.OrderModels.Price;
+                                //orderModels.Add(analysis2.OrderModels);
                             }
                         }
                     }
@@ -258,10 +275,75 @@ namespace MainApp.Model
                         //{
                         //    dealModels.Find(i => i.Tiker == tiker & i.InMarket == true).StopPrice = analysis3.StopOrder;
                         //}
+                //    }
+                //}
+            }
+        }
+
+        private string GetResult(DateModel data, string name)
+        {
+            for (int i = data.Points.Count-1; i > 0; i--)
+            {
+                int item = data.Points[i].AnalysisResults.FindIndex(ii => ii.Name == name);
+                if (item != -1)
+                {
+                    return data.Points[i].AnalysisResults[item].Result;
+                }
+            }
+
+            return "";
+        }
+        private void _GetAnalysis(List<DateModel> dateModels, string tiker)
+        {
+            IndexModel indexModel = new IndexModel();
+            if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
+            {
+                IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"), "Analysis1");
+                analysis1.GetAnalysis();
+            }
+
+            //DateTime date = new DateTime(2018, 10, 17, 12, 00, 00);
+            //if ((dateModels.Find(i => i.Scale == "60").Points.Last().Date == date) && (tiker == "SBER")) { MessageBox.Show("!"); }
+
+            string A1Result = GetResult(dateModels.Find(i => i.Scale == "D"), "Analysis1");
+
+            Analysis2 analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "60"), "Analysis2", tiker, A1Result);
+            analysis2.GetAnalysis();
+
+            // Удаляем ордер если сигнала нет             
+            if (A1Result == "")
+            {
+                int itemDeal = orderModels.FindIndex(i => i.Tiker == tiker & i.IsActive == true);
+                if (itemDeal != -1)
+                {
+                    orderModels[itemDeal].IsActive = false;
+                    orderModels[itemDeal].EndDate = dateModels[0].Points.Last().Date;
+                }
+            }
+            // Проверяем на наличие копий ордера и открытых позиций
+            if (analysis2.HaveOrder)
+            {
+                int itemDeal = dealModels.FindIndex(i => i.Tiker == tiker & i.InMarket == true);
+                if (itemDeal == -1)
+                {
+                    itemDeal = orderModels.FindIndex(i => i.Tiker == tiker & i.IsActive == true);
+                    if (itemDeal == -1)
+                    {
+                        orderModels.Add(analysis2.OrderModels);
                     }
                 }
             }
+            // Обработка открытой позиции 
+            Analysis3 analysis3 = new Analysis3(dateModels.Find(i => i.Scale == "60"), "Analysis3", tiker, A1Result);
+            analysis3.GetAnalysis();
+            int indexDeal = dealModels.FindIndex(i => i.Tiker == tiker & i.InMarket == true);
+            if (indexDeal != -1)
+            {
+                dealModels[indexDeal].StopPrice = analysis3.StopOrder;
+            }
+
         }
+
         private void ChekDeal(List<DateModel> dateModels, string tiker)
         {
             DateTime CurrDate = dateModels.Find(i => i.Scale == "60").Points.Last().Date;
@@ -272,7 +354,7 @@ namespace MainApp.Model
                 if ((orderModels[item].BeginDate < CurrDate) )
                 {
                     var TmpPoint = dateModels.Find(i => i.Scale == "60").Points.Last();                
-                    if ((orderModels[item].Price < TmpPoint.High ) && (orderModels[item].Price > TmpPoint.Low  ) && (CurrDate.DayOfWeek != DayOfWeek.Friday))
+                    if ((orderModels[item].Price < TmpPoint.High ) && (orderModels[item].Price > TmpPoint.Low  ) && (CurrDate.Hour != 11))
                     {
                             orderModels[item].IsExecute = true;
                             orderModels[item].IsActive = false;
@@ -332,7 +414,7 @@ namespace MainApp.Model
                     WorkPoints[index].Data.Find(i1 => i1.Scale == "60").Points.Add(tmp);
                     GetScale(WorkPoints[index].Data);
                     GetIndex(WorkPoints[index].Data);
-                    GetAnalysis(WorkPoints[index].Data, WorkPoints[index].Tiker);
+                    _GetAnalysis(WorkPoints[index].Data, WorkPoints[index].Tiker);
                     ChekDeal(WorkPoints[index].Data,WorkPoints[index].Tiker);
                 }
             }

@@ -230,19 +230,19 @@ namespace MainApp.Model.Analysis
             #endregion
             #region Проанализировать данные 
             List<string> resultArr = new List<string>();
-            string Direction = GetDirection();
-            //string Direction = GetDirectionMACD();
+            //string Direction = GetDirection();
+            string Direction = GetDirectionMACD();
             switch (Direction)
             {
                 case "Up":
-                    if (GetIndexValue("PC50", "Medium") < DateModel.Points.Last().Close )
-                    {
+                    //if (GetIndexValue("PC50", "Medium") < DateModel.Points.Last().Close )
+                    //{
                         //if (GetIndexValue("PC50", "Low") < GetIndexValue("PC20", "Low"))
                         //{
                             Result = Direction;
                             AnalysisResults.Result = "Up";
                         //}
-                    }
+                    //}
             break;
                 case "Down":
                     break;
@@ -430,7 +430,7 @@ namespace MainApp.Model.Analysis
                 Tiker = Tiker,
                 Type = A1Result,
                 Vol = 1,
-                Price = GetMax(50) + (GetIndexValue("ATR", "ATR")/3) , //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
+                Price = GetMax(50) /*+ (GetIndexValue("ATR", "ATR")/3)*/ , //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
                 BeginDate = DateModel.Points.Last().Date,                
                 IsActive = true
             };
@@ -444,11 +444,11 @@ namespace MainApp.Model.Analysis
             switch (A1Result)
             {
                 case "Up":
-                    //string str = GetDirectionMACD();
-                    //if (str == "Up")
-                    //{
+                    string str = GetDirectionMACD();
+                    if (str == "Up")
+                    {
                         GetOrder();
-                    //}                    
+                    }                    
                     break;
                 case "Down":
                     break;
@@ -478,12 +478,23 @@ namespace MainApp.Model.Analysis
             this.DateModel = dateModel;
         }
 
+        private double GetChandlerExitLong()
+        {
+            IndexModel indexModel = new IndexModel();
+            double tmp = DateModel.Points.Last().IndexPoint.Find(i => i.Name == "ATR").Value.Find(i1 => i1.Name == "ATR").Value;
+            double stop = (indexModel.GetMax(DateModel.Points, 22) - (tmp * 3));
+            if (stop > 0)
+            {
+                return stop;
+            }
+
+            return 0;
+        }
+
+
         private void GetStopOrder ()
         {
-            if (DateModel.Points.Last().Date.Hour == 18)
-            {
-                StopOrder = DateModel.Points.Last().Close;
-            }
+            StopOrder = GetChandlerExitLong();
         }
 
         public void GetAnalysis()
@@ -494,6 +505,10 @@ namespace MainApp.Model.Analysis
                     GetStopOrder();
                     break;
                 case "Down":
+                    break;
+                case "":
+                    // Закрываем ели нет Результата первого анализа 
+                    StopOrder = DateModel.Points.Last().Close;
                     break;
             }
         }
