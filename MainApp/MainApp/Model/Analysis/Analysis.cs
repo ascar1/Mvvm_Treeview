@@ -161,7 +161,6 @@ namespace MainApp.Model.Analysis
                     break;
             }
         }
-
         private bool GetAnalysisMACD(string Direction)
         {
             switch (Direction)
@@ -192,6 +191,42 @@ namespace MainApp.Model.Analysis
             }
             
 
+            return false;
+        }
+        private bool GetAnalysisPC(string Direction)
+        {
+            switch (Direction)
+            {
+                case "Up":                    
+                    List<double> PC50 = GetListIndexValue("PC50", "Hiht", 50);
+                    List<double> PC20 = GetListIndexValue("PC20", "Hiht", 50);
+                    List<double> _PC50 = GetListIndexValue("PC50", "Low", 50);
+                    List<double> _PC20 = GetListIndexValue("PC20", "Low", 50);
+                    int kol1 = 0; int kol2 = 0;
+                    for (int i = 0; PC50.Count() > i; i++)
+                    {
+                        if ((PC50[i] - PC20[i]) == 0)
+                        {
+                            kol1++;
+                        }
+                        if ((_PC20[i] - _PC50[i]) > 0)
+                        {
+                            kol2++;
+                        }                       
+                    }
+                    if (/*(kol1 > 25) && */(kol2 > 25))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                case "Down":
+                    break;
+                default:
+                    return false;
+            }
             return false;
         }
         #region Публичные методы 
@@ -235,64 +270,18 @@ namespace MainApp.Model.Analysis
             switch (Direction)
             {
                 case "Up":
-                    //if (GetIndexValue("PC50", "Medium") < DateModel.Points.Last().Close )
-                    //{
-                        //if (GetIndexValue("PC50", "Low") < GetIndexValue("PC20", "Low"))
-                        //{
-                            Result = Direction;
-                            AnalysisResults.Result = "Up";
-                        //}
-                    //}
-            break;
+                    if (GetAnalysisPC("Up"))
+                    {
+                        Result = Direction;
+                        AnalysisResults.Result = "Up";
+                    }
+                    break;
                 case "Down":
                     break;
                 default:
                     Result = "";
                     break;
             }
-
-
-
-            #region не Нужный код 
-            //string result = "";
-            //foreach (var tmp in AnalysisResults.ResultArr)
-            //{
-            //    resultArr.Add(supporting.ChekSignature(tmp.ValStr, tmp.Name));
-            //}
-
-            //int ResultCount = 0; Result = "";
-            //foreach (string tmp in resultArr)
-            //{
-            //    switch (tmp)
-            //    {
-            //        case "Up":
-            //            //AnalysisResults.Result = tmp;
-            //            //Result = tmp;
-            //            if (resultArr.FindAll(i => i == "Up").Count() == 3)
-            //            {
-            //                AnalysisResults.Result = "Up";
-            //                Result = "Up";
-            //            }
-
-            //            ResultCount++;
-            //            break;
-            //        case "Down":
-            //            AnalysisResults.Result = tmp;
-            //            Result = tmp;
-            //            break;
-            //    }
-            //}
-
-            //if (ResultCount == resultArr.Count)
-            //{
-            //    AnalysisResults.Result = "Up";
-            //    Result = "Up";
-            //}
-            //else if (ResultCount == 1)
-            //{
-            //    MessageBox.Show("!");
-            //}
-            #endregion 
             #endregion
             #region Записать данные в коллекцию 
             int ind = DateModel.Points.Last().AnalysisResults.FindIndex(i => i.Name == Name);
@@ -430,7 +419,7 @@ namespace MainApp.Model.Analysis
                 Tiker = Tiker,
                 Type = A1Result,
                 Vol = 1,
-                Price = GetMax(50) /*+ (GetIndexValue("ATR", "ATR")/3)*/ , //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
+                Price = GetMax(20) + (GetIndexValue("ATR", "ATR")/3), //DateModel.Points.Last().IndexPoint.Find(i => i.Name == "EMA8").Value[0].Value, //GetMax(20)
                 BeginDate = DateModel.Points.Last().Date,                
                 IsActive = true
             };
@@ -439,16 +428,16 @@ namespace MainApp.Model.Analysis
 
         public void GetAnalysis()
         {
-            double CCIVal = GetIndexValue("CCI", "CCI");
-            
+            //double CCIVal = GetIndexValue("CCI", "CCI");
+            if (DateModel.Points.Last().Date.Hour != 11) { return;  }
             switch (A1Result)
             {
                 case "Up":
-                    string str = GetDirectionMACD();
-                    if (str == "Up")
-                    {
+                    //string str = GetDirectionMACD();
+                    //if (str == "Up")
+                    //{
                         GetOrder();
-                    }                    
+                    //}                    
                     break;
                 case "Down":
                     break;

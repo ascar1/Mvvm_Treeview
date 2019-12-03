@@ -22,7 +22,7 @@ namespace MainApp.Model
             return instance;
         }
 
-        private readonly int Seed = 200;
+        private readonly int Seed = 480;
         private List<MasterPointModel> MasterPoint;        
         public List<WorkPointModel> WorkPoints;
         private List<FileArrModel> fileArrs;
@@ -279,7 +279,6 @@ namespace MainApp.Model
                 //}
             }
         }
-
         private string GetResult(DateModel data, string name)
         {
             for (int i = data.Points.Count-1; i > 0; i--)
@@ -296,18 +295,19 @@ namespace MainApp.Model
         private void _GetAnalysis(List<DateModel> dateModels, string tiker)
         {
             IndexModel indexModel = new IndexModel();
+            DateTime date = new DateTime(2019, 1, 10, 19, 00, 00);
+            if ((dateModels.Find(i => i.Scale == "60").Points.Last().Date == date) && (tiker == "YNDX")) { MessageBox.Show("!"); }
+
             if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
             {
                 IAnalysis analysis1 = new Analysis1(dateModels.Find(i => i.Scale == "D"), "Analysis1");
                 analysis1.GetAnalysis();
             }
 
-            //DateTime date = new DateTime(2018, 10, 17, 12, 00, 00);
-            //if ((dateModels.Find(i => i.Scale == "60").Points.Last().Date == date) && (tiker == "SBER")) { MessageBox.Show("!"); }
 
             string A1Result = GetResult(dateModels.Find(i => i.Scale == "D"), "Analysis1");
 
-            Analysis2 analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "60"), "Analysis2", tiker, A1Result);
+            Analysis2 analysis2 = new Analysis2(dateModels.Find(i => i.Scale == "D"), "Analysis2", tiker, A1Result);
             analysis2.GetAnalysis();
 
             // Удаляем ордер если сигнала нет             
@@ -331,10 +331,15 @@ namespace MainApp.Model
                     {
                         orderModels.Add(analysis2.OrderModels);
                     }
+                    else
+                    {
+                        orderModels[itemDeal].Price = analysis2.OrderModels.Price;
+                    }
                 }
+
             }
             // Обработка открытой позиции 
-            Analysis3 analysis3 = new Analysis3(dateModels.Find(i => i.Scale == "60"), "Analysis3", tiker, A1Result);
+            Analysis3 analysis3 = new Analysis3(dateModels.Find(i => i.Scale == "D"), "Analysis3", tiker, A1Result);
             analysis3.GetAnalysis();
             int indexDeal = dealModels.FindIndex(i => i.Tiker == tiker & i.InMarket == true);
             if (indexDeal != -1)
