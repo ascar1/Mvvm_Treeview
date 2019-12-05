@@ -38,6 +38,10 @@ namespace MainApp.Model
             orderModels = new List<OrderModel>();
             dealModels = new List<DealModel>();
             fileArrs = files;
+            GetSeed();
+        }        
+        private void GetSeed ()
+        {
             foreach (var i in MasterPoint)
             {
                 List<DateModel> dateModels = new List<DateModel>
@@ -48,17 +52,14 @@ namespace MainApp.Model
                         Points = new List<PointModel>()
                     }
                 };
-                WorkPoints.Add(new WorkPointModel() {
+                WorkPoints.Add(new WorkPointModel()
+                {
                     Tiker = i.Tiker,
                     CurrDate = i.SDate,
                     SDate = i.SDate,
                     Data = dateModels
                 });
             }
-            GetSeed();
-        }        
-        private void GetSeed ()
-        {
             for (int item = 0; item <= Seed; item++)
             {
                 foreach (MasterPointModel i in MasterPoint)
@@ -295,8 +296,8 @@ namespace MainApp.Model
         private void _GetAnalysis(List<DateModel> dateModels, string tiker)
         {
             IndexModel indexModel = new IndexModel();
-            DateTime date = new DateTime(2019, 1, 10, 19, 00, 00);
-            if ((dateModels.Find(i => i.Scale == "60").Points.Last().Date == date) && (tiker == "YNDX")) { MessageBox.Show("!"); }
+            //DateTime date = new DateTime(2019, 1, 10, 19, 00, 00);
+            //if ((dateModels.Find(i => i.Scale == "60").Points.Last().Date == date) && (tiker == "YNDX")) { MessageBox.Show("!"); }
 
             if (dateModels.Find(i => i.Scale == "60").Points.Last().Date.Hour == 19)
             {
@@ -437,6 +438,14 @@ namespace MainApp.Model
             }            
         }
         public List<PointModel> GetListPoint(string tiker, string skale) => WorkPoints.Find(i => i.Tiker == tiker).Data.Find(i1 => i1.Scale == skale).Points;
+
+        public void Clear ()
+        {
+            WorkPoints.Clear();
+            orderModels.Clear();
+            dealModels.Clear();
+            GetSeed();
+        }
 
         #region Методы для работы с графиками
         private int GetIndexSeries(SeriesCollection series, string name)

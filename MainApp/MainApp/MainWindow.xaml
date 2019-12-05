@@ -39,7 +39,7 @@
             <Menu Height="25" VerticalAlignment="Top" Grid.Column="0" Grid.ColumnSpan="2">
                 <MenuItem Header="Work">
                     <MenuItem Header="Analysis 1" Command="{Binding AnalysisCommand}" ></MenuItem>
-                    <MenuItem Header="Analysis 2" ></MenuItem>
+                    <MenuItem Header="Analysis 2" Command="{Binding ClearCommand}"></MenuItem>
                     <MenuItem Header="Analysis 3" ></MenuItem>
                     <Separator />
                     <MenuItem Header="Open Project" >

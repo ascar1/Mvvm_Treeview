@@ -279,6 +279,18 @@ namespace MainApp.ViewModel
                 }));
             }
         }
+        private MyCommand _ClearCommand;
+        public MyCommand ClearCommand
+        {
+            get
+            {
+                return _ClearCommand ?? (_ClearCommand = new MyCommand(obj => 
+                {
+                    IteratorModel iterator = IteratorModel.GetInstance(_dataService.GetMasterPoints(), _dataService.GetFileArrs());
+                    iterator.Clear();
+                }));
+            }
+        }
         #endregion
 
         ////public override void Cleanup()
